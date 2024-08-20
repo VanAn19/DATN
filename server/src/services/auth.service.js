@@ -46,7 +46,7 @@ class AuthService {
         if (!match) throw new AuthFailureError('Authentication error');
         const privateKey = crypto.randomBytes(64).toString('hex');
         const publicKey = crypto.randomBytes(64).toString('hex');
-        const tokens = await createTokenPair({ userId: foundUser._id, username }, publicKey, privateKey);
+        const tokens = await createTokenPair({ userId: foundUser._id, username, role: foundUser.role }, publicKey, privateKey);
         await KeyTokenService.createKeyToken({
             userId: foundUser._id,
             refreshToken: tokens.refreshToken,
@@ -78,7 +78,7 @@ class AuthService {
                     message: 'keyStore error'
                 }
             }
-            const tokens = await createTokenPair({ userId: newUser._id, username }, publicKey, privateKey);
+            const tokens = await createTokenPair({ userId: newUser._id, username, role: newUser.role }, publicKey, privateKey);
             return {
                 user: getInfoData({ fields: ['id', 'name', 'email'], object: newUser}),
                 tokens

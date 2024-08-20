@@ -2,7 +2,7 @@
 
 const jwt = require('jsonwebtoken');
 const { asyncHandler } = require('../helpers/asyncHandler');
-const { AuthFailureError, NotFoundError } = require('../core/error.response');
+const { AuthFailureError, NotFoundError, ForbiddenError } = require('../core/error.response');
 const { findByUserId } = require('../services/keyToken.service');
 
 const HEADER = {
@@ -14,10 +14,10 @@ const HEADER = {
 
 const createTokenPair = async (payload, publicKey, privatekey) => {
     try {
-        const accessToken = await jwt.sign(payload, publicKey, {
+        const accessToken = await jwt.sign({ ...payload, role: payload.role}, publicKey, {
             expiresIn: '2d'
         });
-        const refreshToken = await jwt.sign(payload, privatekey, {
+        const refreshToken = await jwt.sign({ ...payload, role: payload.role}, privatekey, {
             expiresIn: '365d'
         });
         jwt.verify(accessToken, publicKey, (err, decode) => {
@@ -69,7 +69,18 @@ const authentication = asyncHandler(async (req,res,next) => {
     }
 }) 
 
+const checkRole = (...requiredRoles) => {
+    return (req,res,next) => {
+        const { role } = req.user;
+        if (!role || !requiredRoles.includes(role)) {
+            throw new ForbiddenError('You do not have the required role to access this resource');
+        }
+        next();
+    }
+}
+
 module.exports = {
     createTokenPair,
     authentication,
+    checkRole
 }
