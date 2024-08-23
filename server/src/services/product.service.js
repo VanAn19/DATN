@@ -2,11 +2,23 @@
 
 const { BadRequestError } = require('../core/error.response');
 const Product = require('../models/product.model');
-const { findProductByName } = require('../repositories/product.repo');
+const { 
+    findProductByName,
+    updateProductById 
+} = require('../repositories/product.repo');
 
 class ProductService {
 
-    static createProduct = async (payload) => {
+    constructor({ name, thumbnail, description, price, quantity, category }) {
+        this.name = name
+        this.thumbnail = thumbnail
+        this.description = description
+        this.price = price
+        this.quantity = quantity
+        this.category = category
+    }
+
+    static async createProduct(payload) {
         const { name, thumbnail, description, price, quantity, category } = payload;
         const product = await findProductByName({ name });
         if (product) throw new BadRequestError('Product name exists');
@@ -19,7 +31,10 @@ class ProductService {
             category
         });
     }
-    
+
+    static async updateProduct(id, payload) {
+        return await updateProductById({ id, payload });
+    }
     
 }
 
