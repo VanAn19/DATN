@@ -11,6 +11,8 @@ router.use(authentication)
 router.use(checkRole('admin'))
 
 router.post('/create', asyncHandler(productController.createProduct));
+router.post('/publish/:id', asyncHandler(productController.publishProduct));
+router.post('/unpublish/:id', asyncHandler(productController.unPublishProduct));
 
 
 module.exports = router;

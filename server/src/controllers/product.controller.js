@@ -12,6 +12,20 @@ class ProductController {
         }).send(res);
     }
 
+    publishProduct = async (req,res,next) => {
+        new SuccessResponse({
+            message: 'Publish product successfully',
+            metadata: await ProductService.publishProduct({ id: req.params.id})
+        }).send(res);
+    }
+
+    unPublishProduct = async (req,res,next) => {
+        new SuccessResponse({
+            message: 'Unpublish product successfully',
+            metadata: await ProductService.unPublishProduct({ id: req.params.id})
+        }).send(res);
+    }
+
 }
 
 module.exports = new ProductController();

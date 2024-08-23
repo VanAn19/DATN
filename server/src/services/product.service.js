@@ -4,7 +4,11 @@ const { BadRequestError } = require('../core/error.response');
 const Product = require('../models/product.model');
 const { 
     findProductByName,
-    updateProductById 
+    updateProductById,
+    findAllDraftProduct,
+    findAllPublishProduct,
+    publishProduct,
+    unPublishProduct
 } = require('../repositories/product.repo');
 
 class ProductService {
@@ -30,6 +34,14 @@ class ProductService {
             quantity,
             category
         });
+    }
+
+    static async publishProduct({ id }) {
+        return await publishProduct({ id });
+    }
+
+    static async unPublishProduct({ id }) {
+        return await unPublishProduct({ id })
     }
 
     static async updateProduct(id, payload) {
