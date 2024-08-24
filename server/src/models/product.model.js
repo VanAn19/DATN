@@ -28,7 +28,7 @@ var productSchema = new Schema({
     },
     category: {
         type: Schema.Types.ObjectId,
-        ref: "Categories"
+        ref: "Category"
     },
     slug: String,
     isDraft: {

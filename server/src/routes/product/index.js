@@ -13,6 +13,8 @@ router.use(checkRole('admin'))
 router.post('/create', asyncHandler(productController.createProduct));
 router.post('/publish/:id', asyncHandler(productController.publishProduct));
 router.post('/unpublish/:id', asyncHandler(productController.unPublishProduct));
+router.get('/drafts/all', asyncHandler(productController.getAllDraftProduct));
+router.get('/published/all', asyncHandler(productController.getAllPublishedProduct));
 
 
 module.exports = router;

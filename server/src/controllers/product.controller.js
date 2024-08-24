@@ -26,6 +26,20 @@ class ProductController {
         }).send(res);
     }
 
+    getAllDraftProduct = async (req,res,next) => {
+        new SuccessResponse({
+            message: 'get all draft product successfully',
+            metadata: await ProductService.findAllDraftProduct()
+        }).send(res);
+    }
+
+    getAllPublishedProduct = async (req,res,next) => {
+        new SuccessResponse({
+            message: 'get all published product successfully',
+            metadata: await ProductService.findAllPublishedProduct()
+        }).send(res);
+    }
+
 }
 
 module.exports = new ProductController();

@@ -47,6 +47,16 @@ class ProductService {
     static async updateProduct(id, payload) {
         return await updateProductById({ id, payload });
     }
+
+    static async findAllDraftProduct({ limit = 50, skip = 0 } = {}) {
+        const query = { isDraft: true };
+        return await findAllDraftProduct({ query, limit, skip });
+    }
+
+    static async findAllPublishedProduct({ limit = 50, skip = 0 } = {}) {
+        const query = { isPublished: true };
+        return await findAllDraftProduct({ query, limit, skip });
+    }
     
 }
 
