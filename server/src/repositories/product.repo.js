@@ -15,8 +15,12 @@ const findAllDraftProduct = async ({ query, limit, skip }) => {
     return await queryProduct({ query, limit, skip })
 }
 
-const findAllPublishProduct = async () => {
+const findAllPublishProduct = async ({ query, limit, skip }) => {
     return await queryProduct({ query, limit, skip });
+}
+
+const getProductById = async ({ id }) => {
+    return await Product.findById(id).lean();
 }
 
 const findProductByName = async ({ name }) => {
@@ -25,7 +29,6 @@ const findProductByName = async ({ name }) => {
 
 const publishProduct = async ({ id }) => {
     const foundProduct = await Product.findById(id);
-    console.log("foundProduct::::::", foundProduct);
     if (!foundProduct) return null;
     foundProduct.isDraft = false;
     foundProduct.isPublished = true;
@@ -42,8 +45,25 @@ const unPublishProduct = async ({ id }) => {
     return modifiedCount;
 }
 
-const updateProductById = async ({ productId, payload, isNew = true }) => {
-    return await Product.findByIdAndUpdate(productId, payload, { new: isNew });
+const updateProductById = async ({ id, payload, isNew = true }) => {
+    return await Product.findByIdAndUpdate(id, payload, { new: isNew });
+}
+
+const deleteProductById = async ({ id }) => {
+    return await Product.deleteOne({ _id: id });
+}
+
+const searchProductByUser = async ({ keySearch }) => {
+    const regexSearch = new RegExp(keySearch);
+    console.log('Searching for:', regexSearch);
+    const results = await Product.find({
+        isPublished: true,
+        $text: { $search: regexSearch },
+    }, { score: { $meta: 'textScore' } })
+    .sort({ score: { $meta: 'textScore' } })
+    .lean()
+    console.log('Search results:', results);
+    return results;
 }
 
 module.exports = {
@@ -51,6 +71,9 @@ module.exports = {
     updateProductById,
     findAllDraftProduct,
     findAllPublishProduct,
+    getProductById,
     publishProduct,
-    unPublishProduct
+    unPublishProduct,
+    deleteProductById,
+    searchProductByUser
 }

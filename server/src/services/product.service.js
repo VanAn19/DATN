@@ -8,7 +8,10 @@ const {
     findAllDraftProduct,
     findAllPublishProduct,
     publishProduct,
-    unPublishProduct
+    unPublishProduct,
+    deleteProductById,
+    getProductById,
+    searchProductByUser
 } = require('../repositories/product.repo');
 
 class ProductService {
@@ -44,6 +47,10 @@ class ProductService {
         return await unPublishProduct({ id })
     }
 
+    static async getAProduct({ id }) {
+        return await getProductById({ id });
+    }
+
     static async updateProduct(id, payload) {
         return await updateProductById({ id, payload });
     }
@@ -55,7 +62,15 @@ class ProductService {
 
     static async findAllPublishedProduct({ limit = 50, skip = 0 } = {}) {
         const query = { isPublished: true };
-        return await findAllDraftProduct({ query, limit, skip });
+        return await findAllPublishProduct({ query, limit, skip });
+    }
+
+    static async deleteProduct({ id }) {
+        return await deleteProductById({ id });
+    }
+
+    static async searchProduct({ keySearch }) {
+        return await searchProductByUser({ keySearch });
     }
     
 }

@@ -48,6 +48,12 @@ var productSchema = new Schema({
     collection: COLLECTION_NAME
 });
 
+//create index for search
+productSchema.index({
+    name: 'text',
+    // description: 'text'
+});
+
 productSchema.pre('save', function(next) {
     this.slug = slugify(this.name, { lower: true });
     next();

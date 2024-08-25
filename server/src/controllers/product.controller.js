@@ -40,6 +40,35 @@ class ProductController {
         }).send(res);
     }
 
+    getAProduct = async (req,res,next) => {
+        new SuccessResponse({
+            message: 'get a product successfully',
+            metadata: await ProductService.getAProduct({ id: req.params.id })
+        }).send(res);
+    }
+
+    updateProduct = async (req,res,next) => {
+        new SuccessResponse({
+            message: 'update a product successfully',
+            metadata: await ProductService.updateProduct(req.params.id, req.body)
+        }).send(res);
+    }
+
+    deleteProduct = async (req,res,next) => {
+        new SuccessResponse({
+            message: 'delete product successfully',
+            metadata: await ProductService.deleteProduct({ id: req.params.id })
+        }).send(res);
+    }
+
+    searchProduct = async (req,res,next) => {
+        const { keySearch } = req.params;
+        new SuccessResponse({
+            message: 'search product successfully',
+            metadata: await ProductService.searchProduct({ keySearch })
+        }).send(res);
+    }
+
 }
 
 module.exports = new ProductController();
