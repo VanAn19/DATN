@@ -66,6 +66,19 @@ const searchProductByUser = async ({ keySearch }) => {
     return results;
 }
 
+const checkProductByServer = async (products) => {
+    return await Promise.all(products.map(async product => {
+        const foundProduct = await getProductById({ id: product.productId });
+        if (foundProduct) {
+            return {
+                price: foundProduct.price,
+                quantity: product.quantity,
+                productId: product.productId
+            }
+        }
+    }))
+}
+
 module.exports = {
     findProductByName,
     updateProductById,
@@ -75,5 +88,6 @@ module.exports = {
     publishProduct,
     unPublishProduct,
     deleteProductById,
-    searchProductByUser
+    searchProductByUser,
+    checkProductByServer
 }
