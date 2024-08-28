@@ -2,6 +2,7 @@
 
 const { BadRequestError } = require('../core/error.response');
 const Product = require('../models/product.model');
+const { insertInventory } = require('../repositories/inventory.repo');
 const { 
     findProductByName,
     updateProductById,
@@ -29,7 +30,7 @@ class ProductService {
         const { name, thumbnail, description, price, quantity, category } = payload;
         const product = await findProductByName({ name });
         if (product) throw new BadRequestError('Product name exists');
-        return await Product.create({
+        const newProduct = await Product.create({
             name,
             thumbnail,
             description,
@@ -37,6 +38,13 @@ class ProductService {
             quantity,
             category
         });
+        if (newProduct) {
+            await insertInventory({
+                productId: newProduct._id,
+                stock: quantity
+            })
+        }
+        return newProduct 
     }
 
     static async publishProduct({ id }) {
