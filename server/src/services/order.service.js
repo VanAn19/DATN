@@ -3,6 +3,7 @@
 const { BadRequestError } = require("../core/error.response");
 const { findCartById } = require("../repositories/cart.repo");
 const { checkProductByServer } = require("../repositories/product.repo");
+const { acquireLock, releaseLock } = require("./redis.service");
 
 class OrderService {
 
@@ -67,6 +68,10 @@ class OrderService {
             orderIdsNew,
             checkoutOrder
         }
+    }
+
+    static async orderByUser() {
+
     }
 
 }
