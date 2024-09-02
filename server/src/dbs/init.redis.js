@@ -16,7 +16,7 @@ const REDIS_CONNECT_TIMEOUT = 10000, REDIS_CONNECT_MESSAGE = {
         vn: 'Redis lỗi',
         en: 'redis connection error'
     }
-} 
+}  
 
 const handleTimeoutError = () => {
     connectionTimeout = setTimeout(() => {
