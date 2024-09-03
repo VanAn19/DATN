@@ -3,7 +3,8 @@
 const { BadRequestError } = require("../core/error.response");
 const { findCartById } = require("../repositories/cart.repo");
 const { checkProductByServer } = require("../repositories/product.repo");
-// const { acquireLock, releaseLock } = require("./redis.service");
+const { acquireLock, releaseLock } = require("./redis.service");
+const Order = require('../models/order.model');
 
 class OrderService {
 
@@ -70,8 +71,39 @@ class OrderService {
         }
     }
 
-    static async orderByUser() {
+    static async orderByUser({ orderIds, cartId, userId, address = {}, payment = {} }) {
+        const { orderIdsNew, checkoutOrder } = await OrderService.checkoutReview({
+            cartId,
+            userId,
+            orderIds
+        });
+        // check xem có vượt hàng tồn kho không
+        const products = orderIdsNew.flatMap(order => order.products);
+        const acquireProduct = []
+        for (let i = 0; i < acquireProduct.length; i++) {
+            const { productId, quantity } = products[i];
+            const keyLock = await acquireLock(productId, quantity, cartId);
+            acquireLock.push(keyLock ? true : false);
+            if (keyLock) {
+                await releaseLock(keyLock);
+            }
+        }
+        // nếu có 1 sản phẩm hết hàng trong kho
+        if (acquireProduct.includes(false)) {
+            throw new BadRequestError('Một số sản phẩm đã được cập nhật, vui lòng quay lại giỏ hàng');
+        }
+        const newOrder = await Order.create({
+            user: userId,
+            checkout: checkoutOrder,
+            shipping: address,
+            payment: payment,
+            products: orderIdsNew
+        });
+        // nếu create thành công, remove product có trong giỏ hàng
+        if (newOrder) {
 
+        }
+        return newOrder;
     }
 
 }

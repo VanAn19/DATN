@@ -49,7 +49,11 @@ const handleEventConnection = ({ connectionRedis }) => {
 }
 
 const initRedis = () => {
-    const instanceRedis = redis.createClient();
+    const instanceRedis = redis.createClient({
+        port: process.env.REDIS_PORT,
+        host: process.env.REDIS_HOST,
+        password: process.env.REDIS_PASSWORD
+    });
     client.instanceConnect = instanceRedis
     handleEventConnection({
         connectionRedis: instanceRedis
@@ -58,7 +62,13 @@ const initRedis = () => {
 
 const getRedis = () => client
 
-const closeRedis = () => client.instanceConnect.disconnect();
+// const closeRedis = () => client.instanceConnect.disconnect();
+const closeRedis = () => {
+    if (client.instanceConnect) {
+        client.instanceConnect.quit();
+        console.log('Redis connection closed');
+    }
+};
 
 module.exports = {
     initRedis,

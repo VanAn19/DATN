@@ -12,6 +12,12 @@ class OrderController {
         }).send(res);
     }
     
+    orderByUser = async (req,res,next) => {
+        new SuccessResponse({
+            message: 'order successfully ',
+            metadata: await OrderService.orderByUser({ userId: req.user.userId, ...req.body })
+        }).send(res);
+    }
 }
 
 module.exports = new OrderController();
