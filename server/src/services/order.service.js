@@ -99,7 +99,7 @@ class OrderService {
             payment: payment,
             products: orderIdsNew
         });
-        // nếu create thành công, remove product có trong giỏ hàng
+        // nếu create thành công, remove product có trong giỏ hàng 
         if (newOrder) {
 
         }
