@@ -23,6 +23,14 @@ const updateCartQuantity = async ({ userId, product }) => {
     return await Cart.findOneAndUpdate(query, updateSet, options);
 }
 
+const removeProductsFromCart = async (cartId, productIds) => {
+    return await Cart.findOneAndUpdate({ _id: cartId }, {
+        $pull: {
+            products: { productId: { $in: productIds } }
+        }
+    }, { new: true }).lean();
+}
+
 const findCartById = async (cartId) => {
     return await Cart.findOne({ _id: cartId, status: 'active' }).lean();
 }
@@ -30,5 +38,6 @@ const findCartById = async (cartId) => {
 module.exports = {
     createCart,
     updateCartQuantity,
+    removeProductsFromCart,
     findCartById
 }

@@ -1,6 +1,7 @@
 'use strict'
 
 const { model, Schema } = require('mongoose');
+const slugify = require('slugify');
 
 const DOCUMENT_NAME = 'Category';
 const COLLECTION_NAME = 'Categories';

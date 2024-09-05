@@ -26,6 +26,4 @@ var discountSchema = new Schema({
     timestamps: true
 });
 
-module.exports = {
-    discount: model(DOCUMENT_NAME, discountSchema)
-}
+module.exports = model(DOCUMENT_NAME, discountSchema);

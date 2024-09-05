@@ -51,6 +51,4 @@ const orderSchema = new Schema({
     timestamps: true
 })
 
-module.exports = {
-    order: model(DOCUMENT_NAME, orderSchema)
-}
+module.exports = model(DOCUMENT_NAME, orderSchema);

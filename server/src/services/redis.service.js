@@ -4,8 +4,6 @@ const redis = require('redis');
 const { promisify } = require('util');
 const { reservationInventory } = require('../repositories/inventory.repo');
 
-// const redisClient = redis.createClient();
-
 const { getRedis } = require('../dbs/init.redis');
 const {
     instanceConnect: redisClient
@@ -18,7 +16,7 @@ const acquireLock = async (productId, quantity, cartId) => {
     const key = `lock_v2023_${productId}`;
     const retryTimes = 10;
     const expireTime = 3000;
-    for (let i = 0; i < retryTimes.length; i++) {
+    for (let i = 0; i < retryTimes; i++) {
         // tạo 1 key, ai có key thì thanh toán
         const result = await setnxAsync(key, expireTime);
         console.log('result:::::::::::::', result);

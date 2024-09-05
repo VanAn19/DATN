@@ -1,7 +1,7 @@
 'use strict'
 
 const { BadRequestError } = require("../core/error.response");
-const { findCartById } = require("../repositories/cart.repo");
+const { findCartById, removeProductsFromCart } = require("../repositories/cart.repo");
 const { checkProductByServer } = require("../repositories/product.repo");
 const { acquireLock, releaseLock } = require("./redis.service");
 const Order = require('../models/order.model');
@@ -46,7 +46,6 @@ class OrderService {
         for (let i = 0; i < orderIds.length; i++) {
             const { products = [] } = orderIds[i];
             const checkProductServer = await checkProductByServer(products);
-            console.log("checkProductServer:::::::::", checkProductServer);
             if (!checkProductServer[0]) throw new BadRequestError('Order wrong');
             // tổng tiền đơn hàng
             const checkoutPrice = checkProductServer.reduce((acc, product) => {
@@ -80,10 +79,10 @@ class OrderService {
         // check xem có vượt hàng tồn kho không
         const products = orderIdsNew.flatMap(order => order.products);
         const acquireProduct = []
-        for (let i = 0; i < acquireProduct.length; i++) {
+        for (let i = 0; i < products.length; i++) {
             const { productId, quantity } = products[i];
             const keyLock = await acquireLock(productId, quantity, cartId);
-            acquireLock.push(keyLock ? true : false);
+            acquireProduct.push(keyLock ? true : false);
             if (keyLock) {
                 await releaseLock(keyLock);
             }
@@ -101,7 +100,8 @@ class OrderService {
         });
         // nếu create thành công, remove product có trong giỏ hàng 
         if (newOrder) {
-
+            const productIds = products.map(product => product.productId);
+            await removeProductsFromCart(cartId, productIds);
         }
         return newOrder;
     }

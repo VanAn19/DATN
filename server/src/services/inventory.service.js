@@ -7,7 +7,7 @@ const { getProductById } = require('../repositories/product.repo');
 class InventoryService {
 
     static async addStockToInventory({ stock, productId, location }) {
-        const product = await getProductById({ productId });
+        const product = await getProductById({ id: productId });
         if (!product) throw new BadRequestError('Product doesnt exist');
         const query = {
             productId: productId
