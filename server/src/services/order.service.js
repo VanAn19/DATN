@@ -135,13 +135,13 @@ class OrderService {
         const products = foundOrder.products.flatMap(order => order.products);
         console.log("products:::::::::", products);
         for (let product of products) {
-            await releaseInventory({ productId: product.productId, quantity: product.quantity, cartId: foundOrder.cartId });
+            await releaseInventory({ productId: product.productId, quantity: product.quantity });
         }
         return canceledOrder;
     }
 
     static async updateOrderStatusByAdmin() {
-
+        
     }
 
 }

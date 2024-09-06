@@ -29,7 +29,7 @@ const reservationInventory = async ({ productId, quantity, cartId }) => {
     return await Inventory.updateOne(query, updateSet, options);
 }
 
-const releaseInventory = async ({ productId, quantity, cartId }) => {
+const releaseInventory = async ({ productId, quantity }) => {
     const query = { productId }, updateSet = {
         $inc: {
             stock: quantity
