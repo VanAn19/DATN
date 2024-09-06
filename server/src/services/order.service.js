@@ -5,6 +5,8 @@ const { findCartById, removeProductsFromCart } = require("../repositories/cart.r
 const { checkProductByServer } = require("../repositories/product.repo");
 const { acquireLock, releaseLock } = require("./redis.service");
 const Order = require('../models/order.model');
+const { getOrder, getOneOrder } = require("../repositories/order.repo");
+const { releaseInventory } = require("../repositories/inventory.repo");
 
 class OrderService {
 
@@ -86,6 +88,7 @@ class OrderService {
             if (keyLock) {
                 await releaseLock(keyLock);
             }
+            console.log("acquireProduct:::::::", acquireProduct);
         }
         // nếu có 1 sản phẩm hết hàng trong kho
         if (acquireProduct.includes(false)) {
@@ -104,6 +107,41 @@ class OrderService {
             await removeProductsFromCart(cartId, productIds);
         }
         return newOrder;
+    }
+
+    static async getOrderByUser({ userId, limit = 50, skip = 0 }) {
+        const query = { user: userId }
+        return await getOrder({ query, limit, skip });
+    }
+
+    static async getOneOrderByUser({ id, userId }) {
+        return await getOneOrder({ id, userId });
+    }
+
+    static async cancelOrderByUser({ orderId, userId }) {
+        const foundOrder = await getOneOrder({ id: orderId, userId });
+        if (!foundOrder) throw new BadRequestError('Order not found or not owned by user');
+        // kiểm tra status (trường hợp shipped or delivered thì không thể hủy)
+        if (foundOrder.status === 'shipped' || foundOrder.status === 'delivered') throw new BadRequestError('Order cannot be canceled as it has been shipped or delivered');
+        // foundOrder.status = 'canceled';
+        // const canceledOrder = await foundOrder.save();
+        const canceledOrder = await Order.findOneAndUpdate(
+            { _id: orderId, user: userId },
+            { status: 'canceled' },
+            { upsert: true, new: true }
+        );
+        // hoàn lại inventory
+        console.log("foundOrder:::::::::", foundOrder);
+        const products = foundOrder.products.flatMap(order => order.products);
+        console.log("products:::::::::", products);
+        for (let product of products) {
+            await releaseInventory({ productId: product.productId, quantity: product.quantity, cartId: foundOrder.cartId });
+        }
+        return canceledOrder;
+    }
+
+    static async updateOrderStatusByAdmin() {
+
     }
 
 }
