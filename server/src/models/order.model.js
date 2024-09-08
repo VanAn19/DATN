@@ -5,37 +5,108 @@ const { model, Schema } = require('mongoose')
 const DOCUMENT_NAME = 'Order'
 const COLLECTION_NAME = 'Orders'
 
+// Sub-schema for Checkout
+const checkoutSchema = new Schema({
+    totalPrice: {
+        type: Number,
+        required: true
+    },
+    freeShip: {
+        type: Number,
+        default: 0
+    },
+    totalCheckout: {
+        type: Number,
+        required: true
+    }
+}, { _id: false });
+
+// Sub-schema for Address
+const addressSchema = new Schema({
+    street: {
+        type: String,
+        // required: true
+    },
+    city: {
+        type: String,
+        // required: true
+    },
+    state: {
+        type: String,
+        // required: true
+    },
+    country: {
+        type: String,
+        // required: true
+    }
+}, { _id: false });
+
+// Sub-schema for Payment
+const paymentSchema = new Schema({
+    method: {
+        type: String,
+        enum: ['credit card', 'cash', 'bank transfer'],
+        required: true
+    },
+    details: {
+        cardNumber: {
+            type: String,
+            required: function () { return this.method === 'credit card'; }
+        },
+        expirationDate: {
+            type: String,
+            required: function () { return this.method === 'credit card'; }
+        },
+        bankName: {
+            type: String,
+            required: function () { return this.method === 'bank transfer'; }
+        },
+        transactionId: {
+            type: String,
+            required: function () { return this.method === 'bank transfer'; }
+        }
+    }
+}, { _id: false });
+
 const orderSchema = new Schema({
     user: {
         type: Schema.Types.ObjectId,
-        require: true 
+        ref: "User",
+        required: true 
     },
     /*
         totalPrice,
         totalApplyDiscount,
         freeShip
     */ 
-    checkout: {
-        type: Object,
-        default: {}
-    },
+    // checkout: {
+    //     type: Object,
+    //     default: {}
+    // },
+    checkout: checkoutSchema, 
     /*
         street,
-        city,
+        city, 
         state,
         country
     */ 
-    shipping: {
-        type: Object,
-        default: {}
-    },
-    payment: {
-        type: Object,
-        default: {}
-    },
+    // shipping: {
+    //     type: Object,
+    //     default: {}
+    // },
+    address: addressSchema,
+    /*
+        method,
+        details,
+    */ 
+    // payment: {
+    //     type: Object,
+    //     default: {}
+    // },
+    payment: paymentSchema,
     products: {
         type: Array,
-        require: true 
+        required: true 
     },
     trackingNumber: {
         type: String,

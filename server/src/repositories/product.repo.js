@@ -4,7 +4,7 @@ const Product = require('../models/product.model');
 
 const queryProduct = async ({ query, limit, skip }) => {
     return await Product.find(query).populate('category')
-        .sort({ updateAt: -1 })
+        .sort({ updatedAt: -1 })
         .skip(skip)
         .limit(limit)
         .lean()

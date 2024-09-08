@@ -3,15 +3,21 @@
 const express = require('express');
 const orderController = require('../../controllers/order.controller');
 const { asyncHandler } = require('../../helpers/asyncHandler');
-const { authentication } = require('../../auth/authUtils');
+const { authentication, checkRole } = require('../../auth/authUtils');
 const router = express.Router();
 
 router.use(authentication)
 
 router.post('/review', asyncHandler(orderController.checkoutReview));
 router.post('/order', asyncHandler(orderController.orderByUser));
-router.get('/', asyncHandler(orderController.getOrderByUser));
-router.get('/:id', asyncHandler(orderController.getOneOrderByUser));
 router.post('/cancel/:id', asyncHandler(orderController.cancelOrderByUser));
+router.get('/:id', asyncHandler(orderController.getOneOrderByUser));
+router.get('/', asyncHandler(orderController.getOrderByUser));
+
+router.use(checkRole('admin'))
+
+router.get('/getOrderByAdmin', asyncHandler(orderController.getOrderByAdmin));
+router.get('/getOneOrderByAdmin/:id', asyncHandler(orderController.getOneOrderByAdmin));
+router.post('/update', asyncHandler(orderController.updateStatusOrderByAdmin));
 
 module.exports = router;

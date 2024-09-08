@@ -21,8 +21,15 @@ class OrderController {
 
     getOrderByUser = async (req,res,next) => {
         new SuccessResponse({
-            message: 'get order successfully ',
+            message: 'get order successfully by user ',
             metadata: await OrderService.getOrderByUser({ userId: req.user.userId })
+        }).send(res);
+    }
+
+    getOrderByAdmin = async (req,res,next) => {
+        new SuccessResponse({
+            message: 'get order successfully by admin ',
+            metadata: await OrderService.getOrderByAdmin()
         }).send(res);
     }
 
@@ -33,10 +40,24 @@ class OrderController {
         }).send(res);
     }
 
+    getOneOrderByAdmin = async (req,res,next) => {
+        new SuccessResponse({
+            message: 'get one order successfully ',
+            metadata: await OrderService.getOneOrderByAdmin({ id: req.params.id })
+        }).send(res);
+    }
+
     cancelOrderByUser = async (req,res,next) => {
         new SuccessResponse({
             message: 'cancel order successfully ',
             metadata: await OrderService.cancelOrderByUser({ orderId: req.params.id, userId: req.user.userId })
+        }).send(res);
+    }
+
+    updateStatusOrderByAdmin = async (req,res,next) => {
+        new SuccessResponse({
+            message: 'cancel order successfully ',
+            metadata: await OrderService.updateOrderStatusByAdmin(req.body)
         }).send(res);
     }
 }

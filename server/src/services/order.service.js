@@ -5,7 +5,7 @@ const { findCartById, removeProductsFromCart } = require("../repositories/cart.r
 const { checkProductByServer } = require("../repositories/product.repo");
 const { acquireLock, releaseLock } = require("./redis.service");
 const Order = require('../models/order.model');
-const { getOrder, getOneOrder } = require("../repositories/order.repo");
+const { getOrder, getOneOrder, getOrderByAdmin, getOneOrderByAdmin } = require("../repositories/order.repo");
 const { releaseInventory } = require("../repositories/inventory.repo");
 
 class OrderService {
@@ -72,7 +72,7 @@ class OrderService {
         }
     }
 
-    static async orderByUser({ orderIds, cartId, userId, address = {}, payment = {} }) {
+    static async orderByUser({ orderIds, cartId, userId, address, payment }) {
         const { orderIdsNew, checkoutOrder } = await OrderService.checkoutReview({
             cartId,
             userId,
@@ -88,7 +88,6 @@ class OrderService {
             if (keyLock) {
                 await releaseLock(keyLock);
             }
-            console.log("acquireProduct:::::::", acquireProduct);
         }
         // nếu có 1 sản phẩm hết hàng trong kho
         if (acquireProduct.includes(false)) {
@@ -114,8 +113,16 @@ class OrderService {
         return await getOrder({ query, limit, skip });
     }
 
+    static async getOrderByAdmin({ limit = 50, skip = 0 } = {}) {
+        return await getOrderByAdmin({ limit, skip });
+    }
+
     static async getOneOrderByUser({ id, userId }) {
         return await getOneOrder({ id, userId });
+    }
+
+    static async getOneOrderByAdmin({ id }) {
+        return await getOneOrderByAdmin({ id });
     }
 
     static async cancelOrderByUser({ orderId, userId }) {
@@ -131,17 +138,27 @@ class OrderService {
             { upsert: true, new: true }
         );
         // hoàn lại inventory
-        console.log("foundOrder:::::::::", foundOrder);
         const products = foundOrder.products.flatMap(order => order.products);
-        console.log("products:::::::::", products);
         for (let product of products) {
             await releaseInventory({ productId: product.productId, quantity: product.quantity });
         }
         return canceledOrder;
     }
 
-    static async updateOrderStatusByAdmin() {
-        
+    static async updateOrderStatusByAdmin({ orderId, newStatus }) {
+        const allowedStatuses = ['pending', 'confirmed', 'shipped', 'canceled', 'delivered'];
+        if (!allowedStatuses.includes(newStatus)) {
+            throw new BadRequestError('Invalid status');
+        }
+        const foundOrder = await getOneOrderByAdmin({ id: orderId });
+        if (!foundOrder) throw new BadRequestError('Order not found');
+        // nếu đơn hàng bị hủy hoặc đơn hàng đã giao thành công thì không thay đổi được
+        if (foundOrder.status === 'delivered' || foundOrder.status === 'canceled') {
+            throw new BadRequestError('Cant update the order because it is already delivered or canceled');
+        }
+        foundOrder.status = newStatus;
+        const updatedOrder = await foundOrder.save();
+        return updatedOrder;
     }
 
 }
