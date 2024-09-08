@@ -15,7 +15,7 @@ const HEADER = {
 const createTokenPair = async (payload, publicKey, privatekey) => {
     try {
         const accessToken = await jwt.sign({ ...payload, role: payload.role}, publicKey, {
-            expiresIn: '2d'
+            expiresIn: '7d'
         });
         const refreshToken = await jwt.sign({ ...payload, role: payload.role}, privatekey, {
             expiresIn: '365d'

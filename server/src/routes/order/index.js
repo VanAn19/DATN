@@ -16,7 +16,7 @@ router.get('/', asyncHandler(orderController.getOrderByUser));
 
 router.use(checkRole('admin'))
 
-router.get('/getOrderByAdmin', asyncHandler(orderController.getOrderByAdmin));
+router.get('/admin/getOrderByAdmin', asyncHandler(orderController.getOrderByAdmin));
 router.get('/getOneOrderByAdmin/:id', asyncHandler(orderController.getOneOrderByAdmin));
 router.post('/update', asyncHandler(orderController.updateStatusOrderByAdmin));
 
