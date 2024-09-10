@@ -1,0 +1,46 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --header-height: 64px;
+}
+
+body {
+  @apply font-poppins font-thin;
+}
+
+.primary_btn {
+  @apply cursor-pointer;
+}
+.icon-container {
+  @apply relative flex items-center;
+
+  .desc {
+    @apply absolute opacity-0 transition duration-0 mt-16 left-0 top-0 p-2 bg-neutral-600 rounded text-white text-xs;
+  }
+
+  .icon-primary:hover + .desc {
+    @apply opacity-100 mt-14 w-max;
+  }
+}
+
+.icon-primary {
+  @apply hover:bg-slate-100 rounded-full mx-1;
+}
+
+.list-item {
+  @apply pl-3 pt-1.5 flex flex-row items-center pb-1.5 cursor-pointer hover:bg-gray-200;
+}
+
+.list-item:hover .size {
+  @apply opacity-100;
+}
+
+.item-text {
+  @apply m-0 pl-2.5 text-[#0D1216] font-normal text-[14px];
+}
+
+.size {
+  @apply m-0 pl-2.5 text-[rgba(13,18,22,0.7)] font-normal text-[12px] opacity-0;
+}
