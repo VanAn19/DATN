@@ -31,9 +31,16 @@ class AuthController {
 
     signUp = async (req,res,next) => {
         new CREATED({
-            message: 'Register OK!',
+            message: 'Register OK! OTP has been sent',
             metadata: await AuthService.signUp(req.body)
-        }).send(res)
+        }).send(res);
+    }
+
+    verifyOTP = async (req, res, next) => {
+        new SuccessResponse({
+            message: 'Verify OTP success',
+            metadata: await AuthService.verifySignUp(req.body.userId, req.body.otp)
+        }).send(res);
     }
 
 }

@@ -45,6 +45,10 @@ var userSchema = new Schema({
         enum: ['user', 'admin'],
         default: 'user'
     },
+    isOtpVerified: {
+        type: Boolean,
+        default: false 
+    },
     passwordChangedAt: {
         type: String
     },

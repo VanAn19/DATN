@@ -7,6 +7,7 @@ const { authentication } = require('../../auth/authUtils');
 const router = express.Router();
 
 router.post('/signup', asyncHandler(authController.signUp));
+router.post('/verifyOTP', asyncHandler(authController.verifyOTP));
 router.post('/login', asyncHandler(authController.login));
 
 router.use(authentication)

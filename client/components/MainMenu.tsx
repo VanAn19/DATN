@@ -1,11 +1,19 @@
 import React from 'react'
 import { CloseOutlined } from "@ant-design/icons";
+import Link from 'next/link';
 
 interface MainMenuProps {
   onClose: () => void; 
 }
 
 const MainMenu: React.FC<MainMenuProps> = ({ onClose }) => {
+  const menuItems = [
+    { href: '/intro', label: 'Giới thiệu' },
+    { href: '/products', label: 'Sản phẩm' },
+    { href: '/contact', label: 'Liên hệ' },
+    { href: '/instruction-manual', label: 'Hướng dẫn sử dụng và bảo quản' }
+  ];
+
   return (
     <div className="fixed top-0 left-0 h-full w-[375px] bg-white z-50 shadow-lg">
       <div className="flex justify-end p-4">
@@ -15,9 +23,11 @@ const MainMenu: React.FC<MainMenuProps> = ({ onClose }) => {
       </div>
 
       <ul className="p-4">
-        <li className="p-4 border-b">Menu Item 1</li>
-        <li className="p-4 border-b">Menu Item 2</li>
-        <li className="p-4 border-b">Menu Item 3</li>
+        {menuItems.map((menuItem) => (
+          <li key={menuItem.href} className='p-4 border-b'>
+            <Link href={menuItem.href}>{menuItem.label}</Link>
+          </li>
+        ))}
       </ul>
     </div>
   )

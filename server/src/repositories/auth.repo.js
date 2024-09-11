@@ -6,6 +6,11 @@ const findByUsername = async ({ username, select = { password: 1, name: 1, dateO
     return await User.findOne({ username }).select(select).lean();
 }
 
+const findUserById = async (id) => {
+    return await User.findById(id);
+}
+
 module.exports = {
-    findByUsername
+    findByUsername,
+    findUserById
 }
