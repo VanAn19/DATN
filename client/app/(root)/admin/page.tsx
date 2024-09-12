@@ -1,31 +1,31 @@
 import React from 'react'
 import DashboardCard from '@/components/DashboardCard';
-import { Utensils, Folder, ReceiptText, ChartNoAxesCombined } from 'lucide-react';
+import { AppstoreOutlined, MenuUnfoldOutlined, FileTextOutlined, AreaChartOutlined } from '@ant-design/icons';
 
 const Admin = () => {
   const cardData = [
     {
       title: "Sản phẩm",
       count: 100,
-      icon: <Utensils className="text-slate-500" size={72} />,
+      icon: <AppstoreOutlined className="text-slate-500" style={{ fontSize: '72px' }} />,
       link: '/admin/products'
     },
     {
       title: "Danh mục",
       count: 12,
-      icon: <Folder className="text-slate-500" size={72} />,
+      icon: <MenuUnfoldOutlined className="text-slate-500" style={{ fontSize: '72px' }} />,
       link: '/admin/categories'
     },
     {
       title: "Đơn hàng",
       count: 12,
-      icon: <ReceiptText className="text-slate-500" size={72} />,
+      icon: <FileTextOutlined className="text-slate-500" style={{ fontSize: '72px' }} />,
       link: '/admin/orders'
     },
     {
       title: "Thống kê",
       count: 750,
-      icon: <ChartNoAxesCombined className="text-slate-500" size={72} />,
+      icon: <AreaChartOutlined className="text-slate-500" style={{ fontSize: '72px' }} />,
       link: '/admin/stats'
     }
   ];

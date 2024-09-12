@@ -1,13 +1,13 @@
 'use client'
 
 import { Card, CardContent } from '@/components/ui/card';
-import { LucideIcon } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import { ReactNode } from 'react';
 
 interface DashboardCardProps {
   title: string;
   count: number;
-  icon: React.ReactElement<LucideIcon>;
+  icon: ReactNode;
   link: string;
 }
 
