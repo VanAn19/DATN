@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import React, { FormEvent, useState } from 'react'
 
-const Page = () => {
+const SignIn = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   
@@ -64,4 +64,4 @@ const Page = () => {
   )
 }
 
-export default Page
+export default SignIn
