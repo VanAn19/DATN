@@ -2,6 +2,7 @@ const express = require('express');
 const morgan = require('morgan');
 const helmet = require('helmet');
 const compression = require('compression');
+const cors = require('cors');
 require('dotenv').config();
 const app = express();
 
@@ -13,6 +14,9 @@ app.use(express.json())
 app.use(express.urlencoded({
     extended: true
 }))
+app.use(cors({
+    origin: 'http://localhost:3000'  
+}));
 
 // init db
 require('./dbs/init.mongodb')

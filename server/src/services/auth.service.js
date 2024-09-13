@@ -56,7 +56,7 @@ class AuthService {
             privateKey
         });
         return {
-            user: getInfoData({ fields: ['id', 'name', 'email'], object: foundUser}),
+            user: getInfoData({ fields: ['_id', 'name', 'email'], object: foundUser}),
             tokens
         }
     }
