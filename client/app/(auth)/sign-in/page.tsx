@@ -36,7 +36,7 @@ const SignIn = () => {
         });
         if (res.status === 200) {
           dispatch(CHANGE_STATUS_AUTH(true));
-          dispatch(CHANGE_VALUE_TOKEN(res?.metadata?.tokens?.accessToken));
+          dispatch(CHANGE_VALUE_TOKEN(res));
           router.push("/");
         }
       }
