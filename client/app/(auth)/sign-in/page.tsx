@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import React, { FormEvent, useState } from 'react'
 import { signin } from '@/api/auth';
-import { CHANGE_STATUS_AUTH, CHANGE_VALUE_TOKEN } from '@/redux/slices/authSlice';
+import { CHANGE_STATUS_AUTH, CHANGE_VALUE_USER } from '@/redux/slices/authSlice';
 import * as yup from "yup";
 import { useDispatch } from "react-redux";
 import { useRouter } from "next/navigation";
@@ -36,7 +36,7 @@ const SignIn = () => {
         });
         if (res.status === 200) {
           dispatch(CHANGE_STATUS_AUTH(true));
-          dispatch(CHANGE_VALUE_TOKEN(res));
+          dispatch(CHANGE_VALUE_USER(res));
           router.push("/");
         }
       }
