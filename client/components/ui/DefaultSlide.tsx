@@ -12,6 +12,8 @@ import {
   SamplePrevArrow,
   SkeletonCustom,
 } from "./CustomSlide";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 import TruncatedText from "./TruncatedText";
 
 const Slider = dynamic(() => import("react-slick"), { ssr: false }) as any;
@@ -25,7 +27,7 @@ const DefaultSlide = ({ apiAction, title, path }: { apiAction: () => Promise<Pro
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
 
-  const settings = {
+  const settings = {  
     infinite: true,
     speed: 500,
     slidesToShow: 5,
@@ -39,16 +41,19 @@ const DefaultSlide = ({ apiAction, title, path }: { apiAction: () => Promise<Pro
     const fetchProducts = async () => {
       try {
         const res = await apiAction();
+        console.log("apiAction::::::::::", res);
         setProducts(res);
         setLoading(false);
       } catch (err) {
         console.error("Failed to fetch products:", err);
         setLoading(false);
       }    
-      fetchProducts(); 
     }
-
+    fetchProducts();
   }, [apiAction])
+
+  console.log("products::::::::::::::", products);
+  console.log("loading::::::::::::::", loading);
 
   return (
     <div className="w-[100%] mx-auto px-4 pt-4">
@@ -76,27 +81,29 @@ const DefaultSlide = ({ apiAction, title, path }: { apiAction: () => Promise<Pro
                 </div>
               ))}
             </Slider>
-          ): (
+          ) : (
             <Slider {...settings} className="w-full relative">
               {products?.map((product) => (
-                <Link href={`/products/${product.slug}`} className="slide-content pr-8" key={product._id}>
+                <Link href={`/products/${product.slug}`} className="slide-content pr-8" key={product._id} >
                   <div className="card bg-white rounded-lg shadow-md overflow-hidden cursor-pointer w-full sm:w-58">
                     <div className="bg-orange-100 overflow-hidden group flex justify-center">
-                    <Image
-                      src={product?.thumbnail}
-                      width={300}
-                      height={200}
-                      className="object-contain h-48 w-96 transition-transform duration-300 ease-in-out group-hover:scale-110"
-                      alt={product.name}
-                    />
+                      <Image
+                        src="https://res-console.cloudinary.com/dqauhy8f0/thumbnails/v1/image/upload/v1718251982/c2FtcGxlcy9sYW5kc2NhcGVzL25hdHVyZS1tb3VudGFpbnM=/preview"
+                        width={300}
+                        height={200}
+                        className="object-contain h-48 w-96 transition-transform duration-300 ease-in-out group-hover:scale-110"
+                        alt={product.name}
+                      />
                     </div>
                     <div className="p-2">
                       <h2 className="text-lg font-medium h-12 mobile:h-20">
                         <TruncatedText text={product.name} maxLength={33} />
                       </h2>
-                      <p className="text-gray-500 mt-2 text-sm">Đã bán</p>
+                      <p className="text-gray-500 mt-2 text-sm">
+                        Đã bán 
+                      </p>
                       <div className="mt-2">
-                        <span className="text-gray-500 line-through">
+                        <span className="text-gray-500">
                           {VND.format(product?.price)}
                         </span>
                       </div>
@@ -109,7 +116,7 @@ const DefaultSlide = ({ apiAction, title, path }: { apiAction: () => Promise<Pro
         </StyledSlider>
       </div>
     </div>
-  )
+  );
 }
 
 export default DefaultSlide

@@ -7,7 +7,9 @@ const Home = () => {
   return (
     <div>
       <Header />
-      <BestSellingProductSlider />
+      <div className="flex-col w-[90%]">
+        <BestSellingProductSlider />
+      </div>
       <div className='flex flex-col items-center justify-center transition-all duration-300 ml-0 w-full'>
         <div className='transition-all duration-300 w-[100%] flex justify-center`'>
           <Footer />

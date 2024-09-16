@@ -1,6 +1,6 @@
 import axiosInstance from "./axiosInstance";
 import { AxiosResponse } from 'axios'; 
-import { AuthResponse } from "./axiosInstance";
+import { AuthResponse } from "@/types";
 
 export const signin = async (data: { username: string; password: string }) => {
   try {

@@ -1,20 +1,5 @@
 import axios, { AxiosResponse } from 'axios';
-
-export interface AuthResponse {
-  message: string;
-  status: number;
-  metadata: {
-    tokens: {
-      accessToken: string;
-      refreshToken: string;
-    };
-    user: {
-      _id: string
-      name: string;  
-      email: string;
-    };
-  };
-}
+import { AuthResponse } from '@/types';
 
 const axiosInstance = axios.create({
   baseURL: process.env.API_ROOT,
