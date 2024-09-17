@@ -6,12 +6,18 @@ import {
     SearchOutlined,
     ShoppingCartOutlined
 } from "@ant-design/icons";
+import { Divider, Dropdown, Modal, Space, Spin, Button } from "antd";
 import "../styles/globals.scss";
 import Link from 'next/link';
 import MainMenu from './MainMenu';
+import { useSelector } from 'react-redux';
+import { RootState } from '../redux/store';
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
+  // const { user, token, isAuthenticated } = useSelector((state: RootState) => state.auth);
+  
+  // console.log(isAuthenticated);
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -24,6 +30,13 @@ const Header = () => {
   const iconsMenu = [
     { component: MenuOutlined, key: 'menu' },
     { component: SearchOutlined, key: 'search' }
+  ]
+
+  const itemsDropdowUser = [
+    { href: '/profile', label: 'Thông tin cá nhân' },
+    { href: '/liked-products', label: 'Sản phẩm đã thích' },
+    { href: '/orders', label: 'Đơn hàng của tôi' },
+    { href: '/', label: 'Đăng xuất' }
   ]
 
   return (
@@ -54,11 +67,17 @@ const Header = () => {
             <ShoppingCartOutlined style={{ fontSize: '20px' }} />
           </button>
         </div>
-        <Link href="/sign-in">
-          <button className="px-4 py-2 mr-[15px] bg-blue-500 text-white rounded">
-            Đăng nhập
-          </button>
-        </Link>
+        {/* {isAuthenticated ? ( */}
+          {/* <div></div> */}
+        {/* ) : ( */}
+          <>
+            <Link href="/sign-in">
+              <button className="px-4 py-2 mr-[15px] bg-blue-500 text-white rounded">
+                Đăng nhập
+              </button>
+            </Link>
+          </>
+        {/* )} */}
       </div>
     </div>
   )

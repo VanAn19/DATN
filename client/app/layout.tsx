@@ -3,8 +3,6 @@ import { Inter } from "next/font/google";
 import "../styles/globals.scss";
 import Providers from "../redux/Provider";
 
-const inter = Inter({ subsets: ["latin"] });
-
 export const metadata: Metadata = {
   title: "Dao Trọng Bình",
   description: "Dao Trọng Bình",

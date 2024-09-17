@@ -15,6 +15,7 @@ import {
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import TruncatedText from "./TruncatedText";
+import images from '@/public/images'; //
 
 const Slider = dynamic(() => import("react-slick"), { ssr: false }) as any;
 
@@ -52,9 +53,6 @@ const DefaultSlide = ({ apiAction, title, path }: { apiAction: () => Promise<Pro
     fetchProducts();
   }, [apiAction])
 
-  console.log("products::::::::::::::", products);
-  console.log("loading::::::::::::::", loading);
-
   return (
     <div className="w-[100%] mx-auto px-4 pt-4">
       <div className="flex justify-between">
@@ -88,7 +86,7 @@ const DefaultSlide = ({ apiAction, title, path }: { apiAction: () => Promise<Pro
                   <div className="card bg-white rounded-lg shadow-md overflow-hidden cursor-pointer w-full sm:w-58">
                     <div className="bg-orange-100 overflow-hidden group flex justify-center">
                       <Image
-                        src="https://res-console.cloudinary.com/dqauhy8f0/thumbnails/v1/image/upload/v1718251982/c2FtcGxlcy9sYW5kc2NhcGVzL25hdHVyZS1tb3VudGFpbnM=/preview"
+                        src={images.logo}
                         width={300}
                         height={200}
                         className="object-contain h-48 w-96 transition-transform duration-300 ease-in-out group-hover:scale-110"
