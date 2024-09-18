@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import React, { FormEvent, useState } from 'react'
 import { signin } from '@/api/auth';
+import { setCookie } from '@/utils';
 import { CHANGE_STATUS_AUTH, CHANGE_VALUE_USER } from '@/redux/slices/authSlice';
 import * as yup from "yup";
 import { useDispatch } from "react-redux";
@@ -14,6 +15,7 @@ const schema = yup.object().shape({
 });
 
 const SignIn = () => {
+  const expirationHours = 3;
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const dispatch = useDispatch();
@@ -37,6 +39,8 @@ const SignIn = () => {
         if (res.status === 200) {
           dispatch(CHANGE_STATUS_AUTH(true));
           dispatch(CHANGE_VALUE_USER(res));
+          setCookie("token", res?.metadata?.tokens?.accessToken, expirationHours);
+          setCookie("user", res?.metadata?.user, expirationHours);
           router.push("/");
         }
       }

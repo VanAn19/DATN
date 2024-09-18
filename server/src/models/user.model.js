@@ -40,6 +40,11 @@ var userSchema = new Schema({
         trim: true,
         required: true
     },
+    avatar: {
+        type: String,
+        required: true,
+        default: ""
+    },
     role: {
         type: String,
         enum: ['user', 'admin'],

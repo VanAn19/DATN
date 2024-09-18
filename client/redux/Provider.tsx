@@ -1,25 +1,20 @@
 "use client";
 
 import React from "react";
-import { store, persistor } from './store';
+import { store } from './store';
 import { Provider } from "react-redux";
-import { PersistGate } from 'redux-persist/integration/react';
-import { Spin } from 'antd';
 
-export default function Providers({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-  if (typeof window === 'undefined') {
-    return <>{children}</>; // Tránh xử lý Redux Persist khi SSR
-  }
+export default function Providers({ children }: { children: React.ReactNode }) {
 
   return (
-    <Provider store={store}>
-      <PersistGate loading={<Spin />} persistor={persistor}>
-        {children}
-      </PersistGate>
-    </Provider>
+    // <Provider store={store}>
+    //   <PersistGate loading={<Spin />} persistor={persistor}>
+    //     {children}
+    //   </PersistGate>
+    // </Provider>
+    <>
+      <Provider store={store}>{children}</Provider>
+    </>
   );
+  
 }

@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { FormEvent, useState } from 'react'
 import {
     MenuOutlined,
     SearchOutlined,
@@ -10,14 +10,14 @@ import { Divider, Dropdown, Modal, Space, Spin, Button } from "antd";
 import "../styles/globals.scss";
 import Link from 'next/link';
 import MainMenu from './MainMenu';
-import { useSelector } from 'react-redux';
-import { RootState } from '../redux/store';
+import { checkAvailableLogin, checkTokenCookie, getCookie } from '@/utils';
+import Image from 'next/image';
+import images from '@/public/images';
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
-  // const { user, token, isAuthenticated } = useSelector((state: RootState) => state.auth);
-  
-  // console.log(isAuthenticated);
+  const isAuth = checkAvailableLogin();
+  const infoUser = getCookie('user');
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -27,16 +27,48 @@ const Header = () => {
     setIsMenuOpen(false); 
   }
 
+  const handleLogout = async (e: FormEvent) => {
+
+  }
+
   const iconsMenu = [
     { component: MenuOutlined, key: 'menu' },
     { component: SearchOutlined, key: 'search' }
   ]
 
   const itemsDropdowUser = [
-    { href: '/profile', label: 'Thông tin cá nhân' },
-    { href: '/liked-products', label: 'Sản phẩm đã thích' },
-    { href: '/orders', label: 'Đơn hàng của tôi' },
-    { href: '/', label: 'Đăng xuất' }
+    { 
+      label: (
+        <Link href={"/profile"} className="list-item">
+          <p className="item-text">Thông tin cá nhân</p>
+        </Link>
+      ),
+      key: 'profile'
+    },
+    { 
+      label: (
+        <Link href={"/liked-products"} className="list-item ">
+          <p className="item-text">Sản phẩm đã thích</p>
+        </Link>
+      ),  
+      key: 'liked-products'
+    },
+    { 
+      label: (
+        <Link href={"/orders"} className="list-item ">
+          <p className="item-text">Đơn hàng của tôi</p>
+        </Link>
+      ), 
+      key: 'orders'
+    },
+    { 
+      label: (
+        <div className="list-item " onClick={handleLogout}>
+          <p className="item-text">Đăng xuất</p>
+        </div>
+      ),
+      key: 'logout',
+    }
   ]
 
   return (
@@ -67,17 +99,51 @@ const Header = () => {
             <ShoppingCartOutlined style={{ fontSize: '20px' }} />
           </button>
         </div>
-        {/* {isAuthenticated ? ( */}
-          {/* <div></div> */}
-        {/* ) : ( */}
-          <>
-            <Link href="/sign-in">
-              <button className="px-4 py-2 mr-[15px] bg-blue-500 text-white rounded">
-                Đăng nhập
-              </button>
-            </Link>
-          </>
-        {/* )} */}
+        {isAuth ? (
+          <Dropdown
+            trigger={["click"]}
+            placement="bottomRight"
+            arrow={true}
+            dropdownRender={() => (
+              <div
+                style={{
+                  maxHeight: "400px",
+                  background: "white",
+                  overflowY: "auto",
+                  borderRadius: "10px",
+                  scrollbarWidth: "thin",
+                  // scrollbars: "false",
+                }}
+              >
+                {itemsDropdowUser.map((item) => (
+                  <div key={item.key}>{item.label}</div>
+                ))}
+              </div>
+            )}
+          >
+            <div
+                style={{
+                  cursor: "pointer",
+                }}
+              >
+                <Space>
+                  <div className="w-10 h-10 rounded-full overflow-hidden m-5">
+                    <Image
+                      className="w-full h-full object-cover rounded-full"
+                      alt="User Avatar"
+                      src={infoUser?.avatar || images.logo} 
+                    />
+                  </div>
+                </Space>
+              </div>
+          </Dropdown>
+        ) : (
+          <Link href="/sign-in">
+            <button className="px-4 py-2 mr-[15px] bg-blue-500 text-white rounded">
+              Đăng nhập
+            </button>
+          </Link>
+        )}
       </div>
     </div>
   )

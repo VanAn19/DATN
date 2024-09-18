@@ -42,7 +42,6 @@ const DefaultSlide = ({ apiAction, title, path }: { apiAction: () => Promise<Pro
     const fetchProducts = async () => {
       try {
         const res = await apiAction();
-        console.log("apiAction::::::::::", res);
         setProducts(res);
         setLoading(false);
       } catch (err) {
