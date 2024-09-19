@@ -10,12 +10,18 @@ import { Divider, Dropdown, Modal, Space, Spin, Button } from "antd";
 import "../styles/globals.scss";
 import Link from 'next/link';
 import MainMenu from './MainMenu';
-import { checkAvailableLogin, checkTokenCookie, getCookie } from '@/utils';
+import { checkAvailableLogin, checkTokenCookie, getCookie, clearAllCookies } from '@/utils';
 import Image from 'next/image';
 import images from '@/public/images';
+import { logout } from '@/api/auth';
+import { useDispatch } from "react-redux";
+import { DELETE_VALUE_USER } from '@/redux/slices/authSlice';
+import { useRouter } from 'next/navigation';
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
+  const dispatch = useDispatch();
+  const router = useRouter();
   const isAuth = checkAvailableLogin();
   const infoUser = getCookie('user');
 
@@ -28,7 +34,17 @@ const Header = () => {
   }
 
   const handleLogout = async (e: FormEvent) => {
-
+    try {
+      await logout();
+      clearAllCookies();
+      document.cookie = `user=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
+      document.cookie = `token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
+      dispatch(DELETE_VALUE_USER());
+      router.push('/');
+      window.location.reload();
+    } catch (error) {
+      console.error("Logout error:", error);
+    }
   }
 
   const iconsMenu = [
@@ -131,7 +147,7 @@ const Header = () => {
                     <Image
                       className="w-full h-full object-cover rounded-full"
                       alt="User Avatar"
-                      src={infoUser?.avatar || images.logo} 
+                      src={images.logo} 
                     />
                   </div>
                 </Space>

@@ -18,12 +18,13 @@ const authSlice = createSlice({
         CHANGE_STATUS_AUTH: (state, action) => {
             state.isAuthenticated = action.payload;
         },
-        LOGOUT: (state) => {
+        DELETE_VALUE_USER: (state) => {
             state.token = null;
             state.user = null;
+            state.isAuthenticated = false;
         },
     },
 });
 
-export const { CHANGE_VALUE_USER, CHANGE_STATUS_AUTH, LOGOUT } = authSlice.actions;
+export const { CHANGE_VALUE_USER, CHANGE_STATUS_AUTH, DELETE_VALUE_USER } = authSlice.actions;
 export default authSlice.reducer;

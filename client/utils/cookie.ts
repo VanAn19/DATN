@@ -30,13 +30,13 @@ export const getCookie = (name: string) => {
         end = dc.length;
     }
   
-    // const value = decodeURIComponent(dc.substring(begin + prefix.length, end));
-    // try {
-    //     return JSON.parse(value);
-    // } catch (e) {
-    //     return null; // Nếu không phải JSON hợp lệ, trả về null
-    // }
-    return decodeURI(dc.substring(begin + prefix.length, end));
+    const value = decodeURI(dc.substring(begin + prefix.length, end));
+    try {
+        return JSON.parse(value);
+    } catch (e) {
+        return null; // Nếu không phải JSON hợp lệ, trả về null
+    }
+    // return decodeURI(dc.substring(begin + prefix.length, end));
 };
   
 export function checkTokenCookie() {
