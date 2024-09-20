@@ -61,6 +61,11 @@ export default function ProductInfo(props: { data: any, user: string, isLoading:
           <div className="flex items-center gap-3">
             <h1 className="text-xl font-semibold">{data?.name}</h1>
           </div>
+          <div className="flex items-center gap-5 bg-slate-100 p-5">
+            <div className="text-3xl text-red-500">
+              {VND.format(data?.price)}
+            </div>
+          </div>
           <div className="flex items-center gap-3">
             <div className="product-details-e">Mô tả</div>
             <div className="w-[37px] h-[35px] mr-3 flex items-center justify-center overflow-hidden rounded-full bg-gray-200">

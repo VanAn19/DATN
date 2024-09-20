@@ -7,7 +7,7 @@ const Home = () => {
   return (
     <div>
       <Header />
-      <div className="flex-col w-[90%]">
+      <div className="flex flex-col w-[90%]">
         <BestSellingProductSlider />
       </div>
       <div className='flex flex-col items-center justify-center transition-all duration-300 ml-0 w-full'>
