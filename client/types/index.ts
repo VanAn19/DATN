@@ -39,3 +39,17 @@ export interface ProductResponse {
         }
     ];
 }
+
+export interface OneProductResponse {
+    message: string;
+    status: number;
+    metadata: {
+        _id: string;
+        name: string;
+        thumbnail: string;
+        description: string;
+        price: number;
+        category: string;
+        slug: string;
+    }
+}

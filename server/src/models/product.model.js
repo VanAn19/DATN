@@ -48,7 +48,7 @@ var productSchema = new Schema({
     collection: COLLECTION_NAME
 });
 
-//create index for search
+// create index for search
 productSchema.index({
     name: 'text',
     // description: 'text'
@@ -57,6 +57,14 @@ productSchema.index({
 productSchema.pre('save', function(next) {
     this.slug = slugify(this.name, { lower: true });
     next();
+});
+
+// Post-save hook to update slug with ID
+productSchema.post('save', async function(doc) {
+    if (!doc.slug.includes(doc._id)) {
+        const updatedSlug = `${slugify(doc.name, { lower: true })}.${doc._id}`;
+        await model(DOCUMENT_NAME).findByIdAndUpdate(doc._id, { slug: updatedSlug });
+    }
 });
 
 module.exports = model(DOCUMENT_NAME, productSchema);

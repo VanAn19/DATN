@@ -2,7 +2,8 @@ import React, { useState } from 'react'
 import { Button, Modal, Radio, Skeleton, Space, Spin, Table, Tag } from "antd";
 import { SkeletonCustomProduct } from "./slide/CustomSlide";
 import Image from 'next/image';
-import { LoadingOutlined } from "@ant-design/icons";
+import { LoadingOutlined, HeartOutlined } from "@ant-design/icons";
+import images from '@/public/images';
 
 const VND = new Intl.NumberFormat("vi-VN", {
     style: "currency",
@@ -12,7 +13,7 @@ const VND = new Intl.NumberFormat("vi-VN", {
 export default function ProductInfo(props: { data: any, user: string, isLoading: boolean }) {
   const { data, user, isLoading } = props;
   const [isFavorited, setIsFavorited] = useState(false);
-  const [loadingFavorite, setLoadingFavorite] = useState(true);
+  const [loadingFavorite, setLoadingFavorite] = useState(false);
 
   const addToCart = () => {
     
@@ -37,7 +38,7 @@ export default function ProductInfo(props: { data: any, user: string, isLoading:
           <div className="w-full h-full flex items-center justify-center">
             <Image
               className="object-contain h-[100%]"
-              src={data?.thumbnail}
+              src={data?.thumbnail || images.logo}
               alt="product"
             />
           </div>
@@ -68,14 +69,14 @@ export default function ProductInfo(props: { data: any, user: string, isLoading:
           </div>
           <div className="flex items-center gap-3">
             <button
-            style={{
-              backgroundColor: "rgb(255, 245, 241)",
-              border: "1px solid rgb(255, 66, 78)",
-              color: "rgb(255, 66, 78)",
-              width: "200px",
-              cursor: "pointer",
-              animation: "2s linear 0s infinite normal none running thumbs-up",
-            }}
+              style={{
+                backgroundColor: "rgb(255, 245, 241)",
+                border: "1px solid rgb(255, 66, 78)",
+                color: "rgb(255, 66, 78)",
+                width: "200px",
+                cursor: "pointer",
+                animation: "2s linear 0s infinite normal none running thumbs-up",
+              }}
               className="flex items-center justify-center py-2"
               onClick={handleFavorite}
             >
@@ -87,11 +88,11 @@ export default function ProductInfo(props: { data: any, user: string, isLoading:
                         <Spin
                           indicator={
                             <LoadingOutlined
-                                style={{
+                              style={{
                                 fontSize: 30,
                                 color: "rgb(255, 66, 78)",
-                                }}
-                                spin
+                              }}
+                              spin
                             />
                           }
                         />

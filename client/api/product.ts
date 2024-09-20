@@ -1,6 +1,6 @@
 import axiosInstance from "./axiosInstance";
 import { AxiosResponse } from 'axios'; 
-import { Product, ProductResponse } from "@/types";
+import { OneProductResponse, Product, ProductResponse } from "@/types";
 
 export const getBestSellingProducts = async () => {
   try {
@@ -11,3 +11,13 @@ export const getBestSellingProducts = async () => {
     throw error;
   }
 };
+
+export const getInfoProduct = async (id: string) => {
+  try {
+    const response: AxiosResponse<OneProductResponse> = await axiosInstance.get(`/product/${id}`);
+    return response.data.metadata;
+  } catch (error) {
+    console.error("Error during get info product api:", error);
+    throw error;
+  }
+}
