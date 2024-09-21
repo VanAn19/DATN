@@ -39,7 +39,7 @@ class AuthController {
     verifyOTP = async (req, res, next) => {
         new SuccessResponse({
             message: 'Verify OTP success',
-            metadata: await AuthService.verifySignUp(req.body.userId, req.body.otp)
+            metadata: await AuthService.verifySignUp(req.body.username, req.body.otp)
         }).send(res);
     }
 

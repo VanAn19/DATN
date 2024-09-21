@@ -2,8 +2,8 @@
 
 const { model, Schema, Types } = require('mongoose');
 
-const DOCUMENT_NAME = 'User';
-const COLLECTION_NAME = 'Users';
+const DOCUMENT_NAME = 'TempUser';
+const COLLECTION_NAME = 'TempUsers';
 
 var userSchema = new Schema({
     username: {
@@ -45,18 +45,13 @@ var userSchema = new Schema({
         enum: ['user', 'admin'],
         default: 'user'
     },
-    isOtpVerified: {
-        type: Boolean,
-        default: false 
+    otp: {
+        type: String,
+        required: true
     },
-    passwordChangedAt: {
-        type: String
-    },
-    passwordResetToken: {
-        type: String
-    },
-    passwordResetExpires: {
-        type: String
+    expiredAt: {
+        type: Date,
+        required: true
     }
 }, {
     timestamps: true,

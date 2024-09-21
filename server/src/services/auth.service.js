@@ -1,13 +1,14 @@
 'use strict'
 
 const User = require('../models/user.model');
+const TempUser = require('../models/tempUser.model');
 const bcrypt = require('bcrypt');
 const crypto = require('crypto');
 const { BadRequestError, AuthFailureError, ForbiddenError, NotFoundError } = require("../core/error.response");
 const KeyTokenService = require('./keyToken.service');
 const { createTokenPair } = require('../auth/authUtils');
 const { getInfoData } = require('../utils');
-const { findByUsername, findUserById } = require('../repositories/auth.repo');
+const { findByUsername, findUserById, deleteTempUserById } = require('../repositories/auth.repo');
 const { generateAndSendOTP, verifyOTP } = require('./otp.service');
 
 class AuthService {
@@ -61,38 +62,46 @@ class AuthService {
         }
     }
 
-    static signUp = async ({ username, password, name, dateOfBirth, email, phone, address }) => {
+    static signUp = async ({ username, password, name, email, phone, address }) => {
         const holderUser = await findByUsername({ username });
         if (holderUser) throw new BadRequestError('Error: Username already registered!');
         const passwordHash = await bcrypt.hash(password, 10);
-        const newUser = await User.create({ username, password: passwordHash, name, dateOfBirth, email, phone, address });
-        if (newUser) {
-            const otp = Math.floor(100000 + Math.random() * 900000);
-            await generateAndSendOTP(newUser, otp);
-        }
+        const otp = Math.floor(100000 + Math.random() * 900000);
+        const expiredAt = new Date(Date.now() + 5 * 60000);
+        const newTempUser = await TempUser.create({ username, password: passwordHash, name, email, phone, address, otp, expiredAt });
+        await generateAndSendOTP(newTempUser, otp); 
         return {
-            user: getInfoData({ fields: ['id', 'name', 'email'], object: newUser}),
+            user: getInfoData({ fields: ['_id', 'name', 'email'], object: newTempUser}),
         };
     }
 
-    static verifySignUp = async (userId, otp) => {
-        const isValidOtp = await verifyOTP(userId, otp);
+    static verifySignUp = async (username, otp) => {
+        const tempUser = await TempUser.findOne({ username });
+        if (!tempUser) throw new BadRequestError('Người dùng không tồn tại');
+        const isValidOtp = await verifyOTP(tempUser._id, otp);
         if (!isValidOtp) throw new BadRequestError('OTP không hợp lệ hoặc đã hết hạn');
-        const user = await findUserById(userId);
-        if (!user) throw new BadRequestError('Người dùng không tồn tại');
-        user.isOtpVerified = true;
-        await user.save();
+        const newUser = await User.create({
+            username: tempUser.username,
+            password: tempUser.password,
+            name: tempUser.name,
+            email: tempUser.email,
+            phone: tempUser.phone,
+            address: tempUser.address,
+            role: tempUser.role,
+            isOtpVerified: true
+        });
         const privateKey = crypto.randomBytes(64).toString('hex');
         const publicKey = crypto.randomBytes(64).toString('hex');
-        const tokens = await createTokenPair({ userId: user._id, username: user.username, role: user.role }, publicKey, privateKey);
+        const tokens = await createTokenPair({ userId: newUser._id, username: newUser.username, role: newUser.role }, publicKey, privateKey);
         await KeyTokenService.createKeyToken({
-            userId: user._id,
+            userId: newUser._id,
             refreshToken: tokens.refreshToken,
             publicKey,
             privateKey
         });
+        await deleteTempUserById(tempUser._id);
         return {
-            user: getInfoData({ fields: ['id', 'name', 'email'], object: user}),
+            user: getInfoData({ fields: ['id', 'name', 'email'], object: newUser}),
             tokens
         };
     }
