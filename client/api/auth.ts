@@ -15,10 +15,10 @@ export const signin = async (data: { username: string; password: string }) => {
 
 export const signup = async (data: { username: string; password: string; name: string; email: string; phone: string; address: string }) => {
   try {
-    const response = await axiosInstance.post('/signup', data);
+    const response: AxiosResponse<AuthResponse> = await axiosInstance.post('/signup', data);
     return response.data; 
   } catch (error) {
-    console.error("Error during sign-in:", error);
+    console.error("Error during sign-up:", error);
     throw error;
   }
 };

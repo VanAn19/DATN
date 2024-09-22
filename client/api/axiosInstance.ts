@@ -18,7 +18,7 @@ axiosInstance.interceptors.request.use(
 
 axiosInstance.interceptors.response.use(
   (response: AxiosResponse<AuthResponse>) => {
-    if (response.status === 200) {
+    if (response.status === 200 || response.status === 201) {
       return response; 
     } else {
       console.error('Failed to save user data to external API:', response.status, response.statusText);

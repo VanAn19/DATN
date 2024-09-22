@@ -71,7 +71,7 @@ class AuthService {
         const newTempUser = await TempUser.create({ username, password: passwordHash, name, email, phone, address, otp, expiredAt });
         await generateAndSendOTP(newTempUser, otp); 
         return {
-            user: getInfoData({ fields: ['_id', 'name', 'email'], object: newTempUser}),
+            user: getInfoData({ fields: ['_id', 'name', 'username', 'email'], object: newTempUser}),
         };
     }
 
