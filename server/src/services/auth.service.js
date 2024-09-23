@@ -8,7 +8,7 @@ const { BadRequestError, AuthFailureError, ForbiddenError, NotFoundError } = req
 const KeyTokenService = require('./keyToken.service');
 const { createTokenPair } = require('../auth/authUtils');
 const { getInfoData } = require('../utils');
-const { findByUsername, findUserById, deleteTempUserById } = require('../repositories/auth.repo');
+const { findByUsername, findUserById, deleteTempUserById, findTempUserByUsername } = require('../repositories/auth.repo');
 const { generateAndSendOTP, verifyOTP } = require('./otp.service');
 
 class AuthService {
@@ -57,7 +57,7 @@ class AuthService {
             privateKey
         });
         return {
-            user: getInfoData({ fields: ['_id', 'name', 'email', 'avatar'], object: foundUser}),
+            user: getInfoData({ fields: ['_id', 'name', 'username', 'email', 'avatar'], object: foundUser}),
             tokens
         }
     }
@@ -71,12 +71,12 @@ class AuthService {
         const newTempUser = await TempUser.create({ username, password: passwordHash, name, email, phone, address, otp, expiredAt });
         await generateAndSendOTP(newTempUser, otp); 
         return {
-            user: getInfoData({ fields: ['_id', 'name', 'username', 'email'], object: newTempUser}),
+            user: getInfoData({ fields: ['_id', 'name', 'username', 'email', 'avatar'], object: newTempUser}),
         };
     }
 
     static verifySignUp = async (username, otp) => {
-        const tempUser = await TempUser.findOne({ username });
+        const tempUser = await findTempUserByUsername({ username });
         if (!tempUser) throw new BadRequestError('Người dùng không tồn tại');
         const isValidOtp = await verifyOTP(tempUser._id, otp);
         if (!isValidOtp) throw new BadRequestError('OTP không hợp lệ hoặc đã hết hạn');
@@ -101,9 +101,19 @@ class AuthService {
         });
         await deleteTempUserById(tempUser._id);
         return {
-            user: getInfoData({ fields: ['id', 'name', 'email'], object: newUser}),
+            user: getInfoData({ fields: ['_id', 'name', 'username', 'email', 'avatar'], object: newUser}),
             tokens
         };
+    }
+
+    static resendOtp = async (username) => {
+        const tempUser = await findTempUserByUsername({ username });
+        if (!tempUser) throw new BadRequestError('Người dùng không tồn tại');
+        const otp = Math.floor(100000 + Math.random() * 900000);
+        const expiredAt = new Date(Date.now() + 5 * 60000);
+        await TempUser.updateOne({ username }, { otp, expiredAt });
+        await generateAndSendOTP(tempUser, otp);
+        return;
     }
 
 }

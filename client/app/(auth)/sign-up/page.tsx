@@ -126,9 +126,9 @@ const SignUp = () => {
             />
             {errors.address && <span className="error-message">{errors.address.message}</span>}
           </div>
-          <Checkbox className="mt-2 font-semibold">
+          {/* <Checkbox className="mt-2 font-semibold">
             Tôi đồng ý với các <Link href={`https://ezpics.vn/post/32`} className="text-blue-600">Điều khoản dịch vụ của Dao Trọng Bình</Link>
-          </Checkbox>
+          </Checkbox> */}
           <button type="submit" className="btn-submit-sign">
             {isLoading ? (
               <Spin

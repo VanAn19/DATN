@@ -43,6 +43,13 @@ class AuthController {
         }).send(res);
     }
 
+    resendOTP = async (req,res,next) => {
+        new SuccessResponse({
+            message: 'Resend OTP success',
+            metadata: await AuthService.resendOtp(req.body.username)
+        }).send(res);
+    }
+
 }
 
 module.exports = new AuthController();

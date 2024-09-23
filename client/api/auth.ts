@@ -23,6 +23,26 @@ export const signup = async (data: { username: string; password: string; name: s
   }
 };
 
+export const verifyOtp = async (data: { username: string; otp: string }) => {
+  try {
+    const response = await axiosInstance.post('/verifyOTP', data);
+    return response.data; 
+  } catch (error) {
+    console.error("Error during verify otp:", error);
+    throw error;
+  }
+};
+
+export const resendOtp = async (data: { username: string }) => {
+  try {
+    const response = await axiosInstance.post('/resendOTP', data);
+    return response.data; 
+  } catch (error) {
+    console.error("Error during resend otp:", error);
+    throw error;
+  }
+};
+
 export const logout = async () => {
   const infoUser = getCookie('user');
   const token = getCookie('token');

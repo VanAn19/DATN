@@ -13,11 +13,9 @@ const Product = () => {
   
   return (
     <div>
-      <Header />
       <div className="flex-col w-[90%] mb-[100px]">
         <ProductPage productId={productId} />
       </div>
-      <Footer />
     </div>
   )
 }
