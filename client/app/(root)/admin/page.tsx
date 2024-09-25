@@ -1,6 +1,8 @@
 import React from 'react'
 import DashboardCard from '@/components/DashboardCard';
 import { AppstoreOutlined, MenuUnfoldOutlined, FileTextOutlined, AreaChartOutlined } from '@ant-design/icons';
+import { checkRoleAdmin, getCookie } from '@/utils';
+import { notFound } from 'next/navigation';
 
 const Admin = () => {
   const cardData = [
@@ -29,6 +31,12 @@ const Admin = () => {
       link: '/admin/stats'
     }
   ];
+
+  const a = getCookie('user');
+  console.log("a", a);
+
+  // const isAdmin = checkRoleAdmin();
+  // if (!isAdmin) notFound(); 
 
   return (
     <div className="flex flex-col md:flex-row justify-between gap-5 mb-5">

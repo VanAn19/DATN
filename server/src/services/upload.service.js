@@ -11,7 +11,6 @@ const uploadImageFromUrl = async () => {
 const uploadImageFromLocal = async ({ path, folderName = 'product/8409' }) => {
     try {
         const result = await cloudinary.uploader.upload(path, {
-            public_id: 'thumb',
             folder: folderName
         });
         return {

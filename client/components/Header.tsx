@@ -24,6 +24,7 @@ const Header = () => {
   const router = useRouter();
   const isAuth = checkAvailableLogin();
   const infoUser = getCookie('user');
+  console.log("infoUser header", infoUser)
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);

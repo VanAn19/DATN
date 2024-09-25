@@ -1,7 +1,6 @@
 'use strict'
 
 const _ = require('lodash');
-const { asyncHandler } = require('../helpers/asyncHandler');
 
 const getInfoData = ({ fields = [], object = {} }) => {
     if (Array.isArray(object)) {

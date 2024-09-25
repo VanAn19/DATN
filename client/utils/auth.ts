@@ -9,3 +9,13 @@ export function checkAvailableLogin() {
     return true;
   }
 }
+
+export function checkRoleAdmin() {
+  const infoUser = getCookie("user");
+  console.log(`user: ${infoUser}`);
+  if (infoUser?.role === 'admin') {
+    return true;
+  } else {
+    return false;
+  }
+}

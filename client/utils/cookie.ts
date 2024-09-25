@@ -15,20 +15,21 @@ export const getCookie = (name: string) => {
     var dc = document.cookie;
     var prefix = name + "=";
     var begin = dc.indexOf("; " + prefix);
+    let end;
     if (begin === -1) {
         begin = dc.indexOf(prefix);
         if (begin !== 0) return null;
     } else {
         begin += 2;
-        // var end = document.cookie.indexOf(";", begin);
-        // if (end === -1) {
-        //     end = dc.length;
-        // }
+        let end = document.cookie.indexOf(";", begin);
+        if (end === -1) {
+            end = dc.length;
+        }
     }
-    var end = document.cookie.indexOf(";", begin);
-    if (end === -1) {
-        end = dc.length;
-    }
+    // var end = document.cookie.indexOf(";", begin);
+    // if (end === -1) {
+    //     end = dc.length;
+    // }
   
     const value = decodeURI(dc.substring(begin + prefix.length, end));
     try {
