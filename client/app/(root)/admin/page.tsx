@@ -5,17 +5,24 @@ import DashboardCard from '@/components/DashboardCard';
 import { AppstoreOutlined, MenuUnfoldOutlined, FileTextOutlined, AreaChartOutlined } from '@ant-design/icons';
 import { checkRoleAdmin, getCookie } from '@/utils';
 import { notFound } from 'next/navigation';
+import Loader from '@/components/Loader';
 
 const Admin = () => {
   const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const result = checkRoleAdmin();
     setIsAdmin(result);
+    setLoading(false);
     if (result === false) {
       notFound();
     }
   }, []);
+
+  if (loading) {
+    return <Loader />;
+  }
 
   const cardData = [
     {

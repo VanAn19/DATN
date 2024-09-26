@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link';
-import React, { FormEvent, useState } from 'react'
+import React, { useState } from 'react'
 import * as yup from "yup";
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';

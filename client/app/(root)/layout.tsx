@@ -3,11 +3,7 @@
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 
-export default function CenteredLayouts({ 
-  children 
-}: { 
-  children: React.ReactNode 
-}) {
+export default function CenteredLayouts({ children }: { children: React.ReactNode }) {
   return (
     <div>
       <Header />
