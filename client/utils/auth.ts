@@ -12,7 +12,6 @@ export function checkAvailableLogin() {
 
 export function checkRoleAdmin() {
   const infoUser = getCookie("user");
-  console.log(`user: ${infoUser}`);
   if (infoUser?.role === 'admin') {
     return true;
   } else {

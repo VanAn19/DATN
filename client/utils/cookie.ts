@@ -15,21 +15,20 @@ export const getCookie = (name: string) => {
     var dc = document.cookie;
     var prefix = name + "=";
     var begin = dc.indexOf("; " + prefix);
-    let end;
     if (begin === -1) {
         begin = dc.indexOf(prefix);
         if (begin !== 0) return null;
     } else {
         begin += 2;
-        let end = document.cookie.indexOf(";", begin);
-        if (end === -1) {
-            end = dc.length;
-        }
+        // var end = document.cookie.indexOf(";", begin);
+        // if (end === -1) {
+        //     end = dc.length;
+        // }
     }
-    // var end = document.cookie.indexOf(";", begin);
-    // if (end === -1) {
-    //     end = dc.length;
-    // }
+    var end = document.cookie.indexOf(";", begin);
+    if (end === -1) {
+        end = dc.length;
+    }
   
     const value = decodeURI(dc.substring(begin + prefix.length, end));
     try {
@@ -37,7 +36,6 @@ export const getCookie = (name: string) => {
     } catch (e) {
         return null; // Nếu không phải JSON hợp lệ, trả về null
     }
-    // return decodeURI(dc.substring(begin + prefix.length, end));
 };
   
 export function checkTokenCookie() {
@@ -73,7 +71,7 @@ export function checkTokenCookie() {
         console.log('Không tìm thấy cookie có tên là "token"');
         return null;
     }
-  }
+}
   
 export function clearAllCookies() {
     const cookies = document.cookie.split(";");

@@ -1,6 +1,6 @@
 'use client'
 
-import React, { FormEvent, useState } from 'react'
+import React, { FormEvent, useEffect, useState } from 'react'
 import {
     MenuOutlined,
     SearchOutlined,
@@ -20,11 +20,16 @@ import { useRouter } from 'next/navigation';
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
+  const [isAuth, setIsAuth] = useState<boolean>(false);
+  const [infoUser, setInfoUser] = useState<string | null>(null);
   const dispatch = useDispatch();
   const router = useRouter();
-  const isAuth = checkAvailableLogin();
-  const infoUser = getCookie('user');
-  console.log("infoUser header", infoUser)
+  // const isAuth = checkAvailableLogin();
+  // const infoUser = getCookie('user');
+  useEffect(() => {
+    setIsAuth(checkAvailableLogin());
+    setInfoUser(getCookie('user'));
+  }, []);
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
