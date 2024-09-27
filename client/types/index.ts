@@ -54,3 +54,22 @@ export interface OneProductResponse {
         slug: string;
     }
 }
+
+export interface ProductCart {
+    productId: string;
+    quantity: number;
+    name: string;
+    price: number;
+}
+
+export interface ListCartResponse {
+    message: string;
+    status: number;
+    metadata: {
+        _id: string;
+        status: string;
+        user: string;
+        productCount: number;
+        products: ProductCart[];
+    }
+}

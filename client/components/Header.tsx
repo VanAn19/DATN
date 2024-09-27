@@ -17,15 +17,18 @@ import { logout } from '@/api/auth';
 import { useDispatch } from "react-redux";
 import { DELETE_VALUE_USER } from '@/redux/slices/authSlice';
 import { useRouter } from 'next/navigation';
+import Cart from './Cart';
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
+  const [isCartOpen, setIsCartOpen] = useState<boolean>(false);
   const [isAuth, setIsAuth] = useState<boolean>(false);
   const [infoUser, setInfoUser] = useState<string | null>(null);
   const dispatch = useDispatch();
   const router = useRouter();
   // const isAuth = checkAvailableLogin();
   // const infoUser = getCookie('user');
+
   useEffect(() => {
     setIsAuth(checkAvailableLogin());
     setInfoUser(getCookie('user'));
@@ -37,6 +40,14 @@ const Header = () => {
 
   const closeMenu = () => {
     setIsMenuOpen(false); 
+  }
+
+  const toggleCart = () => {
+    setIsCartOpen(!isMenuOpen);
+  }
+
+  const closeCart = () => {
+    setIsCartOpen(false); 
   }
 
   const handleLogout = async (e: FormEvent) => {
@@ -94,7 +105,7 @@ const Header = () => {
   ]
 
   return (
-    <div className="fixed w-full z-50 flex items-center h-[--header-height] px-1 mobile:px-6 shadow-xl bg-white">
+    <div className='fixed w-full z-50 flex items-center h-[--header-height] px-1 mobile:px-6 shadow-xl bg-white'>
       <div className="flex justify-center items-center">
         {iconsMenu.map(({ component: IconComponent, key }) => (
           <div key={key} className="p-1 mr-4 ml-[15px] icon-primary mobile:p-3">
@@ -105,10 +116,7 @@ const Header = () => {
         ))}
       </div>
       {isMenuOpen && (
-        <>
-          <div className="fixed inset-0 bg-black opacity-50 z-40"></div>
-          <MainMenu onClose={closeMenu} />
-        </>
+        <MainMenu onClose={closeMenu} />
       )}
 
       <div className="flex-grow text-center font-bold text-xl">
@@ -117,7 +125,7 @@ const Header = () => {
 
       <div className="flex items-center space-x-4">
         <div className="p-1 mobile:p-3">
-          <button>
+          <button onClick={toggleCart}>
             <ShoppingCartOutlined style={{ fontSize: '20px' }} />
           </button>
         </div>
@@ -167,6 +175,10 @@ const Header = () => {
           </Link>
         )}
       </div>
+
+      {isCartOpen && (
+        <Cart onClose={closeCart} />
+      )}
     </div>
   )
 }

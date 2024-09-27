@@ -21,7 +21,7 @@ const NewProduct = () => {
   };
 
   return (
-    <div className="w-full flex justify-center items-center bg-gray-100">
+    <div className="w-[1250px] flex justify-center items-center bg-gray-100">
       <div className="w-full max-w-7xl bg-white rounded-lg shadow-lg p-10"> 
         <Form form={form} onFinish={onFinish} layout="vertical">
           <Form.Item
@@ -37,54 +37,54 @@ const NewProduct = () => {
               multiple
             >
               {fileList.length < 9 && (
-                <div>
+                <div>               
                   <PlusOutlined />
-                  <div style={{ marginTop: 8 }}>Thêm hình ảnh</div>
-                </div>
-              )}
-            </Upload>
-          </Form.Item>
+                    <div style={{ marginTop: 8 }}>Thêm hình ảnh</div>
+                  </div>
+                )}
+              </Upload>
+            </Form.Item>
 
-          <Form.Item
-            name="name"
-            label="Tên sản phẩm"
-            rules={[
-              { required: true, message: 'Vui lòng nhập tên sản phẩm!' },
-              { min: 25, max: 100, message: 'Tên sản phẩm phải từ 25 đến 100 ký tự.' }
-            ]}
-          >
-            <Input placeholder="Nhập tên sản phẩm" />
-          </Form.Item>
+            <Form.Item
+              name="name"
+              label="Tên sản phẩm"
+              rules={[
+                { required: true, message: 'Vui lòng nhập tên sản phẩm!' },
+                { min: 25, max: 100, message: 'Tên sản phẩm phải từ 25 đến 100 ký tự.' }
+              ]}
+            >
+              <Input placeholder="Nhập tên sản phẩm" />
+            </Form.Item>
 
-          <Form.Item
-            name="category"
-            label="Ngành hàng"
-            rules={[{ required: true, message: 'Vui lòng chọn ngành hàng!' }]}
-          >
-            <Select placeholder="Chọn ngành hàng">
-              <Option value="electronics">Điện tử</Option>
-              <Option value="fashion">Thời trang</Option>
-              <Option value="home">Đồ gia dụng</Option>
-            </Select>
-          </Form.Item>
+            <Form.Item
+              name="category"
+              label="Ngành hàng"
+              rules={[{ required: true, message: 'Vui lòng chọn ngành hàng!' }]}
+            >
+              <Select placeholder="Chọn ngành hàng">
+                <Option value="electronics">Điện tử</Option>
+                <Option value="fashion">Thời trang</Option>
+                <Option value="home">Đồ gia dụng</Option>
+              </Select>
+            </Form.Item>
 
-          <Form.Item
-            name="description"
-            label="Mô tả"
-            rules={[
-              { required: true, message: 'Vui lòng nhập tên sản phẩm!' },
-              { min: 10, max: 5000, message: 'Tên sản phẩm phải từ 25 đến 100 ký tự.' }
-            ]}
-          >
-            <TextArea placeholder="Nhập tên sản phẩm" />
-          </Form.Item>
+            <Form.Item
+              name="description"
+              label="Mô tả"
+              rules={[
+                { required: true, message: 'Vui lòng nhập tên sản phẩm!' },
+                { min: 10, max: 5000, message: 'Tên sản phẩm phải từ 25 đến 100 ký tự.' }
+              ]}
+            >
+              <TextArea placeholder="Nhập tên sản phẩm" />
+            </Form.Item>
 
-          <Form.Item>
-            <Button type="primary" htmlType="submit">Lưu & Hiển thị</Button>
-          </Form.Item>
-        </Form>
+            <Form.Item>
+              <Button type="primary" htmlType="submit">Lưu & Hiển thị</Button>
+            </Form.Item>
+          </Form>
+        </div>
       </div>
-    </div>
   )
 }
 
