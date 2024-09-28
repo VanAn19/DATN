@@ -123,7 +123,7 @@ const Cart: React.FC<CartProps> = ({ onClose }) => {
               <p>Chưa có sản phẩm trong giỏ hàng.</p>
             )
           ) : (
-            <p className="text-red-500">Bạn cần đăng nhập trước để mua hàng.</p>
+            <p className="text-red-500">Bạn cần đăng nhập để mua hàng.</p>
           )}
         </div>
       </div>

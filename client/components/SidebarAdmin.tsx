@@ -16,7 +16,7 @@ const SidebarAdmin = () => {
       ] 
     },
     { 
-      label: 'Quản Lý Danh mục', 
+      label: 'Quản Lý Danh Mục', 
       link: '/admin/categories', 
       component: MenuUnfoldOutlined,
       subItems: [
@@ -34,13 +34,19 @@ const SidebarAdmin = () => {
       ]
     },
     { 
-      label: 'Quản Lý Thống kê', 
+      label: 'Quản Lý Thống Kê', 
       link: '/admin/stats', 
       component: AreaChartOutlined,
       subItems: [
         { label: 'Thống kê doanh thu', link: '/admin/stats/revenue' },
         { label: 'Thống kê theo sản phẩm', link: '/admin/stats/products' },
       ]
+    },
+    { 
+      label: 'Quản Lý Hàng Tồn Kho', 
+      link: '/admin/inventories', 
+      component: AreaChartOutlined,
+      subItems: []
     },
   ];
 
@@ -53,7 +59,7 @@ const SidebarAdmin = () => {
   };
 
   return (
-    <aside className="w-64 bg-gray-100 h-screen fixed top-5 left-0 pt-16 p-4 shadow-lg">
+    <aside className="w-64 bg-gray-100 h-screen fixed top-5 left-0 pt-16 p-2 shadow-lg">
       <ul className="mb-8">
         {menuItems.map((item, index) => {
           const IconComponent = item.component;

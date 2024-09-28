@@ -52,7 +52,7 @@ const Admin = () => {
   ];
 
   return (
-    <div className="flex flex-col md:flex-row justify-between gap-5 mb-5">
+    <div className="flex flex-col md:flex-row justify-between gap-5 mb-5 p-5">
       {cardData.map((card, index) => (
         <div key={index} className="mt-10"> 
         <DashboardCard

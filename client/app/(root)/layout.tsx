@@ -7,10 +7,10 @@ export default function CenteredLayouts({ children }: { children: React.ReactNod
   return (
     <div>
       <Header />
-      <div className="flex pt-[var(--header-height)] font-poppins">
-        <div className="flex flex-col items-center justify-center transition-all duration-300 ml-0 w-full">
+      <div className="flex justify-center items-center pt-[var(--header-height)] font-poppins">
+        {/* <div className="flex flex-col transition-all duration-300 ml-0 w-full"> */}
           {children}
-        </div>
+        {/* </div> */}
       </div>
       <div className='transition-all duration-300 w-[100%] flex justify-center'>
         <Footer />

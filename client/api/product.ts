@@ -21,3 +21,13 @@ export const getInfoProduct = async (id: string) => {
     throw error;
   }
 }
+
+export const createProduct = async (data: { name: string, thumbnail: string, description: string, price: number, quantity: number, category: string }) => {
+  try {
+    const response = await axiosInstance.post('product/create', data);
+    return response.data;
+  } catch (error) {
+    console.error("Error during create product api:", error);
+    throw error;
+  }
+}
