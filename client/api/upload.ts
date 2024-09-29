@@ -1,5 +1,4 @@
-import { getCookie } from '@/utils';
-import axios, { AxiosResponse } from 'axios';
+import axios from 'axios';
 
 const axiosInstance = axios.create({
     baseURL: process.env.API_ROOT,
@@ -10,11 +9,21 @@ const axiosInstance = axios.create({
 });
 
 export const uploadImages = async (data: any) => {
-    try {
-      const response = await axiosInstance.post('/upload/multiple');
-      return response.data; 
-    } catch (error) {
-      console.error("Error during upload images api:", error);
-      throw error;
-    }
-  };
+  try {
+    const response = await axiosInstance.post('/upload/multiple', data);
+    return response.data; 
+  } catch (error) {
+    console.error("Error during upload images api:", error);
+    throw error;
+  }
+};
+
+export const deleteImage = async ({ publicId }: { publicId: string}) => {
+  try {
+    const response = await axiosInstance.delete(`/upload/${publicId}`);
+    return response.data; 
+  } catch (error) {
+    console.error("Error during delete image api:", error);
+    throw error;
+  }
+}

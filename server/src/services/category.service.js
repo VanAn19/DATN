@@ -1,7 +1,7 @@
 'use strict'
 
 const Category = require('../models/category.model');
-const { findCategoryByName } = require('../repositories/category.repo');
+const { findCategoryByName, getListCategory } = require('../repositories/category.repo');
 const { BadRequestError, NotFoundError } = require('../core/error.response');
 
 class CategoryService {
@@ -19,6 +19,10 @@ class CategoryService {
 
     static deleteCategory = async () => {
 
+    }
+
+    static getListCategory = async () => {
+        return await getListCategory();
     }
 
 }

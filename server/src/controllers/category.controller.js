@@ -12,6 +12,13 @@ class CategoryController {
         }).send(res);
     }
 
+    getListCategory = async (req,res,next) => {
+        new SuccessResponse({
+            message: 'Get list category successfully!',
+            metadata: await CategoryService.getListCategory()
+        }).send(res);
+    }
+
 }
 
 module.exports = new CategoryController();

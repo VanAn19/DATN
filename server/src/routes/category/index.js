@@ -11,6 +11,6 @@ router.use(authentication)
 router.use(checkRole('admin'))
 
 router.post('/create', asyncHandler(categoryController.createCategory));
-
+router.get('/', asyncHandler(categoryController.getListCategory));
 
 module.exports = router;

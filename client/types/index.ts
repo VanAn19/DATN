@@ -1,3 +1,5 @@
+import { UploadFile } from "antd";
+
 export interface AuthResponse {
     message: string;
     status: number;
@@ -72,4 +74,13 @@ export interface ListCartResponse {
         productCount: number;
         products: ProductCart[];
     }
+}
+
+export interface FileItem extends UploadFile {
+    publicId: string; 
+}
+
+export interface Category {
+    _id: string;
+    name: string;
 }

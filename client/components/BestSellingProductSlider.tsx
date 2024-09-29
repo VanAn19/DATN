@@ -10,7 +10,7 @@ const BestSellingProductSlider = () => {
         return products;
       }}
       title="Sản phẩm bán chạy"
-      path="/best-selling-products"
+      path="/products"
     />
   )
 }

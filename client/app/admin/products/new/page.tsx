@@ -1,17 +1,76 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Form, Input, Button, Upload, Select, notification } from 'antd';
 import { PlusOutlined, UploadOutlined } from '@ant-design/icons';
+import { deleteImage, uploadImages } from '@/api/upload';
+import { Category, FileItem } from '@/types';
+import { getListCategory } from '@/api/category';
 
 const { TextArea } = Input;
 const { Option } = Select;
 
 const NewProduct = () => {
   const [form] = Form.useForm();
-  const [fileList, setFileList] = useState([]);
+  const [fileList, setFileList] = useState<FileItem[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [uploading, setUploading] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    const fetchCategory = async () => {
+      setLoading(true);
+      try {
+        const res = await getListCategory();
+        if (res.status === 200) {
+          setCategories(res.metadata);
+        }
+        setLoading(false);
+      } catch (error) {
+        console.error("Error during fetch category: ", error);
+        setLoading(false);
+      }
+    };
+    fetchCategory();
+  }, [])
   
-  const handleImageChange = ({ fileList }: any) => setFileList(fileList);
+  const handleImageChange = async ({ fileList }: any) => {
+    setFileList(fileList);
+    const files = fileList.map((file: any) => file.originFileObj);
+    if (files.length) {
+      setUploading(true);
+      const formData = new FormData();
+      files.forEach((file: any) => {
+        formData.append('files', file); 
+      });
+      try {
+        const response = await uploadImages(formData); 
+        // sau khi upload thành công => cập nhật lại fileList với URL từ server
+        setFileList(response.metadata.map((img: any, index: number) => ({
+          uid: index.toString(),
+          name: `image-${index}`,
+          status: 'done',
+          publicId: img.publicId,
+          url: img.imageUrl, 
+          thumbUrl: img.thumbUrl, 
+        })));
+      } catch (error) {
+        console.error("Error during upload images:", error);
+      } finally {
+        setUploading(false);
+      }
+    }
+  }
+
+  const handleRemove = async (file: any) => {
+    try {
+      await deleteImage({ publicId: file.publicId }); 
+      setFileList(fileList.filter((item) => item.uid !== file.uid)); 
+      notification.success({ message: 'Xóa hình ảnh thành công' }); 
+    } catch (error) {
+      console.error("Error during delete image:", error);
+    }
+  };
   
   const onFinish = (values: any) => {
     
@@ -24,11 +83,12 @@ const NewProduct = () => {
           <Form.Item
             name="images"
             label="Hình ảnh sản phẩm"
-            rules={[{ required: true, message: 'Vui lòng thêm ít nhất 3 hình ảnh!' }]}
+            rules={[{ required: true, message: 'Vui lòng thêm hình ảnh sản phẩm!' }]}
           >
             <Upload
               listType="picture-card"
               fileList={fileList}
+              onRemove={handleRemove}
               onChange={handleImageChange}
               beforeUpload={() => false} 
               multiple
@@ -58,10 +118,10 @@ const NewProduct = () => {
             label="Loại"
             rules={[{ required: true, message: 'Vui lòng chọn ngành hàng!' }]}
           >
-            <Select placeholder="Chọn ngành hàng">
-              <Option value="electronics">Điện tử</Option>
-              <Option value="fashion">Thời trang</Option>
-              <Option value="home">Đồ gia dụng</Option>
+            <Select placeholder="Loại">
+              {categories.map((category) => (
+                <Option key={category._id} value={category._id}>{category.name}</Option>
+              ))}
             </Select>
           </Form.Item>
 
@@ -101,7 +161,7 @@ const NewProduct = () => {
           </Form.Item>
 
           <Form.Item>
-            <Button type="primary" htmlType="submit">Lưu & Hiển thị</Button>
+            <Button type="primary" htmlType="submit" loading={uploading}>Lưu & Hiển thị</Button>
           </Form.Item>
         </Form>
       </div>

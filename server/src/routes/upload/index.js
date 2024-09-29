@@ -11,5 +11,7 @@ const router = express.Router();
 
 router.post('', uploadDisk.single('file'), asyncHandler(uploadController.uploadFile));
 router.post('/multiple', uploadDisk.array('files', 5), asyncHandler(uploadController.uploadFiles));
+router.delete('/:id', asyncHandler(uploadController.deleteFile));
+router.delete('/multiple', asyncHandler(uploadController.deleteFiles));
 
 module.exports = router;
