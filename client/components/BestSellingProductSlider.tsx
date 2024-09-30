@@ -1,4 +1,4 @@
-import { getBestSellingProducts } from "@/api/product";
+import { getProductsList } from "@/api/product";
 import DefaultSlide from "./ui/DefaultSlide";
 
 const BestSellingProductSlider = () => {
@@ -6,7 +6,7 @@ const BestSellingProductSlider = () => {
     <DefaultSlide 
       apiAction={async () => {
         'use server'
-        const products = await getBestSellingProducts();
+        const products = await getProductsList();
         return products;
       }}
       title="Sản phẩm bán chạy"

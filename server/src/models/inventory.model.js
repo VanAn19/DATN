@@ -18,6 +18,9 @@ var inventorySchema = new Schema({
         type: Number,
         required: true
     },
+    soldQuantity: {
+        type: Number
+    },
     reservations: {
         type: Array,
         default: []

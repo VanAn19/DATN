@@ -85,7 +85,7 @@ const DefaultSlide = ({ apiAction, title, path }: { apiAction: () => Promise<Pro
                   <div className="card bg-white rounded-lg shadow-md overflow-hidden cursor-pointer w-full sm:w-58">
                     <div className="bg-orange-100 overflow-hidden group flex justify-center">
                       <Image
-                        src={images.logo}
+                        src={product.thumbnail ||images.logo}
                         width={300}
                         height={200}
                         className="object-contain h-48 w-96 transition-transform duration-300 ease-in-out group-hover:scale-110"

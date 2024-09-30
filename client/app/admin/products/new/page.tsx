@@ -6,6 +6,7 @@ import { PlusOutlined, UploadOutlined } from '@ant-design/icons';
 import { deleteImage, uploadImages } from '@/api/upload';
 import { Category, FileItem } from '@/types';
 import { getListCategory } from '@/api/category';
+import { createProduct } from '@/api/product';
 
 const { TextArea } = Input;
 const { Option } = Select;
@@ -28,6 +29,7 @@ const NewProduct = () => {
         setLoading(false);
       } catch (error) {
         console.error("Error during fetch category: ", error);
+      } finally {
         setLoading(false);
       }
     };
@@ -65,20 +67,52 @@ const NewProduct = () => {
   const handleRemove = async (file: any) => {
     try {
       await deleteImage({ publicId: file.publicId }); 
-      setFileList(fileList.filter((item) => item.uid !== file.uid)); 
-      notification.success({ message: 'Xóa hình ảnh thành công' }); 
+      setFileList(fileList.filter((item) => item.uid !== file.uid));
     } catch (error) {
       console.error("Error during delete image:", error);
     }
   };
   
-  const onFinish = (values: any) => {
-    
+  const onFinish = async (values: any) => {
+    setLoading(true);
+    try {
+      const { name, price, quantity, category, description } = values;
+      const thumbnails = fileList.map((file) => file.thumbUrl);
+      if (thumbnails.length === 0) {
+        notification.error({
+          message: 'Lỗi',
+          description: 'Vui lòng thêm ít nhất 1 hình ảnh'
+        });
+        setUploading(false);
+        return;
+      }
+      const res = await createProduct({
+        name,
+        thumbnail: thumbnails[0] as string,
+        price: Number(price),
+        quantity: Number(quantity),
+        category,
+        description
+      });
+      if (res.status === 201) {
+        notification.success({
+          message: 'Success',
+          description: 'Sản phẩm đã được tạo thành công.',
+        });
+        form.resetFields(); 
+        setFileList([]);
+      }
+    } catch (error) {
+      console.error("Error during create product:", error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <div className="w-full h-full bg-gray-100">
       <div className="w-full h-full max-w-7xl bg-white rounded-lg shadow-lg p-10"> 
+        <h2 className="text-2xl font-bold mb-6">Thêm mới sản phẩm</h2>
         <Form form={form} onFinish={onFinish} layout="vertical">
           <Form.Item
             name="images"
@@ -107,10 +141,10 @@ const NewProduct = () => {
             label="Tên sản phẩm"
             rules={[
               { required: true, message: 'Vui lòng nhập tên sản phẩm!' },
-              { min: 25, max: 100, message: 'Tên sản phẩm phải từ 25 đến 100 ký tự.' }
+              { min: 10, max: 100, message: 'Tên sản phẩm phải từ 10 đến 100 ký tự.' }
             ]}
           >
-            <Input placeholder="Nhập tên sản phẩm" />
+            <Input placeholder="Tên sản phẩm" />
           </Form.Item>
 
           <Form.Item
@@ -130,22 +164,20 @@ const NewProduct = () => {
               name="price"
               label="Giá"
               rules={[
-                { required: true, message: 'Vui lòng nhập giá sản phẩm!' },
-                { min: 25, max: 100, message: 'Tên sản phẩm phải từ 25 đến 100 ký tự.' }
+                { required: true, message: 'Vui lòng nhập giá sản phẩm!' }
               ]}
             >
-              <Input placeholder="Nhập giá sản phẩm" />
+              <Input placeholder="Giá sản phẩm" />
             </Form.Item>
 
             <Form.Item
               name="quantity"
               label="Số lượng"
               rules={[
-                { required: true, message: 'Vui lòng nhập tên sản phẩm!' },
-                { min: 25, max: 100, message: 'Tên sản phẩm phải từ 25 đến 100 ký tự.' }
+                { required: true, message: 'Vui lòng nhập số lượng sản phẩm!' },
               ]}
             >
-              <Input placeholder="Nhập tên sản phẩm" />
+              <Input placeholder="Số lượng" />
             </Form.Item>
           </div>
 
@@ -153,15 +185,16 @@ const NewProduct = () => {
             name="description"
             label="Mô tả"
             rules={[
-              { required: true, message: 'Vui lòng nhập tên sản phẩm!' },
-              { min: 10, max: 5000, message: 'Tên sản phẩm phải từ 25 đến 100 ký tự.' }
+              { required: true, message: 'Vui lòng mô tả sản phẩm!' },
+              { min: 10, max: 5000, message: 'Mô tả phải từ 10 đến 5000 ký tự.' }
             ]}
           >
-            <TextArea placeholder="Nhập tên sản phẩm" />
+            <TextArea placeholder="Mô tả..." />
           </Form.Item>
 
           <Form.Item>
-            <Button type="primary" htmlType="submit" loading={uploading}>Lưu & Hiển thị</Button>
+            <Button type="default" htmlType="reset" disabled={uploading || loading}>Hủy</Button>
+            <Button type="primary" htmlType="submit" loading={uploading || loading}>Lưu & Hiển thị</Button>
           </Form.Item>
         </Form>
       </div>

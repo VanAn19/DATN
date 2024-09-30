@@ -55,7 +55,7 @@ const Footer = () => {
               </p>
               <p className="footer_text text_white pb-7">
                 <strong>Địa chỉ: </strong>
-                thôn Bàn Mạch, xã Lý Nhân, huyện Vĩnh Tường, tỉnh Vĩnh Phúc
+                Làng rèn truyền thống, thôn Bàn Mạch, xã Lý Nhân, huyện Vĩnh Tường, tỉnh Vĩnh Phúc
               </p>
               <p className="footer_text text_white pb-7">
                 <strong>Email: </strong>

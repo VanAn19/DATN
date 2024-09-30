@@ -11,6 +11,13 @@ class InventoryController {
             metadata: await InventoryService.addStockToInventory(req.body)
         }).send(res);
     }
+
+    getStockAndSoldQuantity = async (req,res,next) => {
+        new SuccessResponse({
+            message: 'Get stock successfully',
+            metadata: await InventoryService.getStockAndSoldQuantity()
+        }).send(res);
+    }
     
 }
 

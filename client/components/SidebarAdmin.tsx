@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { useState } from 'react';
-import { AppstoreOutlined, MenuUnfoldOutlined, FileTextOutlined, AreaChartOutlined } from '@ant-design/icons';
+import { AppstoreOutlined, MenuUnfoldOutlined, FileTextOutlined, AreaChartOutlined, UpOutlined, DownOutlined } from '@ant-design/icons';
 
 const SidebarAdmin = () => {
   const [activeItems, setActiveItems] = useState<string[]>([]);
@@ -13,6 +13,7 @@ const SidebarAdmin = () => {
       subItems: [
         { label: 'Tất cả sản phẩm', link: '/admin/products' },
         { label: 'Thêm sản phẩm mới', link: '/admin/products/new' },
+        { label: 'Bản nháp của tôi', link: '/admin/products/drafts' },
       ] 
     },
     { 
@@ -71,10 +72,10 @@ const SidebarAdmin = () => {
                 className={`cursor-pointer flex items-center justify-between gap-3 p-2 rounded hover:bg-gray-200 text-gray-700`}
               >
                 <div className="flex items-center gap-3">
-                  <IconComponent className="text-gray-500" style={{ fontSize: '20px' }} />
-                  <span>{item.label}</span>
+                  <IconComponent className="text-gray-500" style={{ fontSize: '16px' }} />
+                  <span style={{ fontSize: '15px' }}>{item.label}</span>
                 </div>
-                <span>{isActive ? '▲' : '▼'}</span>
+                <span style={{ fontSize: '12px' }}>{isActive ? <UpOutlined /> : <DownOutlined />}</span>
               </div>
               {isActive && item.subItems.length > 0 && (
                 <ul className="ml-6 mt-2">

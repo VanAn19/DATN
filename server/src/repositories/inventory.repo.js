@@ -2,11 +2,12 @@
 
 const Inventory = require('../models/inventory.model');
 
-const insertInventory = async ({ productId, stock, location = 'unknown' }) => {
+const insertInventory = async ({ productId, stock, location = 'unknown', soldQuantity = 0 }) => {
     return await Inventory.create({
         productId,
         stock,
-        location
+        location,
+        soldQuantity
     });
 }
 
@@ -16,7 +17,8 @@ const reservationInventory = async ({ productId, quantity, cartId }) => {
         stock: { $gte: quantity }
     }, updateSet = {
         $inc: {
-            stock: -quantity
+            stock: -quantity,
+            soldQuantity: +quantity
         },
         $push: {
             reservations: {
@@ -32,7 +34,8 @@ const reservationInventory = async ({ productId, quantity, cartId }) => {
 const releaseInventory = async ({ productId, quantity }) => {
     const query = { productId }, updateSet = {
         $inc: {
-            stock: quantity
+            stock: quantity,
+            soldQuantity: -quantity
         },
         // $pull: {
         //     reservations: {
@@ -43,8 +46,16 @@ const releaseInventory = async ({ productId, quantity }) => {
     return await Inventory.updateOne(query, updateSet, options);
 }
 
+const getStockAndSoldQuantity = async () => {
+    return Inventory.find()
+        .sort({ updatedAt: -1 })
+        .lean()
+        .exec()
+}
+
 module.exports = {
     insertInventory,
     reservationInventory,
-    releaseInventory
+    releaseInventory,
+    getStockAndSoldQuantity
 }

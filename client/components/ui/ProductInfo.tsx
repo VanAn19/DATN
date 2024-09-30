@@ -6,9 +6,9 @@ import { LoadingOutlined, HeartOutlined } from "@ant-design/icons";
 import images from '@/public/images';
 
 const VND = new Intl.NumberFormat("vi-VN", {
-    style: "currency",
-    currency: "VND",
-  });
+  style: "currency",
+  currency: "VND",
+});
 
 export default function ProductInfo(props: { data: any, user: string, isLoading: boolean }) {
   const { data, user, isLoading } = props;
@@ -29,14 +29,14 @@ export default function ProductInfo(props: { data: any, user: string, isLoading:
         {isLoading ? (
           <SkeletonCustomProduct>
             <Skeleton.Image
-                className="skeleton-image h-[100%] flex items-center justify-center"
-                active={true}
-                style={{ width: "300px !important" }}
+              className="skeleton-image h-[100%] flex items-center justify-center"
+              active={true}
+              style={{ width: "300px !important" }}
             />
           </SkeletonCustomProduct>
         ) : (
           <div className="w-full h-full flex items-center justify-center">
-            <Image
+            <img
               className="object-contain h-[100%]"
               src={data?.thumbnail || images.logo}
               alt="product"
