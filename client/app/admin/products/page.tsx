@@ -108,10 +108,11 @@ const AdminProducts = () => {
     {
       title: 'Thao tác',
       key: 'actions',
-      render: () => (
-        <div>
-          <Button type="link">Cập nhật</Button>
-          <Button type="link">Xem trước</Button>
+      render: (product: Product) => (
+        <div className='flex flex-col space-y-2 text-blue-500'>
+          <Link href={`/admin/products/${product._id}`}>Cập nhật</Link>
+          <Link href={`/products/${product.slug}`}>Xem trước</Link>
+          <Button type='link'>Lưu thành bản nháp</Button>
         </div>
       ),
     },

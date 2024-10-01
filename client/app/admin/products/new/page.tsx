@@ -166,6 +166,7 @@ const NewProduct = () => {
               rules={[
                 { required: true, message: 'Vui lòng nhập giá sản phẩm!' }
               ]}
+              className='mr-5'
             >
               <Input placeholder="Giá sản phẩm" />
             </Form.Item>
@@ -193,7 +194,8 @@ const NewProduct = () => {
           </Form.Item>
 
           <Form.Item>
-            <Button type="default" htmlType="reset" disabled={uploading || loading}>Hủy</Button>
+            <Button type="default" htmlType="reset" disabled={uploading || loading}  className='mr-5'>Hủy</Button>
+            <Button type="default" htmlType="submit" disabled={uploading || loading}  className='mr-5'>Lưu bản nháp</Button>
             <Button type="primary" htmlType="submit" loading={uploading || loading}>Lưu & Hiển thị</Button>
           </Form.Item>
         </Form>

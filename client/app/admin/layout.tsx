@@ -3,8 +3,15 @@
 import Footer from '@/components/Footer';
 import Header from '@/components/Header';
 import SidebarAdmin from '@/components/SidebarAdmin';
+import { checkRoleAdmin } from '@/utils';
+import { notFound } from 'next/navigation';
 
 const AdminLayout = ({ children }: { children: React.ReactNode }) => {
+  const isAdmin = checkRoleAdmin();
+  if (isAdmin === false) {
+    notFound();
+  }
+
   return (
     <div className=''>
       <Header />

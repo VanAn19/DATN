@@ -35,7 +35,7 @@ const SidebarAdmin = () => {
       ]
     },
     { 
-      label: 'Quản Lý Thống Kê', 
+      label: 'Thống Kê', 
       link: '/admin/stats', 
       component: AreaChartOutlined,
       subItems: [

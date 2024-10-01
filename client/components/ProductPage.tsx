@@ -27,7 +27,7 @@ const ProductPage = ({ productId }: { productId: string }) => {
   }, [productId])
 
   return (
-    <div className="w-full flex flex-col items-center justify-center gap-8">
+    <div className="w-full flex flex-col items-center justify-center gap-8 bg-white">
       <ProductInfo data={data} user={user} isLoading={isLoading} />
     </div>
   )

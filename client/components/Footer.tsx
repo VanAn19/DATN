@@ -24,7 +24,7 @@ const Footer = () => {
   ];
 
   return (
-    <div className='w-full z-40 bg-[#333] mt-[100px] text-white bottom-0 px-15 md:px-5'>
+    <div className='w-full z-40 bg-[#333] text-white bottom-0 px-15 md:px-5'>
       <div className='padding_content flex flex-col'>
         <div className='top w-full py-7 flex flex-col sm:flex-row sm:justify-between'>
           <div className='info w-full sm:w-1/4 relative flex flex-col'>

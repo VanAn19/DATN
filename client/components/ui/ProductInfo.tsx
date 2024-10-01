@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { Button, Modal, Radio, Skeleton, Space, Spin, Table, Tag } from "antd";
 import { SkeletonCustomProduct } from "./slide/CustomSlide";
 import Image from 'next/image';
-import { LoadingOutlined, HeartOutlined } from "@ant-design/icons";
+import { LoadingOutlined, DropboxOutlined, MinusOutlined, PlusOutlined, HeartFilled, HeartOutlined } from "@ant-design/icons";
 import images from '@/public/images';
 
 const VND = new Intl.NumberFormat("vi-VN", {
@@ -15,16 +15,24 @@ export default function ProductInfo(props: { data: any, user: string, isLoading:
   const [isFavorited, setIsFavorited] = useState(false);
   const [loadingFavorite, setLoadingFavorite] = useState(false);
 
+  const increaseQuantity = (id: string) => {
+    // Logic để tăng số lượng sản phẩm trong giỏ
+  }
+
+  const decreaseQuantity = (id: string) => {
+    // Logic để giảm số lượng sản phẩm trong giỏ
+  }
+
   const addToCart = () => {
     
   };
 
   const handleFavorite = () => {
-
+    setIsFavorited(!isFavorited);
   }
     
   return (
-    <div className="flex flex-col xl:flex-row w-full h-full mt-[100px] gap-8 px-4">
+    <div className="flex flex-col xl:flex-row w-full h-full mt-[100px] gap-8 px-4 mb-[100px]">
       <div className="xl:w-[50%] w-full h-full flex flex-col items-center justify-center gap-8">
         {isLoading ? (
           <SkeletonCustomProduct>
@@ -36,13 +44,60 @@ export default function ProductInfo(props: { data: any, user: string, isLoading:
           </SkeletonCustomProduct>
         ) : (
           <div className="w-full h-full flex items-center justify-center">
-            <img
+            <Image
               className="object-contain h-[100%]"
-              src={data?.thumbnail || images.logo}
+              src={data?.thumbnail}
               alt="product"
+              width={500}
+              height={500}
             />
           </div>
         )}
+
+        <div className="flex items-center w-[100%] justify-around">
+          {isLoading ? (
+            <Skeleton.Input active />
+          ) : (
+            <div className="flex items-center gap-2">
+              <span className="text-sm ml-10">Chia sẻ:</span>
+              <a href="/">
+                <Image
+                  src={images.facebookLogo}
+                  alt='Facebook'
+                  width={25}
+                  height={25}
+                />
+              </a>
+              <a href="/">
+                <Image
+                  src={images.messengerLogo}
+                  alt='Messenger'
+                  width={25}
+                  height={25}
+                />
+              </a>
+              <a href="/">
+                <Image
+                  src={images.twitterLogo}
+                  alt='Twitter'
+                  width={25}
+                  height={25}
+                />
+              </a>
+            </div>
+          )}
+          {isLoading ? (
+            <Skeleton.Input active />
+          ) : (
+            <div className="flex items-center justify-center gap-1 pl-1 w-[250px] border-l-2">
+              {isFavorited ? (
+                <HeartFilled className='cursor-pointer' style={{ fontSize: '25px'}} onClick={handleFavorite} />
+              ) : (
+                <HeartOutlined className='cursor-pointer' style={{ fontSize: '25px'}} onClick={handleFavorite} />
+              )}
+            </div>
+          )}
+        </div>
       </div>
 
       {isLoading ? (
@@ -57,23 +112,49 @@ export default function ProductInfo(props: { data: any, user: string, isLoading:
           </div>
         </div>
       ) : (
-        <div className="flex xl:w-1/2 w-full h-full flex-col justify-between gap-8">
+        <div className="flex xl:w-1/2 w-full h-full flex-col justify-between gap-5 pr-5">
           <div className="flex items-center gap-3">
             <h1 className="text-xl font-semibold">{data?.name}</h1>
           </div>
-          <div className="flex items-center gap-5 bg-slate-100 p-5">
+          <div className="flex items-center gap-5">
             <div className="text-3xl text-red-500">
               {VND.format(data?.price)}
             </div>
           </div>
           <div className="flex items-center gap-3">
-            <div className="product-details-e">Mô tả</div>
-            <div className="w-[37px] h-[35px] mr-3 flex items-center justify-center overflow-hidden rounded-full bg-gray-200">
-              <div>{data?.description}</div>
-            </div>
+            <div className='' style={{ letterSpacing: '0.2px', lineHeight: '1.4' }}>{data?.description}</div>
           </div>
-          <div className="flex items-center gap-3">
-            <button
+          <div className="flex items-center gap-2 ml-3">
+            <span className="blinking-dot"></span>
+            <div className=''>Còn Hàng</div>
+          </div>
+          <div className="flex items-center gap-2 ml-3">
+            <span className="mr-5">Vận Chuyển</span>
+            <Image 
+              src={images.freeShip}
+              alt='FreeShip'
+              width={30}
+              height={30}
+            />
+            <div className=''>Miễn phí vận chuyển</div>
+          </div>
+          <div className="flex items-center gap-2 ml-3">
+            <span className="mr-5">Chính Sách Đổi Trả</span>
+            <DropboxOutlined style={{ fontSize: '16px' }} />
+            <div className=''>Đổi trả trong 7 ngày</div>
+          </div>
+          <div className="flex items-center gap-2 ml-3">
+            <span className='mr-5'>Số lượng</span>
+            <button onClick={() => decreaseQuantity(data._id)} className="p-1 border rounded">
+              <MinusOutlined />
+            </button>
+            <span className="mx-2">1</span>
+            <button onClick={() => increaseQuantity(data._id)} className="p-1 border rounded">
+              <PlusOutlined />
+            </button>
+          </div>
+          <div className="flex items-center gap-2">
+            {/* <button
               style={{
                 backgroundColor: "rgb(255, 245, 241)",
                 border: "1px solid rgb(255, 66, 78)",
@@ -154,15 +235,18 @@ export default function ProductInfo(props: { data: any, user: string, isLoading:
                   )}
                 </>
               )}
-            </button>
+            </button> */}
             <button
               style={{
-                backgroundColor: "rgb(255, 66, 78)",
-                color: "white",
+                backgroundColor: "black",
+                color: "rgb(254, 240, 138)",
                 cursor: "pointer",
-                width: "200px",
+                width: "100%",
+                height: '50px',
                 paddingTop: "11.5px",
                 paddingBottom: "11.5px",
+                justifyContent: 'center',
+                alignItems: 'center'
               }}
               onClick={addToCart}
             >

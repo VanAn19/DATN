@@ -57,11 +57,11 @@ export const Arrow = styled.div`
   cursor: pointer;
 
   &.next {
-    right: 10px;
+    right: 15px;
   }
 
   &.prev {
-    left: 10px;
+    left: -15px;
   }
 
   &:hover,

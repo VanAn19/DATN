@@ -12,8 +12,8 @@ const Product = () => {
   const productId = slug.split('.').pop() || '';
   
   return (
-    <div>
-      <div className="flex-col w-[90%] mb-[100px]">
+    <div className='flex justify-center items-center '>
+      <div className="flex-col">
         <ProductPage productId={productId} />
       </div>
     </div>
