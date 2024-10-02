@@ -100,7 +100,10 @@ const DefaultSlide = ({ apiAction, title, path }: { apiAction: () => Promise<Pro
                         Đã bán 
                       </p>
                       <div className="mt-2">
-                        <span className="text-gray-500">
+                        <span className="text-gray-500 mr-2 text-lg">
+                          {VND.format(product?.sellingPrice)}
+                        </span>
+                        <span className="text-gray-500 line-through">
                           {VND.format(product?.price)}
                         </span>
                       </div>

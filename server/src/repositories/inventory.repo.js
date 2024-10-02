@@ -11,6 +11,10 @@ const insertInventory = async ({ productId, stock, location = 'unknown', soldQua
     });
 }
 
+const removeInventory = async ({ productId }) => {
+    return await Inventory.deleteOne({ productId });
+}
+
 const reservationInventory = async ({ productId, quantity, cartId }) => {
     const query = {
         productId,
@@ -55,7 +59,8 @@ const getStockAndSoldQuantity = async () => {
 
 module.exports = {
     insertInventory,
+    removeInventory,
     reservationInventory,
     releaseInventory,
-    getStockAndSoldQuantity
+    getStockAndSoldQuantity,
 }

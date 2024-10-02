@@ -13,9 +13,7 @@ const Product = () => {
   
   return (
     <div className='flex justify-center items-center '>
-      <div className="flex-col">
-        <ProductPage productId={productId} />
-      </div>
+      <ProductPage productId={productId} />
     </div>
   )
 }

@@ -91,9 +91,9 @@ export default function ProductInfo(props: { data: any, user: string, isLoading:
           ) : (
             <div className="flex items-center justify-center gap-1 pl-1 w-[250px] border-l-2">
               {isFavorited ? (
-                <HeartFilled className='cursor-pointer' style={{ fontSize: '25px'}} onClick={handleFavorite} />
+                <HeartFilled className='cursor-pointer' style={{ fontSize: '25px', color: 'red' }} onClick={handleFavorite} />
               ) : (
-                <HeartOutlined className='cursor-pointer' style={{ fontSize: '25px'}} onClick={handleFavorite} />
+                <HeartOutlined className='cursor-pointer' style={{ fontSize: '25px', color: 'red' }} onClick={handleFavorite} />
               )}
             </div>
           )}

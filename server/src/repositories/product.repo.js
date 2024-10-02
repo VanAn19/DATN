@@ -1,6 +1,7 @@
 'use strict'
 
 const Product = require('../models/product.model');
+const { insertInventory, removeInventory } = require('./inventory.repo');
 
 const queryProduct = async ({ query, limit, skip }) => {
     return await Product.find(query).populate('category')
@@ -33,6 +34,10 @@ const publishProduct = async ({ id }) => {
     foundProduct.isDraft = false;
     foundProduct.isPublished = true;
     const { modifiedCount } = await foundProduct.updateOne(foundProduct);
+    await insertInventory({
+        productId: id,
+        stock: foundProduct.quantity
+    });
     return modifiedCount;
 }
 
@@ -42,6 +47,7 @@ const unPublishProduct = async ({ id }) => {
     foundProduct.isDraft = true;
     foundProduct.isPublished = false;
     const { modifiedCount } = await foundProduct.updateOne(foundProduct);
+    await removeInventory({ productId: id });
     return modifiedCount;
 }
 

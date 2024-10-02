@@ -15,6 +15,7 @@ const NewProduct = () => {
   const [form] = Form.useForm();
   const [fileList, setFileList] = useState<FileItem[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
+  const [isDraft, setIsDraft] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [loading, setLoading] = useState(false);
 
@@ -76,7 +77,7 @@ const NewProduct = () => {
   const onFinish = async (values: any) => {
     setLoading(true);
     try {
-      const { name, price, quantity, category, description } = values;
+      const { name, price, sale, quantity, category, description } = values;
       const thumbnails = fileList.map((file) => file.thumbUrl);
       if (thumbnails.length === 0) {
         notification.error({
@@ -90,9 +91,11 @@ const NewProduct = () => {
         name,
         thumbnail: thumbnails[0] as string,
         price: Number(price),
+        sale: Number(sale),
         quantity: Number(quantity),
         category,
-        description
+        description,
+        isDraft
       });
       if (res.status === 201) {
         notification.success({
@@ -177,8 +180,19 @@ const NewProduct = () => {
               rules={[
                 { required: true, message: 'Vui lòng nhập số lượng sản phẩm!' },
               ]}
+              className='mr-5'
             >
               <Input placeholder="Số lượng" />
+            </Form.Item>
+
+            <Form.Item
+              name="sale"
+              label="Khuyến mại"
+              rules={[
+                { required: true, message: 'Vui lòng nhập khuyến mại!' },
+              ]}
+            >
+              <Input placeholder="Khuyến mại" addonAfter="%" />
             </Form.Item>
           </div>
 
@@ -194,9 +208,31 @@ const NewProduct = () => {
           </Form.Item>
 
           <Form.Item>
-            <Button type="default" htmlType="reset" disabled={uploading || loading}  className='mr-5'>Hủy</Button>
-            <Button type="default" htmlType="submit" disabled={uploading || loading}  className='mr-5'>Lưu bản nháp</Button>
-            <Button type="primary" htmlType="submit" loading={uploading || loading}>Lưu & Hiển thị</Button>
+            <Button 
+              type="default"
+              htmlType="reset" 
+              disabled={uploading || loading}  
+              className='mr-5'
+            >
+              Hủy
+            </Button>
+            <Button 
+              type="default" 
+              onClick={() => setIsDraft(true)}
+              htmlType="submit" 
+              disabled={uploading || loading}  
+              className='mr-5'
+            >
+              Lưu bản nháp
+            </Button>
+            <Button 
+              type="primary"  
+              onClick={() => setIsDraft(false)}
+              htmlType="submit" 
+              loading={uploading || loading}
+            >
+              Lưu & Hiển thị
+            </Button>
           </Form.Item>
         </Form>
       </div>

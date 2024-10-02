@@ -23,6 +23,8 @@ export interface Product {
     thumbnail: string;
     description: string;
     price: number;
+    sale: number;
+    sellingPrice: number;
     category: string;
     slug: string;
 };

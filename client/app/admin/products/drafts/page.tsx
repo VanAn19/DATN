@@ -5,7 +5,7 @@ import { Table, Button, Input, Select, notification } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import { Product } from '@/types';
 import Image from 'next/image';
-import { getProductsList, unpublishProduct } from '@/api/product';
+import { getDraftProductsList, getProductsList, publishProduct } from '@/api/product';
 import Link from 'next/link';
 import { getStock } from '@/api/inventory';
 
@@ -26,10 +26,10 @@ const AdminProducts = () => {
     const fetchProducts = async () => {
       setLoading(true);
       try {
-        const res = await getProductsList();
+        const res = await getDraftProductsList();
         setProducts(res);  
       } catch (error) {
-        console.error("Error during fetch product: ", error);
+        console.error("Error during fetch draft product: ", error);
       } finally {
         setLoading(false);
       }
@@ -52,14 +52,14 @@ const AdminProducts = () => {
     fetchStock();
   }, [])
 
-  const handleUnpublish = async (productId: string) => {
+  const handlePublish = async (productId: string) => {
     setLoading(true);
     try {
-      await unpublishProduct({ id: productId });
+      await publishProduct({ id: productId });
       notification.success({
-        message: 'Đã lưu thành bản nháp!',
+        message: 'Phát hành sản phẩm thành công!',
       });
-      const updatedProducts = await getProductsList();
+      const updatedProducts = await getDraftProductsList();
       setProducts(updatedProducts);
     } catch (error) {
       console.error("Error during unpublished product:");
@@ -126,9 +126,9 @@ const AdminProducts = () => {
       key: 'actions',
       render: (product: Product) => (
         <div className='flex flex-col space-y-2 text-blue-500'>
-          <Link href={`/admin/products/${product._id}`}>Cập nhật</Link>
+          <Button type='link' onClick={() => handlePublish(product._id)}>Phát hành</Button>
           <Link href={`/products/${product.slug}`}>Xem trước</Link>
-          <Button type='link' onClick={() => handleUnpublish(product._id)}>Lưu thành bản nháp</Button>
+          <Link href='/'>Cập nhật</Link>
           <Link href='/'>Xóa</Link>
         </div>
       ),
@@ -138,7 +138,7 @@ const AdminProducts = () => {
   return (
     <div className="p-4">
       <div className="flex justify-between items-center mb-4">
-        <Search
+        {/* <Search
           placeholder="Tìm tên sản phẩm, SKU sản phẩm, Mã sản phẩm..."
           onSearch={(value) => console.log(value)}
           enterButton
@@ -148,7 +148,8 @@ const AdminProducts = () => {
           <Button type="primary" icon={<PlusOutlined />}>
             Thêm 1 sản phẩm mới
           </Button>
-        </Link>
+        </Link> */}
+        <h1>Danh sách bản nháp sản phẩm</h1>
       </div>
       <Table
         columns={columns}

@@ -17,8 +17,8 @@ const uploadImageFromLocal = async ({ path, folderName = 'products', fileName = 
             publicId: result.public_id.split('/').pop(),
             imageUrl: result.secure_url,
             thumbUrl: await cloudinary.url(result.public_id, {
-                height: 100,
-                width: 100,
+                height: 200,
+                width: 300,
                 format: 'jpg'
             })
         }
@@ -40,8 +40,8 @@ const uploadImagesFromLocal = async ({ files, folderName = 'products' }) => {
                 publicId: result.public_id.split('/').pop(),
                 imageUrl: result.secure_url,
                 thumbUrl: await cloudinary.url(result.public_id, {
-                    height: 100,
-                    width: 100,
+                    height: 200,
+                    width: 300,
                     format: 'jpg'
                 })
             });

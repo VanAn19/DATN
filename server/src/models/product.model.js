@@ -22,6 +22,14 @@ var productSchema = new Schema({
         type: Number,
         required: true
     },
+    sale: {
+        type: Number,
+        required: true,
+    },
+    sellingPrice: {
+        type: Number,
+        required: true
+    },
     quantity: {
         type: Number,
         required: true
