@@ -8,7 +8,7 @@ export default function CenteredLayouts({ children }: { children: React.ReactNod
     <div>
       <Header />
       {/* <div className="flex justify-center items-center pt-[var(--header-height)] font-poppins"> */}
-      <div className="pt-[var(--header-height)] font-poppins">
+      <div className="pt-[var(--header-height)]">
         {children}
       </div>
       <Footer />

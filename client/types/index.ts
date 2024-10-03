@@ -29,6 +29,13 @@ export interface Product {
     slug: string;
 };
 
+export interface Category {
+    _id: string;
+    name: string;
+    productCount: number;
+    slug: string;
+};
+
 export interface ProductResponse {
     message: string;
     status: number;
@@ -39,6 +46,8 @@ export interface ProductResponse {
             thumbnail: string;
             description: string;
             price: number;
+            sale: number;
+            sellingPrice: number;
             category: string;
             slug: string;
         }
@@ -54,6 +63,8 @@ export interface OneProductResponse {
         thumbnail: string;
         description: string;
         price: number;
+        sale: number;
+        sellingPrice: number;
         category: string;
         slug: string;
     }

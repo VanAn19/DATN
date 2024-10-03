@@ -5,7 +5,7 @@ import { Table, Button, Input, Select, notification } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import { Product } from '@/types';
 import Image from 'next/image';
-import { getProductsList, unpublishProduct } from '@/api/product';
+import { getProductsList, removeProduct, unpublishProduct } from '@/api/product';
 import Link from 'next/link';
 import { getStock } from '@/api/inventory';
 
@@ -63,6 +63,22 @@ const AdminProducts = () => {
       setProducts(updatedProducts);
     } catch (error) {
       console.error("Error during unpublished product:");
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  const handleRemoveProduct = async (productId: string) => {
+    setLoading(true);
+    try {
+      await removeProduct(productId);
+      notification.success({
+        message: 'Xóa sản phẩm thành công!',
+      });
+      const updatedProducts = await getProductsList();
+      setProducts(updatedProducts);
+    } catch (error) {
+      console.error("Error during remove product:");
     } finally {
       setLoading(false);
     }
@@ -129,7 +145,7 @@ const AdminProducts = () => {
           <Link href={`/admin/products/${product._id}`}>Cập nhật</Link>
           <Link href={`/products/${product.slug}`}>Xem trước</Link>
           <Button type='link' onClick={() => handleUnpublish(product._id)}>Lưu thành bản nháp</Button>
-          <Link href='/'>Xóa</Link>
+          <Button type='link' onClick={() => handleRemoveProduct(product._id)}>Xóa</Button>
         </div>
       ),
     },

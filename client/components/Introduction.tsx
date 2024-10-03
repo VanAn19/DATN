@@ -5,21 +5,21 @@ const Introduction = () => {
     <div className='w-full mt-10 p-5 bg-gray-100 shadow-md'>
       <div className='w-[60%] mx-auto flex justify-center'>
         <div className='text-center'>
-          <h2 className='text-[21px] font-bold mb-4'>Làng Rèn Truyền Thống Lý Nhân - Vĩnh Phúc</h2>
+          <h2 className='text-[21px] font-bold mb-4'>Dao Trọng Bình - Kế Thừa và Phát Triển Nghề Rèn Truyền Thống Lý Nhân</h2>
           <p className='text-[14px]'>
-            Làng rèn Lý Nhân, nằm ở xã Lý Nhân, huyện Vĩnh Tường, tỉnh Vĩnh Phúc, là một trong những làng nghề truyền thống lâu đời và nổi tiếng nhất tại Việt Nam. Với lịch sử phát triển hơn 300 năm, nghề rèn nơi đây không chỉ là một ngành sản xuất mà còn là một phần không thể thiếu trong văn hóa và đời sống của người dân địa phương.
+            Nằm giữa lòng làng rèn truyền thống Lý Nhân, xã Lý Nhân, huyện Vĩnh Tường, tỉnh Vĩnh Phúc, xưởng rèn Trọng Bình tự hào là một trong những cơ sở chế tác nổi tiếng nhất trong làng nghề có hơn 300 năm lịch sử. Xưởng không chỉ kế thừa những giá trị văn hóa, tinh hoa của nghề rèn cổ truyền mà còn mang đến những sản phẩm sắc bén, chất lượng cao, được ưa chuộng trên khắp cả nước.
           </p>
           <p className='text-[14px] mt-4'>
-            Nổi bật nhất trong các sản phẩm của làng rèn Lý Nhân chính là dao nhà bếp, những sản phẩm này được chế tác tinh xảo từ các loại thép tốt nhất, như thép trắng và thép không gỉ, đảm bảo độ bền, độ cứng và khả năng giữ được độ sắc bén lâu dài. Các nghệ nhân tại Lý Nhân có tay nghề cao, luôn tìm kiếm và áp dụng các kỹ thuật truyền thống để sản xuất ra những con dao chất lượng, từ khâu lựa chọn nguyên liệu đến quá trình rèn, mài và hoàn thiện.
+            Với sự phát triển và đổi mới không ngừng, Dao Trọng Bình chuyên sản xuất các loại dao nhà bếp cao cấp, được chế tác tỉ mỉ từ những loại thép tốt nhất như thép trắng, thép không gỉ. Quy trình chế tác được thực hiện hoàn toàn thủ công bởi các nghệ nhân lành nghề, từ khâu lựa chọn nguyên liệu đến quá trình rèn, mài và hoàn thiện. Mỗi sản phẩm của xưởng đều mang trong mình tâm huyết và sự chăm chút của người thợ, đảm bảo độ bền, độ sắc bén, và chất lượng vượt trội.
           </p>
           <p className='text-[14px] mt-4'>
-            Mỗi sản phẩm được tạo ra đều mang trong mình tâm huyết và sự tinh tế của người thợ rèn. Dao nhà bếp Lý Nhân không chỉ được ưa chuộng trong các gia đình mà còn được xuất khẩu ra nhiều tỉnh thành khác nhau trên toàn quốc, khẳng định vị thế của làng nghề trong ngành chế biến thực phẩm toàn cầu. Những sản phẩm này không chỉ là dụng cụ nấu nướng mà còn là biểu tượng của sự khéo léo và tinh tế của nghệ nhân Việt Nam.
+            Dao Trọng Bình luôn không ngừng tìm tòi và áp dụng các kỹ thuật rèn truyền thống kết hợp với công nghệ hiện đại, tạo ra những sản phẩm vừa giữ được bản sắc làng nghề, vừa đáp ứng nhu cầu đa dạng của khách hàng. Những con dao không chỉ là công cụ nấu ăn hàng ngày mà còn là biểu tượng của sự khéo léo, tinh tế và tâm huyết của người nghệ nhân Việt Nam.
           </p>
           <p className='text-[14px] mt-4'>
-            Làng rèn Lý Nhân không chỉ tạo ra những sản phẩm chất lượng mà còn góp phần bảo tồn và phát triển văn hóa nghề thủ công truyền thống. Các thế hệ nghệ nhân ở đây không ngừng gìn giữ và truyền đạt những bí quyết quý giá cho thế hệ trẻ, giúp nghề rèn không bị mai một theo thời gian.
+            Khi đến với xưởng rèn Trọng Bình, khách hàng sẽ có cơ hội trải nghiệm quy trình sản xuất thủ công tỉ mỉ, chứng kiến trực tiếp từng bước tạo nên những sản phẩm sắc bén và chất lượng. Đây không chỉ là nơi sản xuất mà còn là một điểm đến lý tưởng cho những ai muốn tìm hiểu sâu hơn về nghề rèn truyền thống của dân tộc.
           </p>
           <p className='text-[14px] mt-4'>
-            Làng rèn Lý Nhân, với sự kết hợp giữa truyền thống và hiện đại, không chỉ tạo ra những sản phẩm chất lượng mà còn mang lại giá trị văn hóa, lịch sử cho vùng đất Vĩnh Phúc và cho cả dân tộc Việt Nam. Du khách có thể đến tham quan, chứng kiến quá trình làm ra những sản phẩm độc đáo, và tìm hiểu thêm về nghề rèn đã tồn tại qua nhiều thế hệ.
+            Xưởng Rèn Trọng Bình – Nơi hội tụ của tinh hoa rèn cổ truyền và sự sáng tạo hiện đại, luôn cam kết mang đến cho khách hàng những sản phẩm tốt nhất, góp phần gìn giữ và phát triển di sản văn hóa nghề rèn Lý Nhân.
           </p>
         </div>
       </div>

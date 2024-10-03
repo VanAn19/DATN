@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react'
 import { Form, Input, Button, Upload, Select, notification } from 'antd';
-import { PlusOutlined, UploadOutlined } from '@ant-design/icons';
+import { PlusOutlined } from '@ant-design/icons';
 import { deleteImage, uploadImages } from '@/api/upload';
 import { Category, FileItem } from '@/types';
 import { getListCategory } from '@/api/category';

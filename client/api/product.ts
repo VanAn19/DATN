@@ -2,7 +2,6 @@ import axiosInstance from "./axiosInstance";
 import { AxiosResponse } from 'axios'; 
 import { OneProductResponse, Product, ProductResponse } from "@/types";
 import { getCookie } from "@/utils";
-import { isDraft } from "@reduxjs/toolkit";
 
 const infoUser = getCookie('user');
 const token = getCookie('token');
@@ -83,6 +82,21 @@ export const createProduct = async (data: { name: string, thumbnail: string, des
     return response.data;
   } catch (error) {
     console.error("Error during create product api:", error);
+    throw error;
+  }
+}
+
+export const removeProduct = async (id: string) => {
+  try {
+    const response = await axiosInstance.delete(`/product/delete/${id}`,  {
+      headers: {
+        'Authorization': token,
+        'x-client-id': infoUser._id
+      }
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error during remove product api:", error);
     throw error;
   }
 }

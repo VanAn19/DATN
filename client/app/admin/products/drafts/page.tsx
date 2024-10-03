@@ -17,7 +17,7 @@ const VND = new Intl.NumberFormat("vi-VN", {
   currency: "VND",
 });
 
-const AdminProducts = () => {
+const DraftProducts = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [stocks, setStocks] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -162,4 +162,4 @@ const AdminProducts = () => {
   )
 }
 
-export default AdminProducts
+export default DraftProducts

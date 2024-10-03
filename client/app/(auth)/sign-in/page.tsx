@@ -26,9 +26,11 @@ const SignIn = () => {
   const dispatch = useDispatch();
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string>('');
 
   const handleLogin = async (data: any) => {
     setIsLoading(true);
+    setErrorMessage('');
     try {
       const res = await signin(data);
       if (res.status === 200) {
@@ -38,8 +40,15 @@ const SignIn = () => {
         setCookie("user", res?.metadata?.user, expirationHours);
         router.push("/");
       }
-    } catch (error) {
-      console.error('Error sign in:', error);
+    } catch (error: any) {
+      if (error.response?.status === 403) {
+        setErrorMessage("Tên người dùng không tồn tại.");
+      } else if (error.response?.status === 401) {
+        setErrorMessage("Sai mật khẩu, vui lòng kiểm tra lại.");
+      } else {
+        console.error('Error sign in:', error);
+        setErrorMessage("Đã xảy ra lỗi, vui lòng thử lại sau.");
+      }
     } finally {
       setIsLoading(false);
     }
@@ -70,6 +79,7 @@ const SignIn = () => {
               {...register('password')}
             />
           </div>
+          {errorMessage && <p className="text-red-500 text-sm mb-4">{errorMessage}</p>}
           <div className="flex items-center justify-between">
             <button
               type="submit"

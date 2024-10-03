@@ -37,17 +37,24 @@ const SignUp = () => {
   });
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string>('');
 
   const handleSignUp = async (data: any) => {
     setIsLoading(true);
+    setErrorMessage('');
     try {
       const res = await signup(data);
       if (res.status === 201) {
         setCookie('user', res?.metadata?.user, expirationHours);
         router.push('/otp-verified');
       }
-    } catch (error) {
-      console.error('Error sign up:', error);
+    } catch (error: any) {
+      if (error.response?.status === 403) {
+        setErrorMessage("Tên người dùng đã tồn tại.");
+      } else {
+        console.error('Error sign in:', error);
+        setErrorMessage("Đã xảy ra lỗi, vui lòng thử lại sau.");
+      }
     } finally {
       setIsLoading(false);
     }
@@ -74,6 +81,7 @@ const SignUp = () => {
                 {...register('username')}
               />
               {errors.username && <span className="error-message">{errors.username.message}</span>}
+              {errorMessage && <p className="error-message">{errorMessage}</p>}
             </div>
             <div className="group-input">
               <p>Họ và tên</p>

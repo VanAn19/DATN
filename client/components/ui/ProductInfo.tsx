@@ -58,7 +58,7 @@ export default function ProductInfo(props: { data: any, user: string, isLoading:
           {isLoading ? (
             <Skeleton.Input active />
           ) : (
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 ml-8">
               <span className="text-sm ml-10">Chia sẻ:</span>
               <a href="/">
                 <Image

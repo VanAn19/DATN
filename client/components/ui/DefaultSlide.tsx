@@ -99,14 +99,22 @@ const DefaultSlide = ({ apiAction, title, path }: { apiAction: () => Promise<Pro
                       <p className="text-gray-500 mt-2 text-sm">
                         Đã bán 
                       </p>
-                      <div className="mt-2">
-                        <span className="text-gray-500 mr-2 text-lg">
-                          {VND.format(product?.sellingPrice)}
-                        </span>
-                        <span className="text-gray-500 line-through">
-                          {VND.format(product?.price)}
-                        </span>
-                      </div>
+                      {product.sellingPrice < product.price ? (
+                        <div className="mt-2">
+                          <span className="text-gray-500 mr-2">
+                            {VND.format(product?.sellingPrice)}
+                          </span>
+                          <span className="text-gray-500 line-through">
+                            {VND.format(product?.price)}
+                          </span>
+                        </div>
+                      ) : (
+                        <div className="mt-2">
+                          <span className="text-gray-500 mr-2">
+                            {VND.format(product?.price)}
+                          </span>
+                        </div>
+                      )}
                     </div>
                   </div>
                 </Link>

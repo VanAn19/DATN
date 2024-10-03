@@ -64,7 +64,7 @@ class AuthService {
 
     static signUp = async ({ username, password, name, email, phone, address }) => {
         const holderUser = await findByUsername({ username });
-        if (holderUser) throw new BadRequestError('Error: Username already registered!');
+        if (holderUser) throw new BadRequestError('Username already registered!');
         const passwordHash = await bcrypt.hash(password, 10);
         const otp = Math.floor(100000 + Math.random() * 900000);
         const expiredAt = new Date(Date.now() + 5 * 60000);

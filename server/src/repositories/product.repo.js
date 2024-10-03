@@ -56,6 +56,7 @@ const updateProductById = async ({ id, payload, isNew = true }) => {
 }
 
 const deleteProductById = async ({ id }) => {
+    await removeInventory({ productId: id });
     return await Product.deleteOne({ _id: id });
 }
 
