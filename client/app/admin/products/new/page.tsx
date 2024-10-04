@@ -18,6 +18,7 @@ const NewProduct = () => {
   const [isDraft, setIsDraft] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string>('');
 
   useEffect(() => {
     const fetchCategory = async () => {
@@ -76,6 +77,7 @@ const NewProduct = () => {
   
   const onFinish = async (values: any) => {
     setLoading(true);
+    setErrorMessage('');
     try {
       const { name, price, sale, quantity, category, description } = values;
       const thumbnails = fileList.map((file) => file.thumbUrl);
@@ -105,8 +107,16 @@ const NewProduct = () => {
         form.resetFields(); 
         setFileList([]);
       }
-    } catch (error) {
-      console.error("Error during create product:", error);
+    } catch (error: any) {
+      if (error.response?.status === 403) {
+        setErrorMessage("Sản phẩm đã tồn tại.");
+      }  else {
+        console.error('Error during create product:', error);
+        notification.error({
+          message: 'Failed',
+          description: "Đã xảy ra lỗi, vui lòng thử lại sau."
+        });
+      }
     } finally {
       setLoading(false);
     }
@@ -149,6 +159,7 @@ const NewProduct = () => {
           >
             <Input placeholder="Tên sản phẩm" />
           </Form.Item>
+          {errorMessage && <p className="text-red-500 text-sm mb-1">{errorMessage}</p>}
 
           <Form.Item
             name="category"

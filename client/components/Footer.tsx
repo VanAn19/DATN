@@ -18,9 +18,9 @@ const Footer = () => {
   const pageItems = [
     { label: "Chính sách quyền riêng tư", link: "" },
     { label: "Chính sách bảo mật", link: "" },
-    { label: "Chính sách kiểm hàng - Báo cáo", link: "" },
+    { label: "Chính sách bảo hành", link: "" },
+    { label: "Chính sách hoàn trả hàng", link: "", },
     { label: "Điều khoản dịch vụ", link: "", },
-    { label: "Hướng dẫn sử dụng ", link: "", },
   ];
 
   return (
@@ -64,7 +64,7 @@ const Footer = () => {
             </div>
             <div className="flex flex-col w-1/2 px-5">
               <p className="footer_text font-semibold text-lg text_white pb-7">
-                Hướng dẫn sử dụng
+                Thông tin
               </p>
               {pageItems.map((pageItem, index) => (
                 <Link key={index} href={pageItem.link}>
@@ -76,7 +76,7 @@ const Footer = () => {
             </div>
           </div>
 
-          <div className="contact w-full sm:w-1/4 flex flex-col  items-center sm:items-start">
+          <div className="contact w-full sm:w-1/4 flex flex-col items-center sm:items-start">
             <p className="font-semibold text-lg pb-7">
               Follow Us On Social Media
             </p>

@@ -82,23 +82,25 @@ const DefaultSlide = ({ apiAction, title, path }: { apiAction: () => Promise<Pro
             <Slider {...settings} className="w-full relative">
               {products?.map((product) => (
                 <Link href={`/products/${product.slug}`} className="slide-content pr-8" key={product._id} >
-                  <div className="card bg-white rounded-lg shadow-md overflow-hidden cursor-pointer w-full sm:w-58">
+                  <div className="card bg-white rounded-lg shadow-md overflow-hidden cursor-pointer w-full sm:w-58 relative">
                     <div className="bg-orange-100 overflow-hidden group flex justify-center">
                       <Image
                         src={product.thumbnail ||images.logo}
                         width={300}
-                        height={200}
-                        className="object-contain h-48 w-96 transition-transform duration-300 ease-in-out group-hover:scale-110"
+                        height={300}
+                        className="object-cover transition-transform duration-300 ease-in-out group-hover:scale-110"
                         alt={product.name}
                       />
                     </div>
                     <div className="p-2">
+                      {product.sale && (
+                        <p className="bg-red-300 text-white font-bold px-2 py-1 text-xs rounded-full absolute top-2 left-2">
+                          UP TO {product.sale}%
+                        </p>
+                      )}
                       <h2 className="text-lg font-medium h-12 mobile:h-20">
                         <TruncatedText text={product.name} maxLength={33} />
                       </h2>
-                      <p className="text-gray-500 mt-2 text-sm">
-                        Đã bán 
-                      </p>
                       {product.sellingPrice < product.price ? (
                         <div className="mt-2">
                           <span className="text-gray-500 mr-2">
