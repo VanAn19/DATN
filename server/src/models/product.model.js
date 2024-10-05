@@ -15,6 +15,11 @@ var productSchema = new Schema({
         type: String,
         required: true
     },
+    images: [{
+        publicId: { type: String, required: true },
+        imageUrl: { type: String, required: true },
+        thumbUrl: { type: String, required: true }
+    }],
     description: {
         type: String
     },

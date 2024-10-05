@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useEffect, useState } from 'react'
-import { Form, Input, Button, Upload, Select, notification } from 'antd';
+import { Form, Input, Button, Upload, Select, notification, Image } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import { deleteImage, uploadImages } from '@/api/upload';
 import { Category, FileItem } from '@/types';
@@ -15,6 +15,7 @@ const NewProduct = () => {
   const [form] = Form.useForm();
   const [fileList, setFileList] = useState<FileItem[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
+  const [thumbnail, setThumbnail] = useState<string>('');
   const [isDraft, setIsDraft] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -50,14 +51,24 @@ const NewProduct = () => {
       try {
         const response = await uploadImages(formData); 
         // sau khi upload thành công => cập nhật lại fileList với URL từ server
-        setFileList(response.metadata.map((img: any, index: number) => ({
+        // setFileList(response.metadata.map((img: any, index: number) => ({
+        //   uid: index.toString(),
+        //   name: `image-${index}`,
+        //   status: 'done',
+        //   publicId: img.publicId,
+        //   url: img.imageUrl, 
+        //   thumbUrl: img.thumbUrl, 
+        // })));
+        const updatedFileList = response.metadata.map((img: any, index: number) => ({
           uid: index.toString(),
           name: `image-${index}`,
           status: 'done',
           publicId: img.publicId,
           url: img.imageUrl, 
           thumbUrl: img.thumbUrl, 
-        })));
+        }));
+        setFileList(updatedFileList);
+        setThumbnail(updatedFileList[0]?.thumbUrl || '');
       } catch (error) {
         console.error("Error during upload images:", error);
       } finally {
@@ -69,7 +80,17 @@ const NewProduct = () => {
   const handleRemove = async (file: any) => {
     try {
       await deleteImage({ publicId: file.publicId }); 
-      setFileList(fileList.filter((item) => item.uid !== file.uid));
+      // setFileList(fileList.filter((item) => item.uid !== file.uid));
+      // // delete preview thumbnail 
+      // if (file.publicId === fileList[0]?.publicId) {
+      //   setThumbnail(''); 
+      // }
+      const updatedFileList = fileList.filter((item) => item.uid !== file.uid);
+      setFileList(updatedFileList);
+      // ảnh đầu tiên bị xóa => update thumbnail thành ảnh tiếp theo
+      if (file.uid === fileList[0]?.uid) {
+        setThumbnail(updatedFileList[0]?.thumbUrl || '');
+      }
     } catch (error) {
       console.error("Error during delete image:", error);
     }
@@ -80,8 +101,13 @@ const NewProduct = () => {
     setErrorMessage('');
     try {
       const { name, price, sale, quantity, category, description } = values;
-      const thumbnails = fileList.map((file) => file.thumbUrl);
-      if (thumbnails.length === 0) {
+      const images = fileList.map((file) => ({
+        publicId: file.publicId,
+        imageUrl: file.url || '',
+        thumbUrl: file.thumbUrl || ''
+      }));
+      const thumbnail = images[0]?.thumbUrl; 
+      if (!thumbnail) {
         notification.error({
           message: 'Lỗi',
           description: 'Vui lòng thêm ít nhất 1 hình ảnh'
@@ -91,7 +117,8 @@ const NewProduct = () => {
       }
       const res = await createProduct({
         name,
-        thumbnail: thumbnails[0] as string,
+        thumbnail,
+        images,
         price: Number(price),
         sale: Number(sale),
         quantity: Number(quantity),
@@ -149,6 +176,17 @@ const NewProduct = () => {
             </Upload>
           </Form.Item>
 
+          {thumbnail && ( 
+            <Form.Item label="Ảnh bìa">
+              <Image
+                width={100} 
+                src={thumbnail}
+                alt="Thumbnail"
+                preview={false} 
+              />
+            </Form.Item>
+          )}
+
           <Form.Item
             name="name"
             label="Tên sản phẩm"
@@ -178,7 +216,7 @@ const NewProduct = () => {
               name="price"
               label="Giá"
               rules={[
-                { required: true, message: 'Vui lòng nhập giá sản phẩm!' }
+                { required: true, message: 'Vui lòng nhập giá sản phẩm!' },
               ]}
               className='mr-5'
             >
@@ -232,7 +270,7 @@ const NewProduct = () => {
               onClick={() => setIsDraft(true)}
               htmlType="submit" 
               disabled={uploading || loading}  
-              className='mr-5'
+              className='mr-5 bg-gray-300'
             >
               Lưu bản nháp
             </Button>

@@ -1,5 +1,11 @@
 import { UploadFile } from "antd";
 
+export interface Image {
+    publicId: string;
+    imageUrl: string;
+    thumbUrl: string;
+}
+
 export interface AuthResponse {
     message: string;
     status: number;
@@ -21,6 +27,7 @@ export interface Product {
     _id: string;
     name: string;
     thumbnail: string;
+    images: Image[]
     description: string;
     price: number;
     sale: number;
@@ -44,6 +51,7 @@ export interface ProductResponse {
             _id: string;
             name: string;
             thumbnail: string;
+            images: { publicId: string, imageUrl: string, thumbUrl: string }[];
             description: string;
             price: number;
             sale: number;
@@ -61,10 +69,12 @@ export interface OneProductResponse {
         _id: string;
         name: string;
         thumbnail: string;
+        images: { publicId: string, imageUrl: string, thumbUrl: string }[];
         description: string;
         price: number;
         sale: number;
         sellingPrice: number;
+        quantity: number;
         category: string;
         slug: string;
     }
@@ -91,9 +101,4 @@ export interface ListCartResponse {
 
 export interface FileItem extends UploadFile {
     publicId: string; 
-}
-
-export interface Category {
-    _id: string;
-    name: string;
 }

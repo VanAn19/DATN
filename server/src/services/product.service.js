@@ -27,12 +27,13 @@ class ProductService {
     }
 
     static async createProduct(payload) {
-        const { name, thumbnail, description, price, sale, quantity, category, isDraft } = payload;
+        const { name, thumbnail, images, description, price, sale, quantity, category, isDraft } = payload;
         const product = await findProductByName({ name });
         if (product) throw new BadRequestError('Product name exists');
         const newProduct = await Product.create({
             name,
             thumbnail,
+            images,
             description,
             price,
             sale,

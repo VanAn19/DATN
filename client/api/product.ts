@@ -71,7 +71,17 @@ export const getInfoProduct = async (id: string) => {
   }
 }
 
-export const createProduct = async (data: { name: string, thumbnail: string, description: string, price: number, sale: number, quantity: number, category: string, isDraft: boolean }) => {
+export const createProduct = async (data: { 
+  name: string, 
+  thumbnail: string, 
+  images: { publicId: string, imageUrl: string, thumbUrl: string }[], 
+  description: string, 
+  price: number, 
+  sale: number, 
+  quantity: number, 
+  category: string, 
+  isDraft: boolean 
+}) => {
   try {
     const response = await axiosInstance.post('product/create', data, {
       headers: {
@@ -82,6 +92,30 @@ export const createProduct = async (data: { name: string, thumbnail: string, des
     return response.data;
   } catch (error) {
     console.error("Error during create product api:", error);
+    throw error;
+  }
+}
+
+export const updateProduct = async (id: string, data: { 
+  name: string, 
+  thumbnail: string, 
+  images: { publicId: string, imageUrl: string, thumbUrl: string }[], 
+  description: string, 
+  price: number, 
+  sale: number, 
+  quantity: number, 
+  category: string
+}) => {
+  try {
+    const response = await axiosInstance.patch(`product/update/${id}`, data, {
+      headers: {
+        'Authorization': token,
+        'x-client-id': infoUser._id
+      }
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error during update product api:", error);
     throw error;
   }
 }
