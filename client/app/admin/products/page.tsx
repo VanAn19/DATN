@@ -78,7 +78,7 @@ const AdminProducts = () => {
       const updatedProducts = await getProductsList();
       setProducts(updatedProducts);
     } catch (error) {
-      console.error("Error during remove product:");
+      console.error("Error during remove product:", error);
     } finally {
       setLoading(false);
     }
@@ -141,7 +141,7 @@ const AdminProducts = () => {
       title: 'Thao tác',
       key: 'actions',
       render: (product: Product) => (
-        <div className='flex flex-col space-y-2 text-blue-500'>
+        <div className='flex flex-col space-y-2 text-blue-500 text-center'>
           <Link href={`/admin/products/${product._id}`}>Cập nhật</Link>
           <Link href={`/products/${product.slug}`}>Xem trước</Link>
           <Button type='link' onClick={() => handleUnpublish(product._id)}>Lưu thành bản nháp</Button>

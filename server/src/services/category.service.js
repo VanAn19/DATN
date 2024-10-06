@@ -1,7 +1,7 @@
 'use strict'
 
 const Category = require('../models/category.model');
-const { findCategoryByName, getListCategory } = require('../repositories/category.repo');
+const { findCategoryByName, getListCategory, updateCategoryById, getCategoryById, deleteCategoryById } = require('../repositories/category.repo');
 const { BadRequestError, NotFoundError } = require('../core/error.response');
 
 class CategoryService {
@@ -13,16 +13,23 @@ class CategoryService {
         return await Category.create({ name });
     }
 
-    static updateCategory = async () => {
-        
+    static updateCategory = async (id, payload) => {
+        const { name } = payload;
+        const foundCategory = await findCategoryByName({ name });
+        if (foundCategory) throw new BadRequestError('Category name exists');
+        return await updateCategoryById({ id, payload });
     }
 
-    static deleteCategory = async () => {
-
+    static deleteCategory = async ({ id }) => {
+        return await deleteCategoryById({ id });
     }
 
     static getListCategory = async () => {
         return await getListCategory();
+    }
+
+    static async getACategory({ id }) {
+        return await getCategoryById({ id });
     }
 
 }

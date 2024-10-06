@@ -31,7 +31,22 @@ const getListCategory = async () => {
     .exec();
 }
 
+const updateCategoryById = async ({ id, payload, isNew = true }) => {
+    return await Category.findByIdAndUpdate(id, payload, { new: isNew });
+}
+
+const getCategoryById = async ({ id }) => {
+    return await Category.findById(id).lean();
+}
+
+const deleteCategoryById = async ({ id }) => {
+    return await Category.deleteOne({ _id: id });
+}
+
 module.exports = {
     findCategoryByName,
-    getListCategory
+    getListCategory,
+    updateCategoryById,
+    getCategoryById,
+    deleteCategoryById
 }

@@ -5,7 +5,7 @@ import { Table, Button, Input, Select, notification } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import { Category } from '@/types';
 import Link from 'next/link';
-import { getListCategory } from '@/api/category';
+import { getListCategory, removeCategory } from '@/api/category';
 
 const { Search } = Input;
 
@@ -30,6 +30,22 @@ const AdminCategory = () => {
     fetchCategories();
   }, []);
 
+  const handleRemoveProduct = async (productId: string) => {
+    setLoading(true);
+    try {
+      await removeCategory(productId);
+      notification.success({
+        message: 'Xóa sản phẩm thành công!',
+      });
+      const res = await getListCategory();
+      setCategories(res.metadata);
+    } catch (error) {
+      console.error("Error during remove category:", error);
+    } finally {
+      setLoading(false);
+    }
+  }
+
   const columns = [
     {
       title: 'Tên danh mục',
@@ -53,9 +69,9 @@ const AdminCategory = () => {
       title: 'Thao tác',
       key: 'actions',
       render: (category: Category) => (
-        <div className='flex flex-col space-y-2 text-blue-500'>
-          <Link href='/'>Cập nhật</Link>
-          <Link href='/'>Xóa</Link>
+        <div className='flex flex-col space-y-2 text-blue-500 text-center'>
+          <Link href={`/admin/categories/${category._id}`}>Cập nhật</Link>
+          <Button type='link' onClick={() => handleRemoveProduct(category._id)}>Xóa</Button>
         </div>
       ),
     },

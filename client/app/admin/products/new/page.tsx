@@ -253,7 +253,7 @@ const NewProduct = () => {
               { min: 10, max: 5000, message: 'Mô tả phải từ 10 đến 5000 ký tự.' }
             ]}
           >
-            <TextArea placeholder="Mô tả..." />
+            <TextArea autoSize={{ minRows: 6, maxRows: 8 }} placeholder="Mô tả..." />
           </Form.Item>
 
           <Form.Item>

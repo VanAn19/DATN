@@ -65,6 +65,9 @@ class ProductService {
     }
 
     static async updateProduct(id, payload) {
+        const { name } = payload;
+        const foundProduct = await findProductByName({ name });
+        if (foundProduct) throw new BadRequestError('Product name exists');
         return await updateProductById({ id, payload });
     }
 

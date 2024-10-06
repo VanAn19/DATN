@@ -12,5 +12,8 @@ router.use(checkRole('admin'))
 
 router.post('/create', asyncHandler(categoryController.createCategory));
 router.get('/', asyncHandler(categoryController.getListCategory));
+router.get('/:id', asyncHandler(categoryController.getACategory));
+router.patch('/update/:id', asyncHandler(categoryController.updateCategory));
+router.delete('/delete/:id', asyncHandler(categoryController.deleteCategory));
 
 module.exports = router;

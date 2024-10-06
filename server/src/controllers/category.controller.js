@@ -19,6 +19,27 @@ class CategoryController {
         }).send(res);
     }
 
+    updateCategory = async (req,res,next) => {
+        new SuccessResponse({
+            message: 'update a category successfully',
+            metadata: await CategoryService.updateCategory(req.params.id, req.body)
+        }).send(res);
+    }
+
+    getACategory = async (req,res,next) => {
+        new SuccessResponse({
+            message: 'get a Category successfully',
+            metadata: await CategoryService.getACategory({ id: req.params.id })
+        }).send(res);
+    }
+
+    deleteCategory = async (req,res,next) => {
+        new SuccessResponse({
+            message: 'delete category successfully',
+            metadata: await CategoryService.deleteCategory({ id: req.params.id })
+        }).send(res);
+    }
+
 }
 
 module.exports = new CategoryController();

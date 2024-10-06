@@ -7,7 +7,7 @@ import { getInfoProduct, updateProduct } from '@/api/product';
 import { deleteImage, uploadImages } from '@/api/upload';
 import { Category, FileItem } from '@/types';
 import { getListCategory } from '@/api/category';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 
 
 const { TextArea } = Input;
@@ -22,6 +22,7 @@ const UpdateProduct = () => {
   const [productId, setProductId] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string>('');
   const { id } = useParams();
+  const router = useRouter();
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -41,6 +42,14 @@ const UpdateProduct = () => {
         try {
           const product = await getInfoProduct(id as string);
           setProductId(product._id);
+          const images = product.images.map((img: any, index: number) => ({
+            uid: index.toString(),
+            name: `image-${index}`,
+            status: 'done',
+            publicId: img.publicId,
+            url: img.imageUrl,
+            thumbUrl: img.thumbUrl,
+          }));
           form.setFieldsValue({
             name: product.name,
             price: product.price,
@@ -48,15 +57,16 @@ const UpdateProduct = () => {
             quantity: product.quantity,
             category: product.category,
             description: product.description,
+            images: images,
           });
-          // setFileList(product.images.map((img: any, index: number) => ({
-          //   uid: index.toString(),
-          //   name: `image-${index}`,
-          //   status: 'done',
-          //   publicId: img.publicId,
-          //   url: img.imageUrl,
-          //   thumbUrl: img.thumbUrl,
-          // })));
+          setFileList(product.images.map((img: any, index: number) => ({
+            uid: index.toString(),
+            name: `image-${index}`,
+            status: 'done',
+            publicId: img.publicId,
+            url: img.imageUrl,
+            thumbUrl: img.thumbUrl,
+          })));
         } catch (error) {
           console.error("Error fetching product:", error);
         } finally {
@@ -70,6 +80,7 @@ const UpdateProduct = () => {
 
   const handleImageChange = async ({ fileList }: any) => {
     setFileList(fileList);
+    form.setFieldsValue({ images: fileList });
     const files = fileList.map((file: any) => file.originFileObj);
     if (files.length) {
       setUploading(true);
@@ -87,6 +98,7 @@ const UpdateProduct = () => {
           url: img.imageUrl,
           thumbUrl: img.thumbUrl,
         })));
+        form.setFieldsValue({ images: response.metadata });
       } catch (error) {
         console.error("Error uploading images:", error);
       }
@@ -131,19 +143,18 @@ const UpdateProduct = () => {
         category,
         description
       });
-      if (res.status === 201) {
+      if (res.status === 200) {
         notification.success({
           message: 'Success',
-          description: 'Sản phẩm đã được tạo thành công.',
+          description: 'Cập nhật sản phẩm thành công!',
         });
-        form.resetFields(); 
-        setFileList([]);
+        router.push('/admin/products');
       }
     } catch (error: any) {
       if (error.response?.status === 403) {
-        setErrorMessage("Sản phẩm đã tồn tại.");
+        setErrorMessage("Tên sản phẩm đã tồn tại.");
       }  else {
-        console.error('Error during create product:', error);
+        console.error('Error during update product:', error);
         notification.error({
           message: 'Failed',
           description: "Đã xảy ra lỗi, vui lòng thử lại sau."
@@ -163,6 +174,8 @@ const UpdateProduct = () => {
             name="images"
             label="Hình ảnh sản phẩm"
             rules={[{ required: true, message: 'Vui lòng thêm hình ảnh sản phẩm!' }]}
+            valuePropName="fileList" // valuePropName => liên kết với fileList
+            getValueFromEvent={(e) => e.fileList} // form nhận dữ liệu từ fileList
           >
             <Upload
               listType="picture-card"
