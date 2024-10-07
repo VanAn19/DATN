@@ -8,7 +8,7 @@ import { deleteImage, uploadImages } from '@/api/upload';
 import { Category, FileItem } from '@/types';
 import { getListCategory } from '@/api/category';
 import { useParams, useRouter } from 'next/navigation';
-
+import debounce from 'lodash.debounce';
 
 const { TextArea } = Input;
 const { Option } = Select;
@@ -78,37 +78,46 @@ const UpdateProduct = () => {
     fetchProduct();
   }, [id, form]);
 
-  const handleImageChange = async ({ fileList }: any) => {
-    setFileList(fileList);
-    form.setFieldsValue({ images: fileList });
-    const files = fileList.map((file: any) => file.originFileObj);
-    if (files.length) {
+  const handleImageChange = debounce(async ({ fileList: newFileList }: any) => {
+    const newFiles = newFileList.filter((file: any) => !file.url); // ảnh mới
+    const existingFiles = fileList.filter((file: any) => file.url); // ảnh cũ (đã có url)
+    if (newFiles.length) {
       setUploading(true);
       const formData = new FormData();
-      files.forEach((file: any) => {
-        formData.append('files', file);
+      newFiles.forEach((file: any) => {
+        formData.append('files', file.originFileObj);
       });
       try {
         const response = await uploadImages(formData);
-        setFileList(response.metadata.map((img: any, index: number) => ({
-          uid: index.toString(),
+        const uploadedFiles = response.metadata.map((img: any, index: number) => ({
+          uid: (fileList.length + index).toString(),
           name: `image-${index}`,
           status: 'done',
           publicId: img.publicId,
           url: img.imageUrl,
           thumbUrl: img.thumbUrl,
-        })));
-        form.setFieldsValue({ images: response.metadata });
+        }));
+        setFileList([...existingFiles, ...uploadedFiles]);
+        form.setFieldsValue({ images: [...existingFiles, ...uploadedFiles] });
       } catch (error) {
         console.error("Error uploading images:", error);
+      } finally {
+        setUploading(false);
       }
+    } else {
+      // không có ảnh mới => chỉ cập nhật fileList với các ảnh hiện tại
+      setFileList(newFileList);
+      form.setFieldsValue({ images: newFileList });
     }
-  };
+  }, 500);
 
   const handleRemove = async (file: any) => {
     try {
       await deleteImage({ publicId: file.publicId });
-      setFileList(fileList.filter((item) => item.uid !== file.uid));
+      const updatedFileList = fileList.filter((item) => item.uid !== file.uid);
+      setFileList(updatedFileList); // cập nhật state với ds ảnh mới sau xóa
+      form.setFieldsValue({ images: updatedFileList }); // set lại form
+      
     } catch (error) {
       console.error("Error removing image:", error);
     }

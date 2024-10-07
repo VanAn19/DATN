@@ -28,6 +28,10 @@ const findProductByName = async ({ name }) => {
     return await Product.findOne({ name }).lean();
 }
 
+const findProductByNameExcludeId = async ({ name, id }) => {
+    return await Product.findOne({ name, _id: { $ne: id } }).lean();
+}
+
 const publishProduct = async ({ id }) => {
     const foundProduct = await Product.findById(id);
     if (!foundProduct) return null;
@@ -88,6 +92,7 @@ const checkProductByServer = async (products) => {
 
 module.exports = {
     findProductByName,
+    findProductByNameExcludeId,
     updateProductById,
     findAllDraftProduct,
     findAllPublishProduct,

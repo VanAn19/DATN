@@ -5,6 +5,7 @@ const Product = require('../models/product.model');
 const { insertInventory } = require('../repositories/inventory.repo');
 const { 
     findProductByName,
+    findProductByNameExcludeId,
     updateProductById,
     findAllDraftProduct,
     findAllPublishProduct,
@@ -66,7 +67,7 @@ class ProductService {
 
     static async updateProduct(id, payload) {
         const { name } = payload;
-        const foundProduct = await findProductByName({ name });
+        const foundProduct = await findProductByNameExcludeId({ name, id });
         if (foundProduct) throw new BadRequestError('Product name exists');
         return await updateProductById({ id, payload });
     }
