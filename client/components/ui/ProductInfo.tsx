@@ -1,9 +1,27 @@
 import React, { useState } from 'react'
-import { Button, Modal, Radio, Skeleton, Space, Spin, Table, Tag } from "antd";
+import { Skeleton } from "antd";
 import { SkeletonCustomProduct } from "./slide/CustomSlide";
 import Image from 'next/image';
-import { LoadingOutlined, DropboxOutlined, MinusOutlined, PlusOutlined, HeartFilled, HeartOutlined } from "@ant-design/icons";
+import { 
+  LoadingOutlined, 
+  DropboxOutlined, 
+  MinusOutlined, 
+  PlusOutlined, 
+  HeartFilled, 
+  HeartOutlined,
+  RightOutlined,
+  LeftOutlined
+} from "@ant-design/icons";
 import images from '@/public/images';
+import {
+  SampleNextArrow,
+  SamplePrevArrow,
+} from "./CustomSlide";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+import dynamic from "next/dynamic";
+
+const Slider = dynamic(() => import("react-slick"), { ssr: false }) as any;
 
 const VND = new Intl.NumberFormat("vi-VN", {
   style: "currency",
@@ -14,6 +32,15 @@ export default function ProductInfo(props: { data: any, user: string, isLoading:
   const { data, user, isLoading } = props;
   const [isFavorited, setIsFavorited] = useState(false);
   const [loadingFavorite, setLoadingFavorite] = useState(false);
+
+  const settings = {  
+    infinite: data?.images?.length > 1,
+    speed: 500,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    nextArrow: data?.images?.length > 1 ? <SampleNextArrow /> : null,
+    prevArrow: data?.images?.length > 1 ? <SamplePrevArrow /> : null
+  }
 
   const increaseQuantity = (id: string) => {
     // Logic để tăng số lượng sản phẩm trong giỏ
@@ -43,15 +70,21 @@ export default function ProductInfo(props: { data: any, user: string, isLoading:
             />
           </SkeletonCustomProduct>
         ) : (
-          <div className="w-full h-full flex items-center justify-center">
-            <Image
-              className="object-contain h-[100%]"
-              src={data?.thumbnail}
-              alt="product"
-              width={500}
-              height={500}
-            />
-          </div>
+          <Slider {...settings} className="w-full relative">
+            {data?.images?.map((img: { imageUrl: string }, index: number) => (
+              // <div key={index} className="w-full flex items-center justify-center">
+              <div key={index} className="slider-container w-full h-full">
+                <Image
+                  className="slider-image"
+                  src={img.imageUrl}
+                  alt={`product-image-${index}`}
+                  width={500}
+                  height={500}
+                  layout="responsive"
+                />
+              </div>
+            ))}
+          </Slider>
         )}
 
         <div className="flex items-center w-[100%] justify-around">

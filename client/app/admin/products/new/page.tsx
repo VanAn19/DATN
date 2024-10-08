@@ -132,6 +132,7 @@ const NewProduct = () => {
           description: 'Sản phẩm đã được tạo thành công.',
         });
         form.resetFields(); 
+        setThumbnail('');
         setFileList([]);
       }
     } catch (error: any) {

@@ -32,7 +32,7 @@ const DefaultSlide = ({ apiAction, title, path }: { apiAction: () => Promise<Pro
     infinite: true,
     speed: 500,
     slidesToShow: 5,
-    slidesToScroll: 2,
+    slidesToScroll: 1,
     nextArrow: <SampleNextArrow />,
     prevArrow: <SamplePrevArrow />,
   }
