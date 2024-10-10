@@ -2,10 +2,11 @@ import React, { useEffect, useState } from 'react'
 import { CloseOutlined, PlusOutlined, MinusOutlined, DeleteOutlined } from "@ant-design/icons";
 import Link from 'next/link';
 import Image from 'next/image';
-import { getListCart } from '@/api/cart';
+import { decreaseQuantityCartItem, deleteCartItem, getListCart, increaseQuantityCartItem } from '@/api/cart';
 import { ProductCart } from '@/types';
 import images from '@/public/images';
 import { checkAvailableLogin } from '@/utils';
+import { checkoutReview } from '@/api/order';
 
 const VND = new Intl.NumberFormat("vi-VN", {
   style: "currency",
@@ -19,6 +20,8 @@ interface CartProps {
 const Cart: React.FC<CartProps> = ({ onClose }) => {
   const isAuth = checkAvailableLogin();
   const [cartItems, setCartItems] = useState<ProductCart[]>([]);
+  const [cartId, setCartId] = useState<string | null>(null);
+  const [totalCheckout, setTotalCheckout] = useState(0);
   const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
@@ -28,26 +31,81 @@ const Cart: React.FC<CartProps> = ({ onClose }) => {
         try {
           const res = await getListCart();
           setCartItems(res.metadata.products);
+          setCartId(res.metadata._id);
           setLoading(false);
         } catch (err) {
           console.error("Failed to fetch cart:", err);
+        } finally {
           setLoading(false);
-        }    
+        }
       }
       fetchCart();
     }
   }, [isAuth])
 
-  const increaseQuantity = (id: string) => {
-    // Logic để tăng số lượng sản phẩm trong giỏ
+  useEffect(() => {
+    const getCheckout = async () => {
+      if (cartId && cartItems.length > 0) {
+        setLoading(true);
+        try {
+          const responseCheckout = await checkoutReview({ 
+            cartId: cartId, 
+            orderIds: [
+              {
+                products: cartItems.map(item => ({
+                  productId: item.productId,
+                  quantity: item.quantity,
+                  name: item.name,
+                  price: item.price,
+                })),
+              }
+            ]
+          });
+          setTotalCheckout(responseCheckout.metadata.checkoutOrder.totalCheckout);
+        } catch (err) {
+          console.error("Failed to fetch checkout review:", err);
+        } finally {
+          setLoading(false);
+        }
+      }
+    };
+    getCheckout();
+  }, [cartId, cartItems]);
+
+  const increaseQuantity = async (id: string) => {
+    setLoading(true);
+    try {
+      const res = await increaseQuantityCartItem(id);
+      setCartItems(res.metadata.products);
+    } catch (error) {
+      console.error('Error during increase quantity: ', error);
+    } finally {
+      setLoading(false);
+    }
   }
 
-  const decreaseQuantity = (id: string) => {
-    // Logic để giảm số lượng sản phẩm trong giỏ
+  const decreaseQuantity = async (id: string) => {
+    setLoading(true);
+    try {
+      const res = await decreaseQuantityCartItem(id);
+      setCartItems(res.metadata.products);
+    } catch (error) {
+      console.error('Error during decrease quantity: ', error);
+    } finally {
+      setLoading(false);
+    }
   }
 
-  const removeItem = (id: string) => {
-    // Logic để xóa sản phẩm khỏi giỏ hàng
+  const removeCartItem = async (productId: string) => {
+    setLoading(true);
+    try {
+      await deleteCartItem(productId);
+      setCartItems((prevItems) => prevItems.filter(item => item.productId !== productId));
+    } catch (error) {
+      console.error("Error during remove cart item: ", error);
+    } finally {
+      setLoading(false);
+    }
   }
 
 //   useEffect(() => {
@@ -70,14 +128,14 @@ const Cart: React.FC<CartProps> = ({ onClose }) => {
 
         <div className="p-4 overflow-y-auto h-[calc(100vh_-_150px)]">
           {isAuth ? (
-            cartItems.length > 0 ? (
+            cartItems && cartItems.length > 0 ? (
               <div>
                 {cartItems.map(item => (
                   <div key={item.productId} className="flex justify-between items-center mb-4 border-b pb-4">
                     <div className="flex items-center">
                       <div className="w-16 h-16 mr-4">
                         <Image
-                          src={images.logo}
+                          src={item?.thumbnail}
                           alt={item.name}
                           width={64}
                           height={64}
@@ -102,7 +160,7 @@ const Cart: React.FC<CartProps> = ({ onClose }) => {
                       </div>
                     </div>
                     <div className="flex items-center">
-                      <button onClick={() => removeItem(item.productId)} className="ml-4 text-red-500">
+                      <button onClick={() => removeCartItem(item.productId)} className="ml-4 text-red-500">
                         <DeleteOutlined />
                       </button>
                     </div>
@@ -110,7 +168,7 @@ const Cart: React.FC<CartProps> = ({ onClose }) => {
                 ))}
 
                 <div className="mt-4 text-right">
-                  <p className="text-lg font-bold">Tổng cộng: </p>
+                  <p className="text-lg font-bold">Tổng cộng: {VND.format(totalCheckout)}</p>
                 </div>
 
                 <div className="mt-4">

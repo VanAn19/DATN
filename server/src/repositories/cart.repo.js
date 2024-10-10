@@ -35,9 +35,14 @@ const findCartById = async (cartId) => {
     return await Cart.findOne({ _id: cartId, status: 'active' }).lean();
 }
 
+const findCartByUserId = async (userId)  => {
+    return await Cart.findOne({ user: userId, status: 'active' });
+}
+
 module.exports = {
     createCart,
     updateCartQuantity,
     removeProductsFromCart,
-    findCartById
+    findCartById,
+    findCartByUserId
 }

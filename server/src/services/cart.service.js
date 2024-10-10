@@ -2,7 +2,7 @@
 
 const { BadRequestError, NotFoundError } = require("../core/error.response");
 const Cart = require('../models/cart.model');
-const { createCart, updateCartQuantity } = require("../repositories/cart.repo");
+const { createCart, updateCartQuantity, findCartByUserId } = require("../repositories/cart.repo");
 const { getProductById } = require('../repositories/product.repo');
 
 /*
@@ -17,7 +17,7 @@ const { getProductById } = require('../repositories/product.repo');
 class CartService {
 
     static async addToCart({ userId, product = {} }) {
-        const userCart = await Cart.findOne({ user: userId, status: 'active' });
+        const userCart = await findCartByUserId(userId);
         if (!userCart) {
             return await createCart({ userId, product });
         }
@@ -59,6 +59,39 @@ class CartService {
 
     static async getListUserCart({ userId }) {
         return await Cart.findOne({ user: userId }).lean()
+    }
+
+    static async increaseQuantityCartItem({ productId, userId }) {
+        const userCart = await findCartByUserId(userId);
+        if (!userCart) throw new BadRequestError('Cart not found');
+        const productExists = userCart.products.some(p => p.productId === productId);
+        if (!productExists) throw new NotFoundError('Not found product in cart');
+        return await updateCartQuantity({
+            userId,
+            product: {
+                productId,
+                quantity: 1
+            }
+        });
+    }
+
+    static async decreaseQuantityCartItem({ productId, userId }) {
+        const userCart = await findCartByUserId(userId);
+        if (!userCart) throw new BadRequestError('Cart not found');
+        const productExists = userCart.products.find(p => p.productId === productId);
+        if (!productExists) throw new NotFoundError('Not found product in cart');
+        console.log("productExists:::::::", productExists)
+        // quantity = 1 => xóa luôn sản phẩm
+        if (productExists.quantity === 1) {
+            return await this.deleteUserCartItem({ userId, productId });
+        }
+        return await updateCartQuantity({
+            userId,
+            product: {
+                productId,
+                quantity: -1
+            }
+        });
     }
 
 }

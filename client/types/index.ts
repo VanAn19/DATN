@@ -85,6 +85,7 @@ export interface ProductCart {
     quantity: number;
     name: string;
     price: number;
+    thumbnail: string;
 }
 
 export interface ListCartResponse {
@@ -97,6 +98,18 @@ export interface ListCartResponse {
         productCount: number;
         products: ProductCart[];
     }
+}
+
+export interface CheckoutPayload {
+    cartId: string;
+    orderIds: Array<{
+      products: Array<{
+        productId: string;
+        quantity: number;
+        name: string;
+        price: number;
+      }>;
+    }>;
 }
 
 export interface FileItem extends UploadFile {

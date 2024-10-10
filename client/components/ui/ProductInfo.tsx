@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Skeleton } from "antd";
+import { notification, Skeleton, Spin } from "antd";
 import { SkeletonCustomProduct } from "./slide/CustomSlide";
 import Image from 'next/image';
 import { 
@@ -8,9 +8,7 @@ import {
   MinusOutlined, 
   PlusOutlined, 
   HeartFilled, 
-  HeartOutlined,
-  RightOutlined,
-  LeftOutlined
+  HeartOutlined
 } from "@ant-design/icons";
 import images from '@/public/images';
 import {
@@ -20,6 +18,7 @@ import {
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import dynamic from "next/dynamic";
+import { addToCart } from '@/api/cart';
 
 const Slider = dynamic(() => import("react-slick"), { ssr: false }) as any;
 
@@ -30,7 +29,9 @@ const VND = new Intl.NumberFormat("vi-VN", {
 
 export default function ProductInfo(props: { data: any, user: string, isLoading: boolean }) {
   const { data, user, isLoading } = props;
+  const [quantity, setQuantity] = useState(1);
   const [isFavorited, setIsFavorited] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [loadingFavorite, setLoadingFavorite] = useState(false);
 
   const settings = {  
@@ -42,16 +43,36 @@ export default function ProductInfo(props: { data: any, user: string, isLoading:
     prevArrow: data?.images?.length > 1 ? <SamplePrevArrow /> : null
   }
 
-  const increaseQuantity = (id: string) => {
-    // Logic để tăng số lượng sản phẩm trong giỏ
+  const increaseQuantity = () => {
+    setQuantity(prev => prev + 1);
   }
 
-  const decreaseQuantity = (id: string) => {
-    // Logic để giảm số lượng sản phẩm trong giỏ
+  const decreaseQuantity = () => {
+    if (quantity > 1) {
+      setQuantity(prev => prev - 1); 
+    }
   }
 
-  const addToCart = () => {
-    
+  const addProductToCart = async () => {
+    setLoading(true);
+    try {
+      const product = {
+        productId: data._id,
+        quantity: quantity,
+        name: data.name,
+        price: data.sellingPrice,
+        thumbnail: data.thumbnail
+      }
+      await addToCart(product);
+      notification.success({
+        message: 'Success',
+        description: 'Đã thêm sản phẩm vào giỏ hàng!',
+      });
+    } catch (error) {
+      console.error("Error during add product to cart: ", error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleFavorite = () => {
@@ -150,7 +171,10 @@ export default function ProductInfo(props: { data: any, user: string, isLoading:
             <h1 className="text-xl font-semibold">{data?.name}</h1>
           </div>
           <div className="flex items-center gap-5">
-            <div className="text-3xl text-red-500">
+          <div className="text-3xl text-red-500">
+              {VND.format(data?.sellingPrice)}
+            </div>
+            <div className="text-2xl text-gray-500 line-through">
               {VND.format(data?.price)}
             </div>
           </div>
@@ -178,97 +202,15 @@ export default function ProductInfo(props: { data: any, user: string, isLoading:
           </div>
           <div className="flex items-center gap-2 ml-3">
             <span className='mr-5'>Số lượng</span>
-            <button onClick={() => decreaseQuantity(data._id)} className="p-1 border rounded">
+            <button onClick={decreaseQuantity} className="p-1 border rounded">
               <MinusOutlined />
             </button>
-            <span className="mx-2">1</span>
-            <button onClick={() => increaseQuantity(data._id)} className="p-1 border rounded">
+            <span className="mx-2">{quantity}</span>
+            <button onClick={increaseQuantity} className="p-1 border rounded">
               <PlusOutlined />
             </button>
           </div>
           <div className="flex items-center gap-2">
-            {/* <button
-              style={{
-                backgroundColor: "rgb(255, 245, 241)",
-                border: "1px solid rgb(255, 66, 78)",
-                color: "rgb(255, 66, 78)",
-                width: "200px",
-                cursor: "pointer",
-                animation: "2s linear 0s infinite normal none running thumbs-up",
-              }}
-              className="flex items-center justify-center py-2"
-              onClick={handleFavorite}
-            >
-              {isFavorited ? (
-                <>
-                  {loadingFavorite ? (
-                    <div>
-                      <Space>
-                        <Spin
-                          indicator={
-                            <LoadingOutlined
-                              style={{
-                                fontSize: 30,
-                                color: "rgb(255, 66, 78)",
-                              }}
-                              spin
-                            />
-                          }
-                        />
-                      </Space>
-                    </div>
-                  ) : (
-                    <>
-                      <svg
-                        style={{
-                          color: "rgb(255, 66, 78)",
-                          width: "30px",
-                          height: "30px",
-                          fill: "currentColor",
-                        }}
-                      >
-                        <path d="M9 16.17 4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"></path>
-                      </svg>
-                      <div>Đã yêu thích</div>
-                    </>
-                  )}
-                </>
-              ) : (
-                <>
-                  {loadingFavorite ? (
-                    <div>
-                      <Space>
-                        <Spin
-                          indicator={
-                            <LoadingOutlined
-                              style={{
-                                fontSize: 30,
-                                color: "rgb(255, 66, 78)",
-                              }}
-                              spin
-                            />
-                          }
-                        />
-                      </Space>
-                    </div>
-                  ) : (
-                    <>
-                      <svg
-                        style={{
-                          color: "rgb(255, 66, 78)",
-                          width: "30px",
-                          height: "30px",
-                          fill: "currentColor",
-                        }}
-                      >
-                        <path d="m12 21.35-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"></path>
-                      </svg>
-                      <div>Thêm vào yêu thích</div>
-                    </>
-                  )}
-                </>
-              )}
-            </button> */}
             <button
               style={{
                 backgroundColor: "black",
@@ -281,9 +223,10 @@ export default function ProductInfo(props: { data: any, user: string, isLoading:
                 justifyContent: 'center',
                 alignItems: 'center'
               }}
-              onClick={addToCart}
+              disabled={loading}
+              onClick={addProductToCart}
             >
-              Thêm vào giỏ hàng
+              {loading ? <Spin indicator={<LoadingOutlined style={{ fontSize: 24, color: "rgb(254, 240, 138)" }} spin />} /> : 'Thêm vào giỏ hàng'}
             </button>
           </div>
         </div>

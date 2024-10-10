@@ -5,7 +5,7 @@ const Introduction = () => {
     <div className='w-full mt-10 p-5 bg-gray-100 shadow-md'>
       <div className='w-[60%] mx-auto flex justify-center'>
         <div className='text-center'>
-          <h2 className='text-[21px] font-bold mb-4'>Dao Trọng Bình - Kế Thừa và Phát Triển Nghề Rèn Truyền Thống Lý Nhân</h2>
+          <h2 className='text-[21px] font-bold mb-4'>Dao Trọng Bình - Kế Thừa và Phát Triển Nghề Rèn Truyền Thống</h2>
           <p className='text-[14px]'>
             Nằm giữa lòng làng rèn truyền thống Lý Nhân, xã Lý Nhân, huyện Vĩnh Tường, tỉnh Vĩnh Phúc, xưởng rèn Trọng Bình tự hào là một trong những cơ sở chế tác nổi tiếng nhất trong làng nghề có hơn 300 năm lịch sử. Xưởng không chỉ kế thừa những giá trị văn hóa, tinh hoa của nghề rèn cổ truyền mà còn mang đến những sản phẩm sắc bén, chất lượng cao, được ưa chuộng trên khắp cả nước.
           </p>

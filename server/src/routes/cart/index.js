@@ -9,8 +9,10 @@ const router = express.Router();
 router.use(authentication)
 
 router.post('', asyncHandler(cartController.addToCart));
-router.delete('', asyncHandler(cartController.deleteCartItem));
+router.delete('/:id', asyncHandler(cartController.deleteCartItem));
 router.post('/update', asyncHandler(cartController.updateCartItemQuantity));
 router.get('', asyncHandler(cartController.listToCart));
+router.post('/increase', asyncHandler(cartController.increaseQuantityCartItem));
+router.post('/decrease', asyncHandler(cartController.decreaseQuantityCartItem));
 
 module.exports = router;

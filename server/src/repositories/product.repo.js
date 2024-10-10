@@ -82,7 +82,7 @@ const checkProductByServer = async (products) => {
         const foundProduct = await getProductById({ id: product.productId });
         if (foundProduct) {
             return {
-                price: foundProduct.price,
+                price: foundProduct.sellingPrice,
                 quantity: product.quantity,
                 productId: product.productId
             }
