@@ -112,6 +112,12 @@ export interface CheckoutPayload {
     }>;
 }
 
+export interface CheckoutTotal {
+    totalPrice: number;
+    freeShip: number;
+    totalCheckout: number;
+}
+
 export interface FileItem extends UploadFile {
     publicId: string; 
 }

@@ -139,7 +139,7 @@ const Cart: React.FC<CartProps> = ({ onClose }) => {
                           alt={item.name}
                           width={64}
                           height={64}
-                          className="object-cover"
+                          className="object-cover rounded-lg"
                         />
                       </div>
                       <div>
