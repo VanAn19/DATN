@@ -23,19 +23,19 @@ const checkoutSchema = new Schema({
 
 // Sub-schema for Address
 const addressSchema = new Schema({
+    province: {
+        type: String,
+        // required: true
+    },
+    district: {
+        type: String,
+        // required: true
+    },
+    ward: {
+        type: String,
+        // required: true
+    },
     street: {
-        type: String,
-        // required: true
-    },
-    city: {
-        type: String,
-        // required: true
-    },
-    state: {
-        type: String,
-        // required: true
-    },
-    country: {
         type: String,
         // required: true
     }
@@ -74,6 +74,14 @@ const orderSchema = new Schema({
         ref: "User",
         required: true 
     },
+    name: {
+        type: String,
+        required: true
+    },
+    phone: {
+        type: String,
+        required: true
+    },
     /*
         totalPrice,
         totalApplyDiscount,
@@ -85,10 +93,10 @@ const orderSchema = new Schema({
     // },
     checkout: checkoutSchema, 
     /*
-        street,
-        city, 
-        state,
-        country
+        province,
+        district, 
+        ward,
+        street
     */ 
     // shipping: {
     //     type: Object,

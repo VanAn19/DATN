@@ -72,7 +72,7 @@ class OrderService {
         }
     }
 
-    static async orderByUser({ orderIds, cartId, userId, address, payment }) {
+    static async orderByUser({ orderIds, cartId, userId, address, payment, name, phone }) {
         const { orderIdsNew, checkoutOrder } = await OrderService.checkoutReview({
             cartId,
             userId,
@@ -98,7 +98,9 @@ class OrderService {
             checkout: checkoutOrder,
             shipping: address,
             payment: payment,
-            products: orderIdsNew
+            products: orderIdsNew,
+            name,
+            phone
         });
         // nếu create thành công, remove product có trong giỏ hàng 
         if (newOrder) {

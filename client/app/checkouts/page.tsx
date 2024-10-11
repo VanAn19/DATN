@@ -8,6 +8,7 @@ import { checkAvailableLogin } from '@/utils';
 import Image from 'next/image';
 import React, { useEffect, useState } from 'react'
 import data from '@/data/db.json'
+import Link from 'next/link';
 
 const VND = new Intl.NumberFormat("vi-VN", {
   style: "currency",
@@ -105,7 +106,7 @@ const Checkouts = () => {
   return (
     <div>
       <header className="h-24 flex items-center justify-center bg-white border-b border-gray-300">
-        <p className="m-0 text-xl font-bold">DAO TRỌNG BÌNH</p>
+        <Link className='m-0 text-xl font-bold' href="/">DAO TRỌNG BÌNH</Link>
       </header>
       <div className="flex">
         <div className="xl:w-[50%] w-1/2 bg-white h-screen ">
@@ -118,6 +119,15 @@ const Checkouts = () => {
                 id="name"
                 className="mt-1 block w-full px-3 py-2 border rounded-md"
                 placeholder="Nhập họ tên"
+              />
+            </div>
+            <div className='mb-4'>
+              <label htmlFor="phone" className="block text-md font-medium text-gray-700">Số điện thoại</label>
+              <input
+                type="text"
+                id="phone"
+                className="mt-1 block w-full px-3 py-2 border rounded-md"
+                placeholder="Nhập số điện thoại"
               />
             </div>
             <div className='mb-4'>
