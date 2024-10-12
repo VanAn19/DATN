@@ -9,6 +9,7 @@ import Image from 'next/image';
 import React, { useEffect, useState } from 'react'
 import data from '@/data/db.json'
 import Link from 'next/link';
+import { Form, Input, Select, Button, Radio } from 'antd';
 
 const VND = new Intl.NumberFormat("vi-VN", {
   style: "currency",
@@ -16,6 +17,7 @@ const VND = new Intl.NumberFormat("vi-VN", {
 });
 
 const Checkouts = () => {
+  const [form] = Form.useForm();
   const isAuth = checkAvailableLogin();
   const [cartItems, setCartItems] = useState<ProductCart[]>([]);
   const [cartId, setCartId] = useState<string | null>(null);
@@ -31,20 +33,19 @@ const Checkouts = () => {
   const [selectedCommune, setSelectedCommune] = useState<string | null>(null);
   const [districts, setDistricts] = useState<any[]>([]);
   const [communes, setCommunes] = useState<any[]>([]);
+  const [paymentMethod, setPaymentMethod] = useState('creditCard');
 
-  const handleProvinceChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const provinceId = event.target.value;
-    setSelectedProvince(provinceId);
-    const filteredDistricts = data.district.filter(district => district.idProvince === provinceId);
+  const handleProvinceChange = (value: string) => {
+    setSelectedProvince(value);
+    const filteredDistricts = data.district.filter(district => district.idProvince === value);
     setDistricts(filteredDistricts);
     setSelectedDistrict(null);
     setCommunes([]);
   };
 
-  const handleDistrictChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const districtId = event.target.value;
-    setSelectedDistrict(districtId);
-    const filteredCommunes = data.commune.filter(commune => commune.idDistrict === districtId);
+  const handleDistrictChange = (value: string) => {
+    setSelectedDistrict(value);
+    const filteredCommunes = data.commune.filter(commune => commune.idDistrict === value);
     setCommunes(filteredCommunes);
   };
   
@@ -103,92 +104,149 @@ const Checkouts = () => {
     return <Loader />; 
   }
 
+  const handleFinish = async (values: any) => {
+    
+  };
+
   return (
     <div>
       <header className="h-24 flex items-center justify-center bg-white border-b border-gray-300">
         <Link className='m-0 text-xl font-bold' href="/">DAO TRỌNG BÌNH</Link>
       </header>
-      <div className="flex">
-        <div className="xl:w-[50%] w-1/2 bg-white h-screen ">
+      <div className="flex flex-row">
+        <div className="xl:w-[50%] w-1/2 h-full bg-white border-r border-gray-300">
           <div className='w-4/5 p-8'>
             <p className='text-xl mb-4'>Vận chuyển</p>
-            <div className='mb-4'>
-              <label htmlFor="name" className="block text-md font-medium text-gray-700">Họ tên</label>
-              <input
-                type="text"
-                id="name"
-                className="mt-1 block w-full px-3 py-2 border rounded-md"
-                placeholder="Nhập họ tên"
-              />
-            </div>
-            <div className='mb-4'>
-              <label htmlFor="phone" className="block text-md font-medium text-gray-700">Số điện thoại</label>
-              <input
-                type="text"
-                id="phone"
-                className="mt-1 block w-full px-3 py-2 border rounded-md"
-                placeholder="Nhập số điện thoại"
-              />
-            </div>
-            <div className='mb-4'>
-              <label htmlFor="province" className="block text-md font-medium text-gray-700">Tỉnh/Thành phố</label>
-              <select
-                id="province"
-                value={selectedProvince || ''}
-                onChange={handleProvinceChange}
-                className="mt-1 block w-full px-3 py-2 border rounded-md"
+            <Form form={form} onFinish={handleFinish} layout="vertical">
+              <div className="flex">
+                <Form.Item
+                  label="Họ tên"
+                  name="name"
+                  rules={[{ required: true, message: 'Vui lòng nhập họ tên!' }]}
+                  style={{ flex: 1, marginRight: '8px' }} 
+                >
+                  <Input className="custom-input" placeholder="Nhập họ tên" />
+                </Form.Item>
+                <Form.Item
+                  label="Số điện thoại"
+                  name="phone"
+                  rules={[{ required: true, message: 'Vui lòng nhập số điện thoại!' }]}
+                  style={{ flex: 1 }} 
+                >
+                  <Input className="custom-input" placeholder="Nhập số điện thoại" />
+                </Form.Item>
+              </div>
+              <Form.Item
+                label="Tỉnh/Thành phố"
+                name="province"
+                rules={[{ required: true, message: 'Vui lòng chọn tỉnh/thành phố!' }]}
               >
-                <option value="">Chọn tỉnh/thành phố</option>
-                {data.province.map(province => (
-                  <option key={province.idProvince} value={province.idProvince}>{province.name}</option>
-                ))}
-              </select>
-            </div>
+                <Select
+                  className="custom-select"
+                  value={selectedProvince || ''}
+                  onChange={handleProvinceChange}
+                  placeholder="Chọn tỉnh/thành phố"
+                >
+                  <Select.Option value="">Chọn tỉnh/thành phố</Select.Option>
+                  {data.province.map(province => (
+                    <Select.Option key={province.idProvince} value={province.idProvince}>
+                      {province.name}
+                    </Select.Option>
+                  ))}
+                </Select>
+              </Form.Item>
 
-            <div className='mb-4'>
-              <label htmlFor="district" className="block text-md font-medium text-gray-700">Huyện/Quận</label>
-              <select
-                id="district"
-                value={selectedDistrict || ''}
-                onChange={handleDistrictChange}
-                className="mt-1 block w-full px-3 py-2 border rounded-md"
-                disabled={!selectedProvince}
+              <Form.Item
+                label="Huyện/Quận"
+                name="district"
+                rules={[{ required: true, message: 'Vui lòng chọn huyện/quận!' }]}
               >
-                <option value="">Chọn huyện/quận</option>
-                {districts.map(district => (
-                  <option key={district.idDistrict} value={district.idDistrict}>{district.name}</option>
-                ))}
-              </select>
-            </div>
+                <Select
+                  className="custom-select"
+                  value={selectedDistrict || ''}
+                  onChange={handleDistrictChange}
+                  disabled={!selectedProvince}
+                  placeholder="Chọn huyện/quận"
+                >
+                  <Select.Option value="">Chọn huyện/quận</Select.Option>
+                  {districts.map(district => (
+                    <Select.Option key={district.idDistrict} value={district.idDistrict}>
+                      {district.name}
+                    </Select.Option>
+                  ))}
+                </Select>
+              </Form.Item>
 
-            <div className='mb-4'>
-              <label htmlFor="ward" className="block text-md font-medium text-gray-700">Xã/Phường</label>
-              <select
-                id="ward"
-                value={selectedCommune || ''}
-                onChange={(e) => setSelectedCommune(e.target.value)}
-                className="mt-1 block w-full px-3 py-2 border rounded-md"
-                disabled={!selectedDistrict}
+              <Form.Item
+                label="Xã/Phường"
+                name="ward"
+                rules={[{ required: true, message: 'Vui lòng chọn xã/phường!' }]}
               >
-                <option value="">Chọn xã/phường</option>
-                {communes.map(commune => (
-                  <option key={commune.idCommune} value={commune.idCommune}>{commune.name}</option>
-                ))}
-              </select>
-            </div>
+                <Select
+                  className="custom-select"
+                  value={selectedCommune || ''}
+                  onChange={(value) => setSelectedCommune(value)}
+                  disabled={!selectedDistrict}
+                  placeholder="Chọn xã/phường"
+                >
+                  <Select.Option value="">Chọn xã/phường</Select.Option>
+                  {communes.map(commune => (
+                    <Select.Option key={commune.idCommune} value={commune.idCommune}>
+                      {commune.name}
+                    </Select.Option>
+                  ))}
+                </Select>
+              </Form.Item>
 
-            <div className='mb-4'>
-              <label htmlFor="street" className="block text-md font-medium text-gray-700">Tên đường <span className='text-xs italic'>(Tùy chọn...)</span></label>
-              <input
-                type="text"
-                id="name"
-                className="mt-1 block w-full px-3 py-2 border rounded-md"
-                placeholder="Nhập tên đường/số nhà..."
-              />
-            </div>
+              <Form.Item
+                label="Tên đường"
+                name="street"
+              >
+                <Input className="custom-input" placeholder="Nhập tên đường/số nhà..." />
+              </Form.Item>
+
+              <Form.Item label="Phương thức thanh toán">
+                <Radio.Group
+                  onChange={(e) => setPaymentMethod(e.target.value)}
+                  value={paymentMethod}
+                  className="w-full"
+                >
+                  <div className="flex flex-col">
+                    <div className="flex items-center border p-2 cursor-pointer">
+                      <Radio value="creditCard" className="mr-2 custom-input"><span>Credit Card</span></Radio>                      
+                    </div>
+                    <div className="flex items-center border p-2 cursor-pointer">
+                      <Radio value="cash" className="mr-2 custom-input"><span>Tiền mặt</span></Radio>
+                    </div>
+                  </div>
+                </Radio.Group>
+              </Form.Item>
+
+              {paymentMethod === 'creditCard' && (
+                <div>
+                  <Form.Item label="Số thẻ">
+                    <Input placeholder="Nhập số thẻ" />
+                  </Form.Item>
+                  <Form.Item label="Ngày hết hạn">
+                    <Input placeholder="MM/YY" />
+                  </Form.Item>
+                </div>
+              )}
+
+              <Form.Item>
+                <button 
+                  type="submit" 
+                  disabled={loading}
+                  className={`w-full h-14 py-2 text-yellow-200 bg-black transition duration-200 ease-in-out 
+                    ${loading ? 'opacity-50 cursor-not-allowed' : 'hover:bg-black hover:text-yellow-300'}`}
+                >
+                  {loading ? 'Đang thanh toán...' : 'Thanh toán'}
+                </button>
+              </Form.Item>
+            </Form>
           </div>
         </div>
-        <div className="w-1/2 bg-gray-100 h-screen border-l border-gray-300">
+        <div className="w-1/2 h-full bg-gray-100">
           {isAuth ? (
             cartItems && cartItems.length > 0 ? (
               <div className='w-4/5 p-8'>
