@@ -33,7 +33,7 @@ const Checkouts = () => {
   const [selectedCommune, setSelectedCommune] = useState<string | null>(null);
   const [districts, setDistricts] = useState<any[]>([]);
   const [communes, setCommunes] = useState<any[]>([]);
-  const [paymentMethod, setPaymentMethod] = useState('creditCard');
+  const [paymentMethod, setPaymentMethod] = useState('cash');
 
   const handleProvinceChange = (value: string) => {
     setSelectedProvince(value);
@@ -205,7 +205,11 @@ const Checkouts = () => {
                 <Input className="custom-input" placeholder="Nhập tên đường/số nhà..." />
               </Form.Item>
 
-              <Form.Item label="Phương thức thanh toán">
+              <Form.Item 
+                label="Phương thức thanh toán"
+                name="payment"
+                rules={[{ required: true, message: 'Vui lòng chọn phương thức thanh toán!' }]}
+              >
                 <Radio.Group
                   onChange={(e) => setPaymentMethod(e.target.value)}
                   value={paymentMethod}
@@ -215,23 +219,28 @@ const Checkouts = () => {
                     <div className="flex items-center border p-2 cursor-pointer">
                       <Radio value="creditCard" className="mr-2 custom-input"><span>Credit Card</span></Radio>                      
                     </div>
+                    {paymentMethod === 'creditCard' && (
+                      <div className='border p-2'>
+                        <Form.Item 
+                          label="Số thẻ"
+                          rules={[{ required: true, message: 'Vui lòng nhập số thẻ!' }]}
+                        >
+                          <Input className="custom-input" placeholder="Nhập số thẻ" />
+                        </Form.Item>
+                        <Form.Item 
+                          label="Ngày hết hạn"
+                          rules={[{ required: true, message: 'Vui lòng nhập ngày hết hạn!' }]}
+                        >
+                          <Input className="custom-input" placeholder="MM/YY" />
+                        </Form.Item>
+                      </div>
+                    )}
                     <div className="flex items-center border p-2 cursor-pointer">
                       <Radio value="cash" className="mr-2 custom-input"><span>Tiền mặt</span></Radio>
                     </div>
                   </div>
                 </Radio.Group>
               </Form.Item>
-
-              {paymentMethod === 'creditCard' && (
-                <div>
-                  <Form.Item label="Số thẻ">
-                    <Input placeholder="Nhập số thẻ" />
-                  </Form.Item>
-                  <Form.Item label="Ngày hết hạn">
-                    <Input placeholder="MM/YY" />
-                  </Form.Item>
-                </div>
-              )}
 
               <Form.Item>
                 <button 
