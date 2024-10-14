@@ -172,9 +172,9 @@ const Cart: React.FC<CartProps> = ({ onClose }) => {
                 </div>
 
                 <div className="mt-4">
-                  <button className="w-full py-2 bg-black text-yellow-200 rounded">
+                  <Link href='/checkouts' className="block w-full py-2 bg-black text-yellow-200 rounded text-center">
                     Thanh toán
-                  </button>
+                  </Link>
                 </div>
               </div>
             ) : (

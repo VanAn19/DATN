@@ -103,13 +103,43 @@ export interface ListCartResponse {
 export interface CheckoutPayload {
     cartId: string;
     orderIds: Array<{
-      products: Array<{
-        productId: string;
-        quantity: number;
-        name: string;
-        price: number;
-      }>;
+        products: Array<{
+            productId: string;
+            quantity: number;
+            name: string;
+            price: number;
+        }>;
     }>;
+}
+
+export interface OrderPayload {
+    cartId: string;
+    orderIds: Array<{
+        products: Array<{
+            productId: string;
+            quantity: number;
+            name: string;
+            price: number;
+        }>;
+    }>;
+    address: {
+        province: string;
+        district: string;
+        ward: string;
+        street: string;
+    },
+    payment: {
+        method: string;
+        details: {
+            cardNumber: string;
+            expirationDate: string;
+            cardName: string;
+            // bankName: string;
+            // transactionId: string;
+        } | {}
+    },
+    name: string;
+    phone: string;
 }
 
 export interface CheckoutTotal {

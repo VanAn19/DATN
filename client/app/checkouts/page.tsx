@@ -1,7 +1,7 @@
 'use client'
 
 import { getListCart } from '@/api/cart';
-import { checkoutReview } from '@/api/order';
+import { checkoutReview, orderByUser } from '@/api/order';
 import Loader from '@/components/Loader';
 import { CheckoutTotal, ProductCart } from '@/types';
 import { checkAvailableLogin } from '@/utils';
@@ -9,7 +9,9 @@ import Image from 'next/image';
 import React, { useEffect, useState } from 'react'
 import data from '@/data/db.json'
 import Link from 'next/link';
-import { Form, Input, Select, Button, Radio } from 'antd';
+import { Form, Input, Select, Button, Radio, notification } from 'antd';
+import { useRouter } from 'next/navigation';
+import images from '@/public/images';
 
 const VND = new Intl.NumberFormat("vi-VN", {
   style: "currency",
@@ -18,6 +20,7 @@ const VND = new Intl.NumberFormat("vi-VN", {
 
 const Checkouts = () => {
   const [form] = Form.useForm();
+  const router = useRouter();
   const isAuth = checkAvailableLogin();
   const [cartItems, setCartItems] = useState<ProductCart[]>([]);
   const [cartId, setCartId] = useState<string | null>(null);
@@ -105,7 +108,57 @@ const Checkouts = () => {
   }
 
   const handleFinish = async (values: any) => {
-    
+    setLoading(true);
+    try {
+      const { name, phone, street, cardNumber, expirationDate, cardName } = values;
+      if (cartId && cartItems.length > 0) {
+        const res = await orderByUser({
+          cartId,
+          orderIds: [
+            {
+              products: cartItems.map(item => ({
+                productId: item.productId,
+                quantity: item.quantity,
+                name: item.name,
+                price: item.price,
+              })),
+            }
+          ],
+          address: {
+            province: selectedProvince || '',
+            district: selectedDistrict || '',
+            ward: selectedCommune || '',
+            street: street || '',
+          },
+          payment: {
+            method: paymentMethod,
+            details: paymentMethod === 'cash' ? {} : {
+              cardNumber,
+              expirationDate,
+              cardName
+            }
+          },
+          name, 
+          phone
+        });
+        if (res.status === 200) {
+          form.resetFields();
+          setCartId(null);
+          setCartItems([]);
+          router.push('/thanks');
+        }
+      }
+    } catch (error: any) {
+      console.error('Error during order product:', error);
+      if (error.response?.status === 403) {
+        notification.error({
+          message: 'Failed',
+          description: "Đã xảy ra lỗi, vui lòng thử lại sau."
+        });
+      }
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -216,27 +269,45 @@ const Checkouts = () => {
                   className="w-full"
                 >
                   <div className="flex flex-col">
-                    <div className="flex items-center border p-2 cursor-pointer">
-                      <Radio value="creditCard" className="mr-2 custom-input"><span>Credit Card</span></Radio>                      
+                    <div className="flex items-center border p-2 cursor-pointer relative">
+                      <Radio value="creditCard" className="mr-2 custom-input"><span>Thẻ tín dụng</span></Radio>   
+                      <Image src={images.visa} alt="visa" className="absolute w-10 right-2 h-8" />                   
                     </div>
                     {paymentMethod === 'creditCard' && (
                       <div className='border p-2'>
                         <Form.Item 
                           label="Số thẻ"
-                          rules={[{ required: true, message: 'Vui lòng nhập số thẻ!' }]}
+                          name="cardNumber"
+                          rules={[
+                            { required: true, message: 'Vui lòng nhập số thẻ!' },
+                            { len: 16, message: 'Số thẻ phải có đúng 16 số!' },
+                          ]}
                         >
-                          <Input className="custom-input" placeholder="Nhập số thẻ" />
+                          <Input className="custom-input" placeholder="Nhập số thẻ" maxLength={16} />
                         </Form.Item>
-                        <Form.Item 
-                          label="Ngày hết hạn"
-                          rules={[{ required: true, message: 'Vui lòng nhập ngày hết hạn!' }]}
-                        >
-                          <Input className="custom-input" placeholder="MM/YY" />
-                        </Form.Item>
+
+                        <div className='flex'>
+                          <Form.Item 
+                            label="Ngày hết hạn"
+                            name="expirationDate"
+                            rules={[{ required: true, message: 'Vui lòng nhập ngày hết hạn!' }]}
+                            style={{ flex: 1, marginRight: '8px' }} 
+                          >
+                            <Input className="custom-input" placeholder="MM/YY" />
+                          </Form.Item>
+                          <Form.Item 
+                            label="Tên thẻ"
+                            name="cardName"
+                            rules={[{ required: true, message: 'Vui lòng nhập tên thẻ!' }]}
+                            style={{ flex: 1 }} 
+                          >
+                            <Input className="custom-input" placeholder="Tên thẻ" />
+                          </Form.Item>
+                        </div>
                       </div>
                     )}
                     <div className="flex items-center border p-2 cursor-pointer">
-                      <Radio value="cash" className="mr-2 custom-input"><span>Tiền mặt</span></Radio>
+                      <Radio value="cash" className="mr-2 custom-input"><span>Tiền mặt (Thanh toán khi nhận hàng)</span></Radio>
                     </div>
                   </div>
                 </Radio.Group>

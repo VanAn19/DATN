@@ -45,25 +45,29 @@ const addressSchema = new Schema({
 const paymentSchema = new Schema({
     method: {
         type: String,
-        enum: ['credit card', 'cash', 'bank transfer'],
+        enum: ['creditCard', 'cash', 'bankTransfer'],
         required: true
     },
     details: {
         cardNumber: {
             type: String,
-            required: function () { return this.method === 'credit card'; }
+            required: function () { return this.method === 'creditCard'; }
         },
         expirationDate: {
             type: String,
-            required: function () { return this.method === 'credit card'; }
+            required: function () { return this.method === 'creditCard'; }
+        },
+        cardName: {
+            type: String,
+            required: function () { return this.method === 'creditCard'; }
         },
         bankName: {
             type: String,
-            required: function () { return this.method === 'bank transfer'; }
+            required: function () { return this.method === 'bankTransfer'; }
         },
         transactionId: {
             type: String,
-            required: function () { return this.method === 'bank transfer'; }
+            required: function () { return this.method === 'bankTransfer'; }
         }
     }
 }, { _id: false });
