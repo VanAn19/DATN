@@ -108,6 +108,7 @@ export interface CheckoutPayload {
             quantity: number;
             name: string;
             price: number;
+            thumbnail: string;
         }>;
     }>;
 }
@@ -120,6 +121,7 @@ export interface OrderPayload {
             quantity: number;
             name: string;
             price: number;
+            thumbnail: string;
         }>;
     }>;
     address: {

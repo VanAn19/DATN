@@ -35,3 +35,33 @@ export const orderByUser = async (orderData: OrderPayload) => {
     throw error;
   }
 };
+
+export const getOrderByUser = async () => {
+  try {
+    const response = await axiosInstance.get('/order', {
+      headers: {
+        'Authorization': token,
+        'x-client-id': infoUser._id
+      }
+    });
+    return response.data; 
+  } catch (error) {
+    console.error("Error during get order by user api:", error);
+    throw error;
+  }
+};
+
+export const cancelOrderByUser = async (id: string) => {
+  try {
+    const response = await axiosInstance.post(`/order/cancel/${id}`, {}, {
+      headers: {
+        'Authorization': token,
+        'x-client-id': infoUser._id
+      }
+    });
+    return response.data; 
+  } catch (error) {
+    console.error("Error during cancel order by user api:", error);
+    throw error;
+  }
+};

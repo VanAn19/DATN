@@ -84,7 +84,9 @@ const checkProductByServer = async (products) => {
             return {
                 price: foundProduct.sellingPrice,
                 quantity: product.quantity,
-                productId: product.productId
+                productId: product.productId,
+                thumbnail: product.thumbnail,
+                name: product.name
             }
         }
     }))

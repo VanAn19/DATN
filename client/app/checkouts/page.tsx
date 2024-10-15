@@ -9,7 +9,7 @@ import Image from 'next/image';
 import React, { useEffect, useState } from 'react'
 import data from '@/data/db.json'
 import Link from 'next/link';
-import { Form, Input, Select, Button, Radio, notification } from 'antd';
+import { Form, Input, Select, Radio, notification } from 'antd';
 import { useRouter } from 'next/navigation';
 import images from '@/public/images';
 
@@ -88,6 +88,7 @@ const Checkouts = () => {
                   quantity: item.quantity,
                   name: item.name,
                   price: item.price,
+                  thumbnail: item.thumbnail
                 })),
               }
             ]
@@ -121,6 +122,7 @@ const Checkouts = () => {
                 quantity: item.quantity,
                 name: item.name,
                 price: item.price,
+                thumbnail: item.thumbnail
               })),
             }
           ],
@@ -293,7 +295,7 @@ const Checkouts = () => {
                             rules={[{ required: true, message: 'Vui lòng nhập ngày hết hạn!' }]}
                             style={{ flex: 1, marginRight: '8px' }} 
                           >
-                            <Input className="custom-input" placeholder="MM/YY" />
+                            <Input className="custom-input" placeholder="MM/YYYY" maxLength={7} />
                           </Form.Item>
                           <Form.Item 
                             label="Tên thẻ"
@@ -326,7 +328,7 @@ const Checkouts = () => {
             </Form>
           </div>
         </div>
-        <div className="w-1/2 h-full bg-gray-100">
+        <div className="w-1/2 h-full">
           {isAuth ? (
             cartItems && cartItems.length > 0 ? (
               <div className='w-4/5 p-8'>
