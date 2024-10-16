@@ -96,7 +96,7 @@ class OrderService {
         const newOrder = await Order.create({
             user: userId,
             checkout: checkoutOrder,
-            shipping: address,
+            address: address,
             payment: payment,
             products: orderIdsNew,
             name,

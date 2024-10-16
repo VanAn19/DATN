@@ -38,7 +38,11 @@ const SignIn = () => {
         dispatch(CHANGE_VALUE_USER(res));
         setCookie("token", res?.metadata?.tokens?.accessToken, expirationHours);
         setCookie("user", res?.metadata?.user, expirationHours);
-        router.push("/");
+        if (res.metadata.user.role === "user") {
+          router.push("/");
+        } else if (res.metadata.user.role === "admin") {
+          router.push("/admin");
+        }
       }
     } catch (error: any) {
       if (error.response?.status === 403) {

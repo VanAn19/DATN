@@ -51,6 +51,21 @@ export const getOrderByUser = async () => {
   }
 };
 
+export const getOrderByAdmin = async () => {
+  try {
+    const response = await axiosInstance.get('/order/admin/getOrderByAdmin', {
+      headers: {
+        'Authorization': token,
+        'x-client-id': infoUser._id
+      }
+    });
+    return response.data; 
+  } catch (error) {
+    console.error("Error during get order by admin api:", error);
+    throw error;
+  }
+};
+
 export const cancelOrderByUser = async (id: string) => {
   try {
     const response = await axiosInstance.post(`/order/cancel/${id}`, {}, {
@@ -62,6 +77,21 @@ export const cancelOrderByUser = async (id: string) => {
     return response.data; 
   } catch (error) {
     console.error("Error during cancel order by user api:", error);
+    throw error;
+  }
+};
+
+export const updateStatusOrder = async (data: { orderId: string, newStatus: string }) => {
+  try {
+    const response = await axiosInstance.post('/order/update', data, {
+      headers: {
+        'Authorization': token,
+        'x-client-id': infoUser._id
+      }
+    });
+    return response.data; 
+  } catch (error) {
+    console.error("Error during update status order api:", error);
     throw error;
   }
 };

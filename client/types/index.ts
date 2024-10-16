@@ -19,6 +19,7 @@ export interface AuthResponse {
             name: string;  
             username: string;
             email: string;
+            role: string;
         };
     };
 }
@@ -153,3 +154,14 @@ export interface CheckoutTotal {
 export interface FileItem extends UploadFile {
     publicId: string; 
 }
+
+
+export interface Order {
+    _id: string;
+    checkout: CheckoutTotal;
+    products: ProductCart[];
+    trackingNumber: string;
+    status: OrderStatus;
+};
+
+export type OrderStatus = 'pending' | 'confirmed' | 'shipped' | 'canceled' | 'delivered';

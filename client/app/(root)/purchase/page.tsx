@@ -5,6 +5,7 @@ import { ShoppingCartOutlined, MessageOutlined } from '@ant-design/icons';
 import Image from 'next/image';
 import { Button, Card, Col, Row, Tabs } from 'antd';
 import { cancelOrderByUser, getOrderByUser } from '@/api/order';
+import { OrderStatus } from '@/types';
 
 const { TabPane } = Tabs;
 
@@ -12,8 +13,6 @@ const VND = new Intl.NumberFormat("vi-VN", {
   style: "currency",
   currency: "VND",
 });
-
-type OrderStatus = 'pending' | 'confirmed' | 'shipped' | 'canceled' | 'delivered';
 
 const statusOrder: Record<OrderStatus, { text: string; color: string; label: string; labelColor: string }> = {
   pending: {
