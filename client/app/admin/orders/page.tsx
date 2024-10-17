@@ -32,7 +32,7 @@ const AdminOrder = () => {
     const fetchOrders = async () => {
       try {
         const res = await getOrderByAdmin();
-        if (res.metadata && Array.isArray(res.metadata)) {
+        if (res.status === 200) {
           const fetchedOrders = res.metadata.map((order: any) => ({
             _id: order._id,
             name: order.name,

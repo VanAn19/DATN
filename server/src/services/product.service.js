@@ -13,7 +13,8 @@ const {
     unPublishProduct,
     deleteProductById,
     getProductById,
-    searchProductByUser
+    searchProductByUser,
+    filterProductByCategory
 } = require('../repositories/product.repo');
 
 class ProductService {
@@ -80,6 +81,10 @@ class ProductService {
     static async findAllPublishedProduct({ limit = 50, skip = 0 } = {}) {
         const query = { isPublished: true };
         return await findAllPublishProduct({ query, limit, skip });
+    }
+
+    static async filterProductByCategory({ category, limit = 50, skip = 0 }) {
+        return await filterProductByCategory({ category, limit, skip });
     }
 
     static async deleteProduct({ id }) {

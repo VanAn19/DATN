@@ -56,7 +56,7 @@ const Purchase = () => {
     const fetchCart = async () => {
       try {
         const res = await getOrderByUser();
-        if (res.metadata && Array.isArray(res.metadata)) {
+        if (res.status === 200) {
           const fetchedOrders = res.metadata.map((order: any) => ({
             _id: order._id,
             checkout: order.checkout,

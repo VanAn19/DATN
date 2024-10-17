@@ -1,37 +1,48 @@
-import Image from "next/image";
-import Link from "next/link";
-import React, { useEffect } from "react";
-import TruncatedText from "./ui/TruncatedText";
+import { ProductCardType } from '@/types/product';
+import { Card } from 'antd';
+import Image from 'next/image';
+import Link from 'next/link';
+
+const { Meta } = Card;
+
 const VND = new Intl.NumberFormat("vi-VN", {
     style: "currency",
     currency: "VND",
 });
 
-const ProductCard = ({ product }: any) => { //
+const ProductCard: React.FC<ProductCardType> = ({ _id, name, thumbnail, price, sale, sellingPrice, category, slug }) => { 
   return (
-    <Link href={`/products/${product.slug}`} className="slide-content pr-8" key={product._id}>
-      <div className="card bg-white rounded-lg shadow-md overflow-hidden cursor-pointer w-full sm:w-58">
-        <div className="bg-orange-100 overflow-hidden group">
-          <Image 
-            src={product.thumbnail}
-            width={300}
-            height={200}
-            className="object-contain h-48 w-96 transition-transform duration-300 ease-in-out group-hover:scale-110"
-            alt={product?.name}
-          />
-        </div>
-        <div className="p-4">
-          <h2 className="text-lg font-medium h-20">
-            <TruncatedText text={product?.name} maxLength={33} />
-          </h2> 
-          <p className="text-gray-500 mt-2 text-sm">Đã bán {product?.sold}</p>
-          <div className="mt-2">
-            <span className="text-gray-500 line-through">
-              {VND.format(product?.price)}
-            </span>
-          </div>   
-        </div>
-      </div>
+    <Link href={`/products/${slug}`} passHref>
+      <Card
+        key={_id}
+        hoverable
+        cover={
+          <div className="relative">
+            <Image 
+              alt={name} 
+              src={thumbnail} 
+              width={300.4} 
+              height={300.4} 
+              className="object-cover rounded-lg ml-025" 
+            />
+            {sale > 0 && (
+              <div className="bg-red-300 text-white font-bold px-2 py-1 text-xs rounded-full absolute top-2 left-2">
+                UP TO {sale}%
+              </div>
+            )}
+          </div>
+        }
+      >
+        <Meta
+          title={name}
+          description={
+            <div className='flex'>
+              <p className="text-lg font-bold mr-2">{VND.format(sellingPrice)}</p>
+              <p className="text-base line-through font-bold">{VND.format(price)}</p>
+            </div>
+          }
+        />
+      </Card>
     </Link>
   )
 }

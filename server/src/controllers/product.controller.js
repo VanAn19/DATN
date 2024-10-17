@@ -40,6 +40,13 @@ class ProductController {
         }).send(res);
     }
 
+    filterProductByCategory = async (req,res,next) => {
+        new SuccessResponse({
+            message: 'filter product by category successfully',
+            metadata: await ProductService.filterProductByCategory({ category: req.body.category })
+        }).send(res);
+    }
+
     getAProduct = async (req,res,next) => {
         new SuccessResponse({
             message: 'get a product successfully',

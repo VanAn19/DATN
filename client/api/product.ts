@@ -134,3 +134,13 @@ export const removeProduct = async (id: string) => {
     throw error;
   }
 }
+
+export const filterProductByCategory = async (data: { category: string }) => {
+  try {
+    const response = await axiosInstance.post('/product/filter', data);
+    return response.data;
+  } catch (error) {
+    console.error("Error during remove product api:", error);
+    throw error;
+  }
+}

@@ -2,6 +2,7 @@
 
 const Product = require('../models/product.model');
 const { insertInventory, removeInventory } = require('./inventory.repo');
+const { Types } = require('mongoose')
 
 const queryProduct = async ({ query, limit, skip }) => {
     return await Product.find(query).populate('category')
@@ -17,6 +18,11 @@ const findAllDraftProduct = async ({ query, limit, skip }) => {
 }
 
 const findAllPublishProduct = async ({ query, limit, skip }) => {
+    return await queryProduct({ query, limit, skip });
+}
+
+const filterProductByCategory = async ({ category, limit, skip }) => {
+    const query = { isPublished: true, category: new Types.ObjectId(category) }
     return await queryProduct({ query, limit, skip });
 }
 
@@ -98,6 +104,7 @@ module.exports = {
     updateProductById,
     findAllDraftProduct,
     findAllPublishProduct,
+    filterProductByCategory,
     getProductById,
     publishProduct,
     unPublishProduct,
