@@ -5,7 +5,8 @@ import { ShoppingCartOutlined, MessageOutlined } from '@ant-design/icons';
 import Image from 'next/image';
 import { Button, Card, Col, Row, Tabs } from 'antd';
 import { cancelOrderByUser, getOrderByUser } from '@/api/order';
-import { OrderStatus } from '@/types';
+import { Order, OrderStatus } from '@/types';
+import Bill from '@/components/Bill';
 
 const { TabPane } = Tabs;
 
@@ -49,6 +50,8 @@ const statusOrder: Record<OrderStatus, { text: string; color: string; label: str
 
 const Purchase = () => {
   const [orders, setOrders] = useState<any[]>([]);
+  const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
+  const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
@@ -59,6 +62,9 @@ const Purchase = () => {
         if (res.status === 200) {
           const fetchedOrders = res.metadata.map((order: any) => ({
             _id: order._id,
+            name: order.name,
+            phone: order.phone,
+            address: order.address,
             checkout: order.checkout,
             products: order.products.flatMap((product: any) => product.products.map((item: any) => ({
               ...item,
@@ -96,6 +102,11 @@ const Purchase = () => {
     }
   }
 
+  const handleViewDetails = (order: Order) => {
+    setSelectedOrder(order); 
+    setIsModalVisible(true); 
+  };
+
   return (
     <div className="container mx-auto p-4">
       <Tabs defaultActiveKey="1">
@@ -117,7 +128,7 @@ const Purchase = () => {
                       )
                     }
                     actions={[
-                      <Button key={1} icon={<ShoppingCartOutlined />} type="primary">
+                      <Button key={1} icon={<ShoppingCartOutlined />} type="primary" onClick={() => handleViewDetails(order)}>
                         Xem chi tiết
                       </Button>,
                       <Button key={2} icon={<MessageOutlined />} type="default">
@@ -166,6 +177,7 @@ const Purchase = () => {
           </Row>
         </TabPane>
       </Tabs>
+      <Bill visible={isModalVisible} onClose={() => setIsModalVisible(false)} order={selectedOrder} />
     </div>
   )
 }

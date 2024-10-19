@@ -3,9 +3,6 @@ import { AxiosResponse } from 'axios';
 import { OneProductResponse, Product, ProductResponse } from "@/types";
 import { getCookie } from "@/utils";
 
-const infoUser = getCookie('user');
-const token = getCookie('token');
-
 export const getProductsList = async () => {
   try {
     const response: AxiosResponse<ProductResponse> = await axiosInstance.get('/product/published/all');
@@ -17,6 +14,8 @@ export const getProductsList = async () => {
 };
 
 export const getDraftProductsList = async () => {
+  const infoUser = getCookie('user');
+  const token = getCookie('token');
   try {
     const response: AxiosResponse<ProductResponse> = await axiosInstance.get('/product/drafts/all', {
       headers: {
@@ -32,6 +31,8 @@ export const getDraftProductsList = async () => {
 };
 
 export const publishProduct = async ({ id }: { id: string }) => {
+  const infoUser = getCookie('user');
+  const token = getCookie('token');
   try {
     const response = await axiosInstance.post(`/product/publish/${id}`, {},  {
       headers: {
@@ -47,6 +48,8 @@ export const publishProduct = async ({ id }: { id: string }) => {
 };
 
 export const unpublishProduct = async ({ id }: { id: string }) => {
+  const infoUser = getCookie('user');
+  const token = getCookie('token');
   try {
     const response = await axiosInstance.post(`/product/unpublish/${id}`, {},  {
       headers: {
@@ -82,6 +85,8 @@ export const createProduct = async (data: {
   category: string, 
   isDraft: boolean 
 }) => {
+  const infoUser = getCookie('user');
+  const token = getCookie('token');
   try {
     const response = await axiosInstance.post('product/create', data, {
       headers: {
@@ -106,6 +111,8 @@ export const updateProduct = async (id: string, data: {
   quantity: number, 
   category: string
 }) => {
+  const infoUser = getCookie('user');
+  const token = getCookie('token');
   try {
     const response = await axiosInstance.patch(`product/update/${id}`, data, {
       headers: {
@@ -121,6 +128,8 @@ export const updateProduct = async (id: string, data: {
 }
 
 export const removeProduct = async (id: string) => {
+  const infoUser = getCookie('user');
+  const token = getCookie('token');
   try {
     const response = await axiosInstance.delete(`/product/delete/${id}`,  {
       headers: {

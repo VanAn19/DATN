@@ -47,7 +47,10 @@ const SidebarAdmin = () => {
       label: 'Quản Lý Hàng Tồn Kho', 
       link: '/admin/inventories', 
       component: AreaChartOutlined,
-      subItems: []
+      subItems: [
+        { label: 'Danh sách hàng tồn kho', link: '/admin/inventories' },
+        { label: 'Nhập thêm sản phẩm', link: '/admin/inventories/new' },
+      ]
     },
   ];
 

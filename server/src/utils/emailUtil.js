@@ -24,6 +24,17 @@ const sendOTPEmail = async (email, otp) => {
     }
 }
 
+const sendLinkResetPassword = async ({ email, html }) => {
+    const info = await transporter.sendMail({
+        from: 'Dao Trọng Bình <no-relply@daotrongbinh.vn>',
+        to: email,
+        subject: "Forgot password",
+        html: html,
+    });
+    return info;
+}
+
 module.exports = {
-    sendOTPEmail
+    sendOTPEmail,
+    sendLinkResetPassword
 };

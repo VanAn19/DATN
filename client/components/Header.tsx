@@ -18,12 +18,13 @@ import { useDispatch } from "react-redux";
 import { DELETE_VALUE_USER } from '@/redux/slices/authSlice';
 import { useRouter } from 'next/navigation';
 import Cart from './Cart';
+import { User } from '@/utils/user';
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
   const [isCartOpen, setIsCartOpen] = useState<boolean>(false);
   const [isAuth, setIsAuth] = useState<boolean>(false);
-  const [infoUser, setInfoUser] = useState<string | null>(null);
+  const [infoUser, setInfoUser] = useState<User | undefined>(undefined);
   const dispatch = useDispatch();
   const router = useRouter();
   // const isAuth = checkAvailableLogin();
@@ -145,6 +146,11 @@ const Header = () => {
                   // scrollbars: "false",
                 }}
               >
+                {infoUser && infoUser?.role === 'admin' && (
+                  <Link href={"/admin"} className="list-item">
+                    <p className="item-text">Trang quản lý</p>
+                </Link>
+                )}
                 {itemsDropdowUser.map((item) => (
                   <div key={item.key}>{item.label}</div>
                 ))}

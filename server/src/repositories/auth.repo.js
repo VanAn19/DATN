@@ -19,9 +19,14 @@ const findUserById = async (id) => {
     return await User.findById(id);
 }
 
+const findUserByEmail = async ({ email }) => {
+    return await User.findOne({ email });
+}
+
 module.exports = {
     findByUsername,
     findTempUserByUsername,
     deleteTempUserById,
     findUserById,
+    findUserByEmail
 }

@@ -2,7 +2,7 @@
 
 import React, { useEffect } from 'react'
 import { useState } from 'react';
-import { Select } from 'antd';
+import { Pagination, Select } from 'antd';
 import ProductCard from '@/components/ProductCard';
 import { Category, Product } from '@/types';
 import { filterProductByCategory, getProductsList } from '@/api/product';
@@ -17,6 +17,8 @@ const ProductsPage = () => {
   const [originalProducts, setOriginalProducts] = useState<Product[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
+  const [currentPage, setCurrentPage] = useState<number>(1); 
+  const [productsPerPage] = useState<number>(20);
 
   useEffect(() => {
     setLoading(true);
@@ -63,6 +65,7 @@ const ProductsPage = () => {
           setProducts(res.metadata);
         }
       }
+      setCurrentPage(1);
     } catch (error) {
       console.error("Error during filter products: ", error);
     } finally {
@@ -83,6 +86,15 @@ const ProductsPage = () => {
       sortedProducts = [...originalProducts];
     }
     setProducts(sortedProducts);
+    setCurrentPage(1);
+  };
+
+  const indexOfLastProduct = currentPage * productsPerPage;
+  const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
+  const currentProducts = products.slice(indexOfFirstProduct, indexOfLastProduct);
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
   };
 
   return (
@@ -111,7 +123,7 @@ const ProductsPage = () => {
         </div>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        {products.map((product) => (
+        {currentProducts.map((product) => (
           <ProductCard
             key={product._id}
             _id={product._id}
@@ -124,6 +136,14 @@ const ProductsPage = () => {
             thumbnail={product.thumbnail}
           />
         ))}
+      </div>
+      <div className="flex justify-center mt-8">
+        <Pagination
+          current={currentPage}
+          pageSize={productsPerPage}
+          total={products.length}
+          onChange={handlePageChange}
+        />
       </div>
     </div>
   )

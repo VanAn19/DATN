@@ -3,10 +3,9 @@ import { AxiosResponse } from 'axios';
 import { getCookie } from "@/utils";
 import { ListCartResponse } from "@/types";
 
-const infoUser = getCookie('user');
-const token = getCookie('token');
-
 export const getListCart = async () => {
+  const infoUser = getCookie('user');
+  const token = getCookie('token');
   try {
     const response: AxiosResponse<ListCartResponse> = await axiosInstance.get('/cart',  {
       headers: {
@@ -22,6 +21,8 @@ export const getListCart = async () => {
 };
 
 export const addToCart = async (product: { productId: string, quantity: number, name: string, price: number, thumbnail: string }) => {
+  const infoUser = getCookie('user');
+  const token = getCookie('token');
   try {
     const response = await axiosInstance.post('/cart', {
       product: {
@@ -45,6 +46,8 @@ export const addToCart = async (product: { productId: string, quantity: number, 
 };
 
 export const deleteCartItem = async (productId: string) => {
+  const infoUser = getCookie('user');
+  const token = getCookie('token');
   try {
     const response = await axiosInstance.delete(`/cart/${productId}`, {
       headers: {
@@ -60,6 +63,8 @@ export const deleteCartItem = async (productId: string) => {
 };
 
 export const increaseQuantityCartItem = async (productId: string) => {
+  const infoUser = getCookie('user');
+  const token = getCookie('token');
   try {
     const response = await axiosInstance.post('/cart/increase', { productId }, {
       headers: {
@@ -75,6 +80,8 @@ export const increaseQuantityCartItem = async (productId: string) => {
 };
 
 export const decreaseQuantityCartItem = async (productId: string) => {
+  const infoUser = getCookie('user');
+  const token = getCookie('token');
   try {
     const response = await axiosInstance.post('/cart/decrease', { productId }, {
       headers: {

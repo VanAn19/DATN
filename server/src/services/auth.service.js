@@ -8,8 +8,9 @@ const { BadRequestError, AuthFailureError, ForbiddenError, NotFoundError } = req
 const KeyTokenService = require('./keyToken.service');
 const { createTokenPair } = require('../auth/authUtils');
 const { getInfoData } = require('../utils');
-const { findByUsername, findUserById, deleteTempUserById, findTempUserByUsername } = require('../repositories/auth.repo');
+const { findByUsername, deleteTempUserById, findTempUserByUsername, findUserByEmail } = require('../repositories/auth.repo');
 const { generateAndSendOTP, verifyOTP } = require('./otp.service');
+const { sendLinkResetPassword } = require('../utils/emailUtil');
 
 class AuthService {
 
@@ -114,6 +115,32 @@ class AuthService {
         await TempUser.updateOne({ username }, { otp, expiredAt });
         await generateAndSendOTP(tempUser, otp);
         return;
+    }
+
+    static forgotPassword = async ({ email }) => {
+        const user = await findUserByEmail({ email });
+        if (!user) throw new BadRequestError('Not found email');
+        const resetToken = user.createPasswordChangedToken();
+        await user.save();
+        const resetUrl = `${process.env.URL_CLIENT}/reset-password/${resetToken}`;
+        console.log("Reset URL:", resetUrl);
+        const html = `Xin vui lòng click vào link dưới đây để thay đổi mật khẩu của bạn. Link này sẽ hết hạn sau 15 phút kể từ bây giờ. <a href='${resetUrl}'>Click here</a>`
+        const data = { email, html };
+        const rs = await sendLinkResetPassword(data);
+        return rs
+    }
+
+    static resetPassword = async ({ password, token }) => {
+        const passwordResetToken = crypto.createHash('sha256').update(token).digest('hex');
+        const user = await User.findOne({ passwordResetToken, passwordResetExpires: { $gt: Date.now() } });
+        if (!user) throw new BadRequestError('Invalid reset token');
+        const passwordHash = await bcrypt.hash(password, 10);
+        user.password = passwordHash
+        user.passwordResetToken = undefined
+        user.passwordChangedAt = Date.now()
+        user.passwordResetExpires = undefined
+        await user.save()
+        return user
     }
 
 }

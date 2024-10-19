@@ -2,9 +2,6 @@ import { Category } from "@/types";
 import axiosInstance from "./axiosInstance";
 import { getCookie } from "@/utils"; 
 
-const infoUser = getCookie('user');
-const token = getCookie('token');
-
 export const getListCategory = async () => {
   try {
     const response = await axiosInstance.get('/category');
@@ -16,6 +13,8 @@ export const getListCategory = async () => {
 }
 
 export const getInfoCategory = async (id: string) => {
+  const infoUser = getCookie('user');
+  const token = getCookie('token');
   try {
     const response = await axiosInstance.get(`/category/${id}`, {
       headers: {
@@ -31,6 +30,8 @@ export const getInfoCategory = async (id: string) => {
 }
 
 export const createCategory = async (data: { name: string }) => {
+  const infoUser = getCookie('user');
+  const token = getCookie('token');
   try {
     const response = await axiosInstance.post('/category/create', data, {
       headers: {
@@ -48,6 +49,8 @@ export const createCategory = async (data: { name: string }) => {
 export const updateCategory = async (id: string, data: { 
   name: string, 
 }) => {
+  const infoUser = getCookie('user');
+  const token = getCookie('token');
   try {
     const response = await axiosInstance.patch(`category/update/${id}`, data, {
       headers: {
@@ -63,6 +66,8 @@ export const updateCategory = async (id: string, data: {
 }
 
 export const removeCategory = async (id: string) => {
+  const infoUser = getCookie('user');
+  const token = getCookie('token');
   try {
     const response = await axiosInstance.delete(`/category/delete/${id}`,  {
       headers: {

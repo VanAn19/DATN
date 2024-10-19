@@ -1,6 +1,8 @@
 'use strict'
 
 const { model, Schema, Types } = require('mongoose');
+const bcrypt = require('bcrypt')
+const crypto = require('crypto')
 
 const DOCUMENT_NAME = 'User';
 const COLLECTION_NAME = 'Users';
@@ -62,5 +64,14 @@ var userSchema = new Schema({
     timestamps: true,
     collection: COLLECTION_NAME
 });
+
+userSchema.methods = {
+    createPasswordChangedToken: function () {
+        const resetToken = crypto.randomBytes(64).toString('hex');
+        this.passwordResetToken = crypto.createHash('sha256').update(resetToken).digest('hex');
+        this.passwordResetExpires = Date.now() + 15 * 60 * 1000
+        return resetToken
+    }
+}
 
 module.exports = model(DOCUMENT_NAME, userSchema);

@@ -59,3 +59,27 @@ export const logout = async () => {
     throw error;
   }
 }
+
+export const forgotPassword = async (email: string) => {
+  try {
+    const response = await axiosInstance.get('/forgot-password', {
+      params: {
+        email
+      }
+    });
+    return response.data; 
+  } catch (error) {
+    console.error("Error during forgot password api:", error);
+    throw error;
+  }
+}
+
+export const resetPassword = async (data: { token: string, password: string }) => {
+  try {
+    const response = await axiosInstance.post('/reset-password', data);
+    return response.data; 
+  } catch (error) {
+    console.error("Error during reset password api:", error);
+    throw error;
+  }
+}

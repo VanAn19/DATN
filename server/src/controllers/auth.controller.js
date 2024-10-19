@@ -50,6 +50,23 @@ class AuthController {
         }).send(res);
     }
 
+    forgotPassword = async (req,res,next) => {
+        new SuccessResponse({
+            message: 'forgot password success',
+            metadata: await AuthService.forgotPassword({ email: req.query.email })
+        }).send(res);
+    }
+
+    resetPassword = async (req,res,next) => {
+        new SuccessResponse({
+            message: 'reset password success',
+            metadata: await AuthService.resetPassword({ 
+                password: req.body.password,
+                token: req.body.token
+            })
+        }).send(res);
+    }
+
 }
 
 module.exports = new AuthController();

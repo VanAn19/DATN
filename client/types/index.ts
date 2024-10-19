@@ -158,10 +158,26 @@ export interface FileItem extends UploadFile {
 
 export interface Order {
     _id: string;
+    name: string;
+    phone: string;
+    address: {
+        province: string;
+        district: string;
+        ward: string;
+        street: string;
+    };
     checkout: CheckoutTotal;
     products: ProductCart[];
     trackingNumber: string;
     status: OrderStatus;
+    payment: {
+        method: string;
+        details: {
+            cardNumber: string;
+            expirationDate: string;
+            cardName: string;
+        } | {}
+    },
 };
 
 export type OrderStatus = 'pending' | 'confirmed' | 'shipped' | 'canceled' | 'delivered';

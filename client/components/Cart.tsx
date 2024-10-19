@@ -4,8 +4,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { decreaseQuantityCartItem, deleteCartItem, getListCart, increaseQuantityCartItem } from '@/api/cart';
 import { ProductCart } from '@/types';
-import images from '@/public/images';
-import { checkAvailableLogin } from '@/utils';
+import { checkAvailableLogin, checkTokenCookie } from '@/utils';
 import { checkoutReview } from '@/api/order';
 
 const VND = new Intl.NumberFormat("vi-VN", {
@@ -19,6 +18,7 @@ interface CartProps {
 
 const Cart: React.FC<CartProps> = ({ onClose }) => {
   const isAuth = checkAvailableLogin();
+  // const isAuth = checkTokenCookie();
   const [cartItems, setCartItems] = useState<ProductCart[]>([]);
   const [cartId, setCartId] = useState<string | null>(null);
   const [totalCheckout, setTotalCheckout] = useState(0);
@@ -32,7 +32,6 @@ const Cart: React.FC<CartProps> = ({ onClose }) => {
           const res = await getListCart();
           setCartItems(res.metadata.products);
           setCartId(res.metadata._id);
-          setLoading(false);
         } catch (err) {
           console.error("Failed to fetch cart:", err);
         } finally {
@@ -57,6 +56,7 @@ const Cart: React.FC<CartProps> = ({ onClose }) => {
                   quantity: item.quantity,
                   name: item.name,
                   price: item.price,
+                  thumbnail: item.thumbnail
                 })),
               }
             ]

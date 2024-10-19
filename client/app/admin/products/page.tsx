@@ -10,7 +10,6 @@ import Link from 'next/link';
 import { getStock } from '@/api/inventory';
 
 const { Search } = Input;
-const { Option } = Select;
 
 const VND = new Intl.NumberFormat("vi-VN", {
   style: "currency",

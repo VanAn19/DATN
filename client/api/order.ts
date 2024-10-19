@@ -3,10 +3,9 @@ import { AxiosResponse } from 'axios';
 import { getCookie } from "@/utils";
 import { CheckoutPayload, OrderPayload } from "@/types";
 
-const infoUser = getCookie('user');
-const token = getCookie('token');
-
 export const checkoutReview = async (checkoutData: CheckoutPayload) => {
+  const infoUser = getCookie('user');
+  const token = getCookie('token');
   try {
     const response = await axiosInstance.post('/order/review', checkoutData, {
       headers: {
@@ -22,6 +21,8 @@ export const checkoutReview = async (checkoutData: CheckoutPayload) => {
 };
 
 export const orderByUser = async (orderData: OrderPayload) => {
+  const infoUser = getCookie('user');
+  const token = getCookie('token');
   try {
     const response = await axiosInstance.post('/order/order', orderData, {
       headers: {
@@ -37,6 +38,8 @@ export const orderByUser = async (orderData: OrderPayload) => {
 };
 
 export const getOrderByUser = async () => {
+  const infoUser = getCookie('user');
+  const token = getCookie('token');
   try {
     const response = await axiosInstance.get('/order', {
       headers: {
@@ -51,7 +54,26 @@ export const getOrderByUser = async () => {
   }
 };
 
+export const getOneOrderByUser = async (id: string) => {
+  const infoUser = getCookie('user');
+  const token = getCookie('token');
+  try {
+    const response = await axiosInstance.get(`/order/${id}`, {
+      headers: {
+        'Authorization': token,
+        'x-client-id': infoUser._id
+      }
+    });
+    return response.data; 
+  } catch (error) {
+    console.error("Error during get order by user api:", error);
+    throw error;
+  }
+};
+
 export const getOrderByAdmin = async () => {
+  const infoUser = getCookie('user');
+  const token = getCookie('token');
   try {
     const response = await axiosInstance.get('/order/admin/getOrderByAdmin', {
       headers: {
@@ -67,6 +89,8 @@ export const getOrderByAdmin = async () => {
 };
 
 export const cancelOrderByUser = async (id: string) => {
+  const infoUser = getCookie('user');
+  const token = getCookie('token');
   try {
     const response = await axiosInstance.post(`/order/cancel/${id}`, {}, {
       headers: {
@@ -82,6 +106,8 @@ export const cancelOrderByUser = async (id: string) => {
 };
 
 export const updateStatusOrder = async (data: { orderId: string, newStatus: string }) => {
+  const infoUser = getCookie('user');
+  const token = getCookie('token');
   try {
     const response = await axiosInstance.post('/order/update', data, {
       headers: {
