@@ -21,9 +21,10 @@ const ProductCard: React.FC<ProductCardType> = ({ _id, name, thumbnail, price, s
             <Image 
               alt={name} 
               src={thumbnail} 
-              width={300.4} 
-              height={300.4} 
-              className="object-cover rounded-lg ml-025" 
+              layout="responsive"
+              width={300} 
+              height={300} 
+              className="object-cover rounded-lg w-full" 
             />
             {sale > 0 && (
               <div className="bg-red-300 text-white font-bold px-2 py-1 text-xs rounded-full absolute top-2 left-2">

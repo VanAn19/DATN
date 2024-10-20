@@ -167,7 +167,9 @@ const Header = () => {
                     <Image
                       className="w-full h-full object-cover rounded-full"
                       alt="User Avatar"
-                      src={images.logo} 
+                      src={infoUser?.avatar || images.logo} 
+                      width={40}
+                      height={40}
                     />
                   </div>
                 </Space>

@@ -74,9 +74,14 @@ const SignIn = () => {
             />
           </div>
           <div className="mb-6">
-            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="password">
-              Mật khẩu
-            </label>
+            <div className="flex justify-between items-center">
+              <label className="block text-gray-700 text-sm font-bold" htmlFor="password">
+                Mật khẩu
+              </label>
+              <Link href="/forgot-password" className="text-indigo-600 hover:text-indigo-500 text-sm ml-auto">
+                Quên mật khẩu?
+              </Link>
+            </div>
             <input
               type="password"
               className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"

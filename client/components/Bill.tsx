@@ -31,7 +31,7 @@ const Bill: React.FC<BillProps> = ({ visible, onClose, order }) => {
           <span>Địa chỉ: </span>
           {order?.address?.street}, {order?.address?.ward}, {order?.address?.district}, {order?.address?.province}
         </p>
-        <p className='mb-2'><span>Phương thức thanh toán: </span>{}</p>
+        <p className='mb-2'><span>Phương thức thanh toán: </span>{order?.payment?.method === 'cash' ? 'Tiền mặt' : 'Thẻ tín dụng'}</p>
         <p className='mb-4'>Trạng thái đơn hàng: {order?.status}</p>
         <div className="mb-4">
           {order?.products.map((product: any) => (

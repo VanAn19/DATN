@@ -66,6 +66,7 @@ const Purchase = () => {
             phone: order.phone,
             address: order.address,
             checkout: order.checkout,
+            payment: order.payment,
             products: order.products.flatMap((product: any) => product.products.map((item: any) => ({
               ...item,
               priceRaw: order.products[0].priceRaw, 

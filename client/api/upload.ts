@@ -8,6 +8,16 @@ const axiosInstance = axios.create({
     },
 });
 
+export const uploadImage = async (data: any) => {
+  try {
+    const response = await axiosInstance.post('/upload', data);
+    return response.data; 
+  } catch (error) {
+    console.error("Error during upload image api:", error);
+    throw error;
+  }
+};
+
 export const uploadImages = async (data: any) => {
   try {
     const response = await axiosInstance.post('/upload/multiple', data);

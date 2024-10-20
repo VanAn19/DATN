@@ -98,7 +98,7 @@ const ProductsPage = () => {
   };
 
   return (
-    <div className="container mx-auto mb-8">
+    <div className="w-[80%] container mx-auto mb-8">
       <div className='mt-8 font-extrabold text-center'>TẤT CẢ SẢN PHẨM</div>
       <div className="flex justify-between items-center mt-8 mb-8">
         <div>
