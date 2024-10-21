@@ -58,7 +58,7 @@ class AuthService {
             privateKey
         });
         return {
-            user: getInfoData({ fields: ['_id', 'name', 'username', 'email', 'avatar', 'role'], object: foundUser}),
+            user: getInfoData({ fields: ['_id', 'username', 'name', 'email', 'phone', 'avatar', 'address', 'role'], object: foundUser}),
             tokens
         }
     }
@@ -72,7 +72,7 @@ class AuthService {
         const newTempUser = await TempUser.create({ username, password: passwordHash, name, email, phone, address, otp, expiredAt });
         await generateAndSendOTP(newTempUser, otp); 
         return {
-            user: getInfoData({ fields: ['_id', 'name', 'username', 'email', 'avatar'], object: newTempUser}),
+            user: getInfoData({ fields: ['_id', 'username', 'name', 'email', 'phone', 'avatar', 'address', 'role'], object: newTempUser}),
         };
     }
 
@@ -102,7 +102,7 @@ class AuthService {
         });
         await deleteTempUserById(tempUser._id);
         return {
-            user: getInfoData({ fields: ['_id', 'name', 'username', 'email', 'avatar'], object: newUser}),
+            user: getInfoData({ fields: ['_id', 'username', 'name', 'email', 'phone', 'avatar', 'address', 'role'], object: newUser}),
             tokens
         };
     }

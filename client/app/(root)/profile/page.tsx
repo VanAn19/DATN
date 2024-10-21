@@ -1,22 +1,27 @@
 'use client'
 
-import React, { useEffect, useState } from 'react'
-import { Form, Button, Input, message, Upload } from 'antd';
+import React, { useEffect, useRef, useState } from 'react'
+import { Form, Button, Input, message, Upload, Slider, Modal } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
 import Image from 'next/image';
 import { getInfoUser, updateInfoUser } from '@/api/user';
 import { InfoUser } from '@/types/user';
 import { uploadImage } from '@/api/upload';
 import { RcFile } from 'antd/es/upload';
-import { useRouter } from 'next/navigation';
+import { setCookie } from '@/utils';
+import AvatarEditor from 'react-avatar-editor';
 
 const Profile = () => {
+  const expirationHours = 3;
   const [form] = Form.useForm();
   const [avatarFile, setAvatarFile] = useState<string>('');
   const [user, setUser] = useState<InfoUser | null>(null);
   const [loading, setLoading] = useState(false);
   const [uploading, setUploading] = useState(false);
-  const router = useRouter();
+  const [editorVisible, setEditorVisible] = useState(false);
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [scale, setScale] = useState<number>(1);
+  const editorRef = useRef<AvatarEditor | null>(null);
 
   useEffect(() => {
     setLoading(true);
@@ -60,22 +65,33 @@ const Profile = () => {
     if (file.status === 'uploading') {
       return;
     }
-    setUploading(true);
-    try {
-      const formData = new FormData();
-      formData.append('file', file.originFileObj);
-      const res = await uploadImage(formData);
-      if (res.status === 200) {
-        const { imageUrl } = res.metadata;
-        setAvatarFile(imageUrl);
-        setUser((prev) => (prev ? { ...prev, avatar: imageUrl } : null));
-      }
-    } catch (error) {
-      console.error("Error during upload avatar: ", error);
-    } finally {
-      setUploading(false);
-    }
+    setImageFile(file.originFileObj);
+    setEditorVisible(true);
   }
+
+  const handleSave = async () => {
+    if (editorRef.current && imageFile) {
+      const canvas = editorRef.current.getImageScaledToCanvas().toDataURL();
+      const blob = await fetch(canvas).then(res => res.blob());
+
+      setUploading(true);
+      try {
+        const formData = new FormData();
+        formData.append('file', blob, imageFile.name);
+        const res = await uploadImage(formData);
+        if (res.status === 200) {
+          const { imageUrl } = res.metadata;
+          setAvatarFile(imageUrl);
+          setUser((prev) => (prev ? { ...prev, avatar: imageUrl } : null));
+        }
+      } catch (error) {
+        console.error("Error during upload avatar: ", error);
+      } finally {
+        setUploading(false);
+        setEditorVisible(false);
+      }
+    }
+  };
 
   const onFinish = async (values: any) => {
     setLoading(true);
@@ -89,7 +105,8 @@ const Profile = () => {
       });
       if (res.status === 200) {
         message.success('Lưu thông tin mới thành công!');
-        router.push('/profile');
+        setCookie("user", res.metadata, expirationHours);
+        window.location.reload();
       }
     } catch (error) {
       console.error('Error during update info user: ', error);
@@ -144,9 +161,9 @@ const Profile = () => {
               type="submit" 
               disabled={loading || uploading}
               className={`w-full h-14 py-2 text-yellow-200 bg-black transition duration-200 ease-in-out rounded-lg 
-                ${loading ? 'opacity-50 cursor-not-allowed' : 'hover:bg-black hover:text-yellow-300'}`}
+                ${loading || uploading ? 'opacity-50 cursor-not-allowed' : 'hover:bg-black hover:text-yellow-300'}`}
             >
-              {loading || uploading ? 'Đang lưu...' : 'Lưu'}
+              {loading || uploading ? 'Lưu...' : 'Lưu'}
             </button>
           </div>
 
@@ -168,14 +185,50 @@ const Profile = () => {
               beforeUpload={beforeUpload}
               onChange={handleImageChange}
             >
-              <Button icon={<UploadOutlined />}>Chọn Ảnh</Button>
+              <Button loading={uploading} icon={<UploadOutlined />}>Chọn Ảnh</Button>
             </Upload>
             <p className="text-gray-500 mt-2 text-center">
-              Dụng lượng file tối đa 1 MB <br /> Định dạng: .JPEG, .PNG
+              Dụng lượng file tối đa 2 MB <br /> Định dạng: .JPEG, .PNG
             </p>
             </div>
           </div>
       </Form>
+      <Modal
+        visible={editorVisible}
+        title="Chỉnh sửa ảnh đại diện"
+        onCancel={() => setEditorVisible(false)}
+        onOk={handleSave}
+        okText="Lưu"
+        cancelText="Hủy"
+        confirmLoading={uploading}
+      >
+        {imageFile && (
+          <>
+            <div className="flex justify-center">
+              <AvatarEditor
+                ref={editorRef}
+                image={imageFile}
+                width={150}
+                height={150}
+                border={50}
+                borderRadius={75}
+                color={[255, 255, 255, 0.6]} 
+                scale={scale}
+                rotate={0}
+              />
+            </div>
+            <Slider 
+              min={1}
+              max={3}
+              step={0.01}
+              value={scale}
+              tooltip={{ formatter: null }}
+              onChange={(value) => setScale(value)}
+              className="mt-4"
+            />
+          </>
+        )}
+      </Modal>
     </div>
   )
 }
