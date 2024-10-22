@@ -71,14 +71,20 @@ const deleteProductById = async ({ id }) => {
 }
 
 const searchProductByUser = async ({ keySearch }) => {
-    const regexSearch = new RegExp(keySearch);
+    const regexSearch = new RegExp(keySearch, 'i');
     console.log('Searching for:', regexSearch);
+    // const results = await Product.find({
+    //     isPublished: true,
+    //     $text: { $search: regexSearch },
+    // }, { score: { $meta: 'textScore' } })
+    // .sort({ score: { $meta: 'textScore' } })
+    // .lean()
     const results = await Product.find({
         isPublished: true,
-        $text: { $search: regexSearch },
-    }, { score: { $meta: 'textScore' } })
-    .sort({ score: { $meta: 'textScore' } })
-    .lean()
+        $or: [
+            { name: regexSearch },
+        ]
+    }).lean();
     console.log('Search results:', results);
     return results;
 }

@@ -153,3 +153,13 @@ export const filterProductByCategory = async (data: { category: string }) => {
     throw error;
   }
 }
+
+export const getListSearchProduct = async (keySearch: string) => {
+  try {
+    const response = await axiosInstance.get(`/product/search/${keySearch}`);
+    return response.data;
+  } catch (error) {
+    console.error("Error during get list search product api:", error);
+    throw error;
+  }
+}

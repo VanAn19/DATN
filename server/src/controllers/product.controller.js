@@ -69,10 +69,9 @@ class ProductController {
     }
 
     searchProduct = async (req,res,next) => {
-        const { keySearch } = req.params;
         new SuccessResponse({
             message: 'search product successfully',
-            metadata: await ProductService.searchProduct({ keySearch })
+            metadata: await ProductService.searchProduct(req.params)
         }).send(res);
     }
 

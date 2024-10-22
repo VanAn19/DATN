@@ -194,7 +194,7 @@ const Profile = () => {
           </div>
       </Form>
       <Modal
-        visible={editorVisible}
+        open={editorVisible}
         title="Chỉnh sửa ảnh đại diện"
         onCancel={() => setEditorVisible(false)}
         onOk={handleSave}
