@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link';
-import React, { FormEvent, useState } from 'react'
+import React, { FormEvent, useState } from 'react';
 import { signin } from '@/api/auth';
 import { setCookie } from '@/utils';
 import { CHANGE_STATUS_AUTH, CHANGE_VALUE_USER } from '@/redux/slices/authSlice';
