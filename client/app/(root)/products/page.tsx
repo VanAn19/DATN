@@ -55,23 +55,6 @@ const ProductsPage = () => {
     fetchCategories();
   }, [])
 
-  const handleSearch = async () => {
-    if (!searchValue.trim()) {
-      console.warn("Vui lòng nhập từ khóa tìm kiếm!");
-      return;
-    }
-    setLoading(true);
-    try {
-      const res = await getListSearchProduct(searchValue);
-      setProducts(res.metadata);
-      setOriginalProducts(res.metadata);
-    } catch (error) {
-      console.error("Error during search product: ", error);
-    } finally {
-      setLoading(false);
-    }
-  }
-
   const handleSearchInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchValue(e.target.value);
   };
