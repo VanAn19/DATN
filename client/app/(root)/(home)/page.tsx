@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 import BestSellingProductSlider from '@/components/BestSellingProductSlider';
 import Introduction from '@/components/Introduction';
 
