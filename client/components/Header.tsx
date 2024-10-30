@@ -58,8 +58,8 @@ const Header = () => {
       document.cookie = `user=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
       document.cookie = `token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
       dispatch(DELETE_VALUE_USER());
-      router.push('/');
-      window.location.reload();
+      router.push('/sign-in');
+      // window.location.reload();
     } catch (error) {
       console.error("Logout error:", error);
     }

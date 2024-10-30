@@ -93,13 +93,13 @@ const AdminOrder = () => {
         <div>
         {order.products.map((product: ProductCart) => (
           <div className='flex mb-2' key={product.productId}>
-            <Image 
+            {/* <Image 
               src={product.thumbnail} 
               alt={product.name} 
               width={100} 
               height={100} 
-            />
-            <div className='ml-5'>
+            /> */}
+            <div className=''>
               <p>{product.name}</p>
               <p className='text-gray-500'>Số lượng: {product.quantity}</p>
               <p className='text-gray-500'>Đơn giá: {VND.format(product.price)}</p>
