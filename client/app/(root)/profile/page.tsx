@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react';
 import { Form, Button, Input, message, Upload, Slider, Modal } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
 import Image from 'next/image';
