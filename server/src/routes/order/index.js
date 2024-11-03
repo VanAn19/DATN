@@ -19,5 +19,6 @@ router.use(checkRole('admin'))
 router.get('/admin/getOrderByAdmin', asyncHandler(orderController.getOrderByAdmin));
 router.get('/getOneOrderByAdmin/:id', asyncHandler(orderController.getOneOrderByAdmin));
 router.post('/update', asyncHandler(orderController.updateStatusOrderByAdmin));
+router.get('/search/:keySearch', asyncHandler(orderController.searchOrderByAdmin));
 
 module.exports = router;

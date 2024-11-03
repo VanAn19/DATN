@@ -5,7 +5,7 @@ const { findCartById, removeProductsFromCart } = require("../repositories/cart.r
 const { checkProductByServer } = require("../repositories/product.repo");
 const { acquireLock, releaseLock } = require("./redis.service");
 const Order = require('../models/order.model');
-const { getOrder, getOneOrder, getOrderByAdmin, getOneOrderByAdmin } = require("../repositories/order.repo");
+const { getOrder, getOneOrder, getOrderByAdmin, getOneOrderByAdmin, searchOrderByAdmin } = require("../repositories/order.repo");
 const { releaseInventory } = require("../repositories/inventory.repo");
 
 class OrderService {
@@ -159,8 +159,17 @@ class OrderService {
             throw new BadRequestError('Cant update the order because it is already delivered or canceled');
         }
         foundOrder.status = newStatus;
+        if (newStatus === 'shipped') {
+            foundOrder.trackingNumber = `#${Date.now()}`;
+        } else if (newStatus === 'pending' || newStatus === 'confirmed' || newStatus === 'canceled') {
+            foundOrder.trackingNumber = '';
+        }
         const updatedOrder = await foundOrder.save();
         return updatedOrder;
+    }
+
+    static async searchOrderByAdmin({ keySearch }) {
+        return await searchOrderByAdmin({ keySearch });
     }
 
 }

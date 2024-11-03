@@ -92,3 +92,8 @@ body {
 .ml-025 {
   margin-left: 1.25px;
 }
+
+// admin
+.custom-table-header .ant-table-thead > tr > th {
+  @apply text-blue-400;
+}

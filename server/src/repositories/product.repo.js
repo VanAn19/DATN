@@ -2,7 +2,7 @@
 
 const Product = require('../models/product.model');
 const { insertInventory, removeInventory } = require('./inventory.repo');
-const { Types } = require('mongoose')
+const { Types } = require('mongoose');
 
 const queryProduct = async ({ query, limit, skip }) => {
     return await Product.find(query).populate('category')

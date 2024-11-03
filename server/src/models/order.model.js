@@ -122,7 +122,7 @@ const orderSchema = new Schema({
     },
     trackingNumber: {
         type: String,
-        default: '#0000118052022'
+        // default: '#0000118052022'
     },
     status: {
         type: String,

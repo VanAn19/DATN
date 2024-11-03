@@ -121,3 +121,20 @@ export const updateStatusOrder = async (data: { orderId: string, newStatus: stri
     throw error;
   }
 };
+
+export const searchOrderByAdmin = async (keySearch: string) => {
+  const infoUser = getCookie('user');
+  const token = getCookie('token');
+  try {
+    const response = await axiosInstance.get(`/order/search/${keySearch}`, {
+      headers: {
+        'Authorization': token,
+        'x-client-id': infoUser._id
+      }
+    });
+    return response.data; 
+  } catch (error) {
+    console.error("Error during update status order api:", error);
+    throw error;
+  }
+};

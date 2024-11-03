@@ -203,6 +203,7 @@ const AdminProducts = () => {
         loading={loading}
         rowKey={(product: Product) => product._id}
         pagination={{ pageSize: 10 }}
+        className='custom-table-header'
       />
     </div>
   )

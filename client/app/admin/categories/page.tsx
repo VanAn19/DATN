@@ -98,6 +98,7 @@ const AdminCategory = () => {
         loading={loading}
         rowKey={(categories) => categories._id}
         pagination={{ pageSize: 10 }}
+        className='custom-table-header'
       />
     </div>
   )

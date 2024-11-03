@@ -60,6 +60,13 @@ class OrderController {
             metadata: await OrderService.updateOrderStatusByAdmin(req.body)
         }).send(res);
     }
+
+    searchOrderByAdmin = async (req,res,next) => {
+        new SuccessResponse({
+            message: 'search order successfully',
+            metadata: await OrderService.searchOrderByAdmin(req.params)
+        }).send(res);
+    }
 }
 
 module.exports = new OrderController();

@@ -112,6 +112,9 @@ const Checkouts = () => {
     setLoading(true);
     try {
       const { name, phone, street, cardNumber, expirationDate, cardName } = values;
+      const provinceName = data.province.find((p) => p.idProvince === selectedProvince)?.name || '';
+      const districtName = data.district.find((d) => d.idDistrict === selectedDistrict)?.name || '';
+      const communeName = data.commune.find((c) => c.idCommune === selectedCommune)?.name || '';
       if (cartId && cartItems.length > 0) {
         const res = await orderByUser({
           cartId,
@@ -127,9 +130,9 @@ const Checkouts = () => {
             }
           ],
           address: {
-            province: selectedProvince || '',
-            district: selectedDistrict || '',
-            ward: selectedCommune || '',
+            province: provinceName,
+            district: districtName,
+            ward: communeName,
             street: street || '',
           },
           payment: {
