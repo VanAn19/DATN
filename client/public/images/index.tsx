@@ -1,5 +1,5 @@
 const images = {
-    logo: require("./logo.jpg"),
+    logo: require("./logo-removebg.png"),
     imgSignUp: require('./imgSignUp.jpg'),
     freeShip: require('./freeship.png'),
     facebookLogo: require('./facebook.png'),

@@ -55,6 +55,10 @@ var productSchema = new Schema({
         default: false,
         index: true,
         select: false
+    },
+    userFavor: {
+        type: Array,
+        default: []
     }
 }, {
     timestamps: true,

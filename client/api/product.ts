@@ -163,3 +163,20 @@ export const getListSearchProduct = async (keySearch: string) => {
     throw error;
   }
 }
+
+export const addFavorProduct = async (productId: string) => {
+  const infoUser = getCookie('user');
+  const token = getCookie('token');
+  try {
+    const response = await axiosInstance.post('/product/addFavorProduct', productId, {
+      headers: {
+        'Authorization': token,
+        'x-client-id': infoUser._id
+      }
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error during add favorite product api:", error);
+    throw error;
+  }
+}

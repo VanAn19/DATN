@@ -5,6 +5,9 @@ import Providers from "../redux/Provider";
 export const metadata: Metadata = {
   title: "Dao Trọng Bình",
   description: "Dao Trọng Bình",
+  icons: {
+    icon: '/images/logo.svg'
+  }
 };
 
 export default function RootLayout({
