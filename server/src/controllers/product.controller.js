@@ -75,20 +75,6 @@ class ProductController {
         }).send(res);
     }
 
-    addFavorProduct = async (req,res,next) => {
-        new SuccessResponse({
-            message: 'add favorite product successfully',
-            metadata: await ProductService.addFavorProduct({ userId: req.user.userId, ...req.body})
-        }).send(res);
-    }
-
-    removeFavorProduct = async (req,res,next) => {
-        new SuccessResponse({
-            message: 'remove favorite product successfully',
-            metadata: await ProductService.removeFavorProduct({ userId: req.user.userId, ...req.body})
-        }).send(res);
-    }
-
 }
 
 module.exports = new ProductController();

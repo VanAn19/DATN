@@ -94,21 +94,6 @@ class ProductService {
     static async searchProduct({ keySearch }) {
         return await searchProductByUser({ keySearch });
     }
-
-    static async addFavorProduct({ userId, productId }) {
-        const foundProduct = await getProductById({ id: productId });
-        foundProduct.userFavor.push(userId);
-        await foundProduct.save();
-        return foundProduct;
-    }
-
-    static async removeFavorProduct({ userId, productId }) {
-        const foundProduct = await getProductById({ id: productId });
-        if (!foundProduct.userFavor.includes(userId)) throw new BadRequestError('Not found favorite product');
-        foundProduct.userFavor = foundProduct.userFavor.filter(id => id !== userId);
-        await foundProduct.save();
-        return foundProduct;
-    }
     
 }
 

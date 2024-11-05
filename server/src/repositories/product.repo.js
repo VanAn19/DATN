@@ -27,7 +27,7 @@ const filterProductByCategory = async ({ category, limit, skip }) => {
 }
 
 const getProductById = async ({ id }) => {
-    return await Product.findById(id);
+    return await Product.findById(id).lean();
 }
 
 const findProductByName = async ({ name }) => {

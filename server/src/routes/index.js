@@ -9,6 +9,7 @@ router.use(apiKey);
 // check permission
 router.use(permission('0000'));
 
+router.use('/v1/api/favorite', require('./favorite'));
 router.use('/v1/api/profile', require('./profile'));
 router.use('/v1/api/upload', require('./upload'));
 router.use('/v1/api/order', require('./order'));

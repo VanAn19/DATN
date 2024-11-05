@@ -13,9 +13,6 @@ router.get('/search/:keySearch', asyncHandler(productController.searchProduct));
 
 router.use(authentication)
 
-router.post('/addFavorProduct', asyncHandler(productController.addFavorProduct));
-router.post('/removeFavorProduct', asyncHandler(productController.removeFavorProduct));
-
 router.use(checkRole('admin'))
 
 router.post('/create', asyncHandler(productController.createProduct));
