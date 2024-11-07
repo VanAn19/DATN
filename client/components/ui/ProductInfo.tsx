@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { notification, Skeleton, Spin } from "antd";
 import { SkeletonCustomProduct } from "./slide/CustomSlide";
 import Image from 'next/image';
@@ -19,6 +19,7 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import dynamic from "next/dynamic";
 import { addToCart } from '@/api/cart';
+import { addProductToFavorite, getUserFavorite, removeProductFromFavorite } from '@/api/favorite';
 
 const Slider = dynamic(() => import("react-slick"), { ssr: false }) as any;
 
@@ -75,8 +76,48 @@ export default function ProductInfo(props: { data: any, user: string, isLoading:
     }
   };
 
-  const handleFavorite = () => {
-    setIsFavorited(!isFavorited);
+  useEffect(() => {
+    setLoading(true);
+    const checkFavorProduct = async () => {
+      try {
+        const res = await getUserFavorite();
+        if (res.status === 200) {
+          res.metadata.products.map((product: any) => {
+            if (product._id === data._id) {
+              setIsFavorited(true);
+            } else {
+              setIsFavorited(false);
+            }
+          });
+        }
+      } catch (error) {
+        console.error("Error during check favorite product: ", error);
+      } finally {
+        setLoading(false);
+      }
+    }
+    checkFavorProduct();
+  }, [isFavorited, data._id]);
+
+  const handleFavorite = async () => {
+    setLoading(true);
+    try {
+      if (isFavorited) {
+        const res = await removeProductFromFavorite(data._id);
+        if (res.status === 200) {
+          setIsFavorited(false);
+        }
+      } else {
+        const res = await addProductToFavorite(data._id);
+        if (res.status === 200) {
+          setIsFavorited(true);
+        }
+      }
+    } catch (error) {
+      console.error("Error during handle favorite product: ", error);
+    } finally {
+      setLoading(false);
+    }
   }
     
   return (
@@ -171,7 +212,7 @@ export default function ProductInfo(props: { data: any, user: string, isLoading:
             <h1 className="text-xl font-semibold">{data?.name}</h1>
           </div>
           <div className="flex items-center gap-5">
-          <div className="text-3xl text-red-500">
+            <div className="text-3xl text-red-500">
               {VND.format(data?.sellingPrice)}
             </div>
             <div className="text-2xl text-gray-500 line-through">
