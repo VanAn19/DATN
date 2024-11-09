@@ -10,7 +10,7 @@ import React, { useEffect, useState } from 'react'
 import data from '@/data/db.json'
 import Link from 'next/link';
 import { Form, Input, Select, Radio, notification } from 'antd';
-import { useRouter } from 'next/navigation';
+import { notFound, useRouter } from 'next/navigation';
 import images from '@/public/images';
 
 const VND = new Intl.NumberFormat("vi-VN", {
@@ -321,7 +321,7 @@ const Checkouts = () => {
               <Form.Item>
                 <button 
                   type="submit" 
-                  disabled={loading}
+                  disabled={loading || !isAuth}
                   className={`w-full h-14 py-2 text-yellow-200 bg-black transition duration-200 ease-in-out 
                     ${loading ? 'opacity-50 cursor-not-allowed' : 'hover:bg-black hover:text-yellow-300'}`}
                 >
@@ -365,7 +365,7 @@ const Checkouts = () => {
               <p>Chưa có sản phẩm để thanh toán.</p>
             )
           ) : (
-            <p className="text-red-500">Bạn cần đăng nhập trước.</p>
+            <p className="text-red-500 p-5">Bạn cần đăng nhập trước.</p>
           )}
         </div>
       </div>

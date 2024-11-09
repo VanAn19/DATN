@@ -7,6 +7,8 @@ import { Button, Card, Col, Row, Tabs } from 'antd';
 import { cancelOrderByUser, getOrderByUser } from '@/api/order';
 import { Order, OrderStatus } from '@/types';
 import Bill from '@/components/Bill';
+import { checkAvailableLogin } from '@/utils';
+import { useRouter } from 'next/navigation';
 
 const { TabPane } = Tabs;
 
@@ -53,8 +55,20 @@ const Purchase = () => {
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
+  const [isAuthChecked, setIsAuthChecked] = useState<boolean>(false); 
+  const router = useRouter();
 
   useEffect(() => {
+    const isAuth = checkAvailableLogin();
+    if (!isAuth) {
+      router.push('/sign-in');
+    } else {
+      setIsAuthChecked(true);
+    }
+  }, [router]);
+
+  useEffect(() => {
+    if (!isAuthChecked) return;
     setLoading(true);
     const fetchCart = async () => {
       try {
@@ -83,7 +97,7 @@ const Purchase = () => {
       }
     }
     fetchCart();
-  }, []);
+  }, [isAuthChecked]);
 
   const handleCancelOrder = async (id: string) => {
     setLoading(true);

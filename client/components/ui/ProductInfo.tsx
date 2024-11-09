@@ -20,6 +20,8 @@ import "slick-carousel/slick/slick-theme.css";
 import dynamic from "next/dynamic";
 import { addToCart } from '@/api/cart';
 import { addProductToFavorite, getUserFavorite, removeProductFromFavorite } from '@/api/favorite';
+import { checkAvailableLogin } from '@/utils';
+import { useRouter } from 'next/navigation';
 
 const Slider = dynamic(() => import("react-slick"), { ssr: false }) as any;
 
@@ -34,6 +36,7 @@ export default function ProductInfo(props: { data: any, user: string, isLoading:
   const [isFavorited, setIsFavorited] = useState(false);
   const [loading, setLoading] = useState(false);
   const [loadingFavorite, setLoadingFavorite] = useState(false);
+  const router = useRouter();
 
   const settings = {  
     infinite: data?.images?.length > 1,
@@ -55,6 +58,11 @@ export default function ProductInfo(props: { data: any, user: string, isLoading:
   }
 
   const addProductToCart = async () => {
+    const isAuth = checkAvailableLogin();
+    if (!isAuth) {
+      router.push('/sign-in');
+      return;
+    }
     setLoading(true);
     try {
       const product = {
@@ -77,6 +85,8 @@ export default function ProductInfo(props: { data: any, user: string, isLoading:
   };
 
   useEffect(() => {
+    const isAuth = checkAvailableLogin();
+    if (!isAuth) return setIsFavorited(false);
     setLoading(true);
     const checkFavorProduct = async () => {
       try {
@@ -100,6 +110,11 @@ export default function ProductInfo(props: { data: any, user: string, isLoading:
   }, [isFavorited, data._id]);
 
   const handleFavorite = async () => {
+    const isAuth = checkAvailableLogin();
+    if (!isAuth) {
+      router.push('/sign-in');
+      return;
+    }
     setLoading(true);
     try {
       if (isFavorited) {

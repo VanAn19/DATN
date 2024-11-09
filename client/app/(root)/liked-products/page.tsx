@@ -8,6 +8,8 @@ import { ShoppingCartOutlined, HeartFilled } from '@ant-design/icons';
 import Image from 'next/image';
 import Link from 'next/link';
 import { addToCart } from '@/api/cart';
+import { checkAvailableLogin } from '@/utils';
+import { useRouter } from 'next/navigation';
 
 const VND = new Intl.NumberFormat("vi-VN", {
   style: "currency",
@@ -17,8 +19,20 @@ const VND = new Intl.NumberFormat("vi-VN", {
 const LikedProducts = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(false);
+  const [isAuthChecked, setIsAuthChecked] = useState<boolean>(false); 
+  const router = useRouter();
 
   useEffect(() => {
+    const isAuth = checkAvailableLogin();
+    if (!isAuth) {
+      router.push('/sign-in');
+    } else {
+      setIsAuthChecked(true);
+    }
+  }, [router]);
+
+  useEffect(() => {
+    if (!isAuthChecked) return;
     setLoading(true);
     const fetchFavorProduct = async () => {
       try {
@@ -33,7 +47,7 @@ const LikedProducts = () => {
       }     
     }
     fetchFavorProduct();
-  }, [])
+  }, [isAuthChecked])
 
   const addProductToCart = async (product: Product) => {
     setLoading(true);
@@ -77,7 +91,7 @@ const LikedProducts = () => {
 
   return (
     <div className="w-[80%] container mx-auto mb-8">
-        <div className='mt-8 font-extrabold text-center mb-4'>SẢN PHẨM YÊU THÍCH</div>
+      <div className='mt-8 font-extrabold text-center mb-4'>SẢN PHẨM YÊU THÍCH</div>
         {products.map((product) => (
           <Card 
             key={product._id}
