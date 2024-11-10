@@ -6,6 +6,8 @@ const { asyncHandler } = require('../../helpers/asyncHandler');
 const { authentication, checkRole } = require('../../auth/authUtils');
 const router = express.Router();
 
+router.get('/sold', asyncHandler(inventoryController.getSoldQuantity));
+
 router.use(authentication)
 
 router.use(checkRole('admin'))

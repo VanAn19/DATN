@@ -7,7 +7,6 @@ import {
     ShoppingCartOutlined
 } from "@ant-design/icons";
 import { Divider, Dropdown, Modal, Space, Spin, Button } from "antd";
-import "../styles/globals.scss";
 import Link from 'next/link';
 import MainMenu from './MainMenu';
 import { checkAvailableLogin, checkTokenCookie, getCookie, clearAllCookies } from '@/utils';
@@ -19,6 +18,7 @@ import { DELETE_VALUE_USER } from '@/redux/slices/authSlice';
 import { useRouter } from 'next/navigation';
 import Cart from './Cart';
 import { User } from '@/utils/user';
+import '../styles/home/header.scss'
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
@@ -81,7 +81,7 @@ const Header = () => {
     },
     { 
       label: (
-        <Link href={"/liked-products"} className="list-item ">
+        <Link href={"/liked-products"} className="list-item border">
           <p className="item-text">Sản phẩm đã thích</p>
         </Link>
       ),  
@@ -89,7 +89,7 @@ const Header = () => {
     },
     { 
       label: (
-        <Link href={"/purchase"} className="list-item ">
+        <Link href={"/purchase"} className="list-item border-b">
           <p className="item-text">Đơn hàng của tôi</p>
         </Link>
       ), 
@@ -97,7 +97,7 @@ const Header = () => {
     },
     { 
       label: (
-        <div className="list-item " onClick={handleLogout}>
+        <div className="list-item" onClick={handleLogout}>
           <p className="item-text">Đăng xuất</p>
         </div>
       ),
@@ -177,7 +177,7 @@ const Header = () => {
           </Dropdown>
         ) : (
           <Link href="/sign-in">
-            <button className="px-4 py-2 mr-[15px] bg-blue-500 text-white rounded">
+            <button className="px-4 py-2 mr-[15px] bg-black text-yellow-200 hover:text-yellow-300 rounded">
               Đăng nhập
             </button>
           </Link>

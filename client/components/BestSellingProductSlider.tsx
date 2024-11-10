@@ -1,5 +1,5 @@
 import { getProductsList } from "@/api/product";
-import DefaultSlide from "./ui/DefaultSlide";
+import DefaultSlide from "./ui/slide/DefaultSlide";
 
 const BestSellingProductSlider = () => {
   return (

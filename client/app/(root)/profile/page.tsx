@@ -8,8 +8,9 @@ import { getInfoUser, updateInfoUser } from '@/api/user';
 import { InfoUser } from '@/types/user';
 import { uploadImage } from '@/api/upload';
 import { RcFile } from 'antd/es/upload';
-import { setCookie } from '@/utils';
+import { checkAvailableLogin, setCookie } from '@/utils';
 import AvatarEditor from 'react-avatar-editor';
+import { useRouter } from 'next/navigation';
 
 const Profile = () => {
   const expirationHours = 3;
@@ -22,8 +23,20 @@ const Profile = () => {
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [scale, setScale] = useState<number>(1);
   const editorRef = useRef<AvatarEditor | null>(null);
+  const [isAuthChecked, setIsAuthChecked] = useState<boolean>(false); 
+  const router = useRouter();
 
   useEffect(() => {
+    const isAuth = checkAvailableLogin();
+    if (!isAuth) {
+      router.push('/sign-in');
+    } else {
+      setIsAuthChecked(true);
+    }
+  }, [router]);
+
+  useEffect(() => {
+    if (!isAuthChecked) return;
     setLoading(true);
     const fetchInfoUser = async () => {
       try {
@@ -44,7 +57,7 @@ const Profile = () => {
       }
     }
     fetchInfoUser();
-  }, [form]);
+  }, [form, isAuthChecked]);
 
   const beforeUpload = (file: RcFile) => {
     const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';

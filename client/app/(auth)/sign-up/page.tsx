@@ -75,7 +75,7 @@ const SignUp = () => {
           <h2 className="title-sign">Dao Trọng Bình - Người giúp việc nhiệt tình! 👋</h2>
           <div className="group-input-password">
             <div className="group-input">
-              <p>Tên đăng nhập</p>
+              <p>Tên đăng nhập <span className='text-red-500'>*</span></p>
               <input
                 type="text"
                 {...register('username')}
@@ -84,7 +84,7 @@ const SignUp = () => {
               {errorMessage && <p className="error-message">{errorMessage}</p>}
             </div>
             <div className="group-input">
-              <p>Họ và tên</p>
+              <p>Họ tên <span className='text-red-500'>*</span></p>
               <input
                 type="text"
                 {...register('name')}
@@ -93,7 +93,7 @@ const SignUp = () => {
             </div>
           </div>
           <div className="group-input">
-            <p>Số điện thoại</p>
+            <p>Số điện thoại <span className='text-red-500'>*</span></p>
             <input
               type="text"
               {...register('phone')}
@@ -101,7 +101,7 @@ const SignUp = () => {
             {errors.phone && <span className="error-message">{errors.phone.message}</span>}
           </div>
           <div className="group-input">
-            <p>Email</p>
+            <p>Email <span className='text-red-500'>*</span></p>
             <input
               type="text"
               {...register('email')}
@@ -110,7 +110,7 @@ const SignUp = () => {
           </div>
           <div className="group-input-password">
             <div className="group-input">
-              <p>Mật khẩu</p>
+              <p>Mật khẩu <span className='text-red-500'>*</span></p>
               <input
                 type="password"
                 {...register('password')}
@@ -118,7 +118,7 @@ const SignUp = () => {
               {errors.password && <span className="error-message">{errors.password.message}</span>}
             </div>
             <div className="group-input">
-              <p>Nhập lại mật khẩu</p>
+              <p>Nhập lại mật khẩu <span className='text-red-500'>*</span></p>
               <input
                 type="password"
                 {...register('confirmPassword')}

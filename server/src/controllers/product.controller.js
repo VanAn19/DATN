@@ -47,6 +47,13 @@ class ProductController {
         }).send(res);
     }
 
+    getRandomProducts = async (req,res,next) => {
+        new SuccessResponse({
+            message: 'get random products successfully',
+            metadata: await ProductService.getRandomProducts(req.params.id)
+        }).send(res);
+    }
+
     getAProduct = async (req,res,next) => {
         new SuccessResponse({
             message: 'get a product successfully',

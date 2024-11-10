@@ -26,6 +26,13 @@ const filterProductByCategory = async ({ category, limit, skip }) => {
     return await queryProduct({ query, limit, skip });
 }
 
+const getRandomProducts = async (id) => {
+    return Product.aggregate([
+        { $match: { isPublished: true, _id: { $ne: new Types.ObjectId(id) } } },
+        { $sample: { size: 10 } }
+    ]);
+}
+
 const getProductById = async ({ id }) => {
     return await Product.findById(id).lean();
 }
@@ -111,6 +118,7 @@ module.exports = {
     findAllDraftProduct,
     findAllPublishProduct,
     filterProductByCategory,
+    getRandomProducts,
     getProductById,
     publishProduct,
     unPublishProduct,

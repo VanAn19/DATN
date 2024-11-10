@@ -6,6 +6,9 @@ const images = {
     messengerLogo: require('./messenger.png'),
     twitterLogo: require('./twitter.png'),
     visa: require('./visa.jpg'),
+    sliderImg: require('./slider-img-remove.png'),
+    whiteBg: require('./white-wallpaper.jpg'),
+    background: "/images/background3.jpg",
 };
 
 export default images;

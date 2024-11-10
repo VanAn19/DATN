@@ -51,23 +51,6 @@ body {
   animation: blink 1.5s infinite;
 }
 
-
-.icon-primary {
-  @apply hover:bg-slate-100 rounded-full mx-1;
-}
-
-.list-item {
-  @apply pl-2 pt-1 pb-1 flex flex-row items-center cursor-pointer hover:bg-gray-200;
-}
-
-.item-text {
-  @apply m-0 pl-1.5 text-[#0D1216] font-normal text-[14px];
-}
-
-.list-item:hover .size {
-  @apply opacity-100;
-}
-
 // product-info
 .slider-container {
   display: flex;

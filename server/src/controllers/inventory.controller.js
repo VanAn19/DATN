@@ -18,6 +18,13 @@ class InventoryController {
             metadata: await InventoryService.getStockAndSoldQuantity()
         }).send(res);
     }
+
+    getSoldQuantity = async (req,res,next) => {
+        new SuccessResponse({
+            message: 'Get sold quantity product successfully',
+            metadata: await InventoryService.getSoldQuantity()
+        }).send(res);
+    }
     
 }
 

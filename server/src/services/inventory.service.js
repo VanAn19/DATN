@@ -4,6 +4,7 @@ const { BadRequestError } = require('../core/error.response');
 const Inventory = require('../models/inventory.model');
 const { getStockAndSoldQuantity } = require('../repositories/inventory.repo');
 const { getProductById } = require('../repositories/product.repo');
+const { getInfoData } = require('../utils');
 
 class InventoryService {
 
@@ -26,6 +27,13 @@ class InventoryService {
 
     static async getStockAndSoldQuantity() {
         return await getStockAndSoldQuantity();
+    }
+
+    static async getSoldQuantity() {
+        const inventory = await getStockAndSoldQuantity();
+        return {
+            soldQuantity: getInfoData({ fields: ['productId', 'soldQuantity'], object: inventory })
+        }
     }
 
 }

@@ -12,6 +12,7 @@ import { useDispatch } from "react-redux";
 import { useRouter } from "next/navigation";
 import { Spin } from 'antd';
 import { LoadingOutlined } from "@ant-design/icons";
+import images from '@/public/images';
 
 const schema = yup.object().shape({
   username: yup.string().required('Tên người dùng là bắt buộc'),
@@ -59,7 +60,15 @@ const SignIn = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
+    <div className="min-h-screen flex items-center justify-center bg-gray-100"
+      style={{ 
+        background: `url(${images.background}) 0% 0% / contain`, 
+        backgroundSize: 'cover', 
+        backgroundPosition: 'center',
+        backgroundAttachment: 'fixed',
+        backgroundRepeat: 'no-repeat',
+      }}
+    >
       <div className="bg-white p-8 rounded shadow-md w-full max-w-sm">
         <h2 className="text-2xl font-bold mb-6 text-center">Đăng nhập</h2>
         <form onSubmit={handleSubmit(handleLogin)}>

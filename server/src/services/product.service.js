@@ -14,7 +14,8 @@ const {
     deleteProductById,
     getProductById,
     searchProductByUser,
-    filterProductByCategory
+    filterProductByCategory,
+    getRandomProducts
 } = require('../repositories/product.repo');
 
 class ProductService {
@@ -85,6 +86,10 @@ class ProductService {
 
     static async filterProductByCategory({ category, limit = 50, skip = 0 }) {
         return await filterProductByCategory({ category, limit, skip });
+    }
+
+    static async getRandomProducts(id) {
+        return await getRandomProducts(id);
     }
 
     static async deleteProduct({ id }) {

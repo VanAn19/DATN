@@ -30,7 +30,7 @@ body {
 }
 
 .list-item {
-  @apply pl-3 pt-1.5 flex flex-row items-center pb-1.5 cursor-pointer hover:bg-gray-200;
+  @apply p-3 pt-1.5 flex flex-row items-center pb-1.5 cursor-pointer hover:bg-gray-200;
 }
 
 .list-item:hover .size {

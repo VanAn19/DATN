@@ -78,7 +78,7 @@ const Footer = () => {
 
           <div className="contact w-full sm:w-1/4 flex flex-col items-center sm:items-start">
             <p className="font-semibold text-lg pb-7">
-              Follow Us On Social Media
+              Theo dõi chúng tôi tại
             </p>
             <div className='flex space-x-4'>
               {socialIcons.map(({ component: IconComponent, href, parentClass }, index) => (

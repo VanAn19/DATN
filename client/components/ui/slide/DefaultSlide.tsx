@@ -14,8 +14,8 @@ import {
 } from "./CustomSlide";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import TruncatedText from "./TruncatedText";
-import images from '@/public/images'; //
+import TruncatedText from "../TruncatedText";
+import images from '@/public/images'; 
 
 const Slider = dynamic(() => import("react-slick"), { ssr: false }) as any;
 

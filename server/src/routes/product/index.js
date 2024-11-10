@@ -6,6 +6,7 @@ const { asyncHandler } = require('../../helpers/asyncHandler');
 const { authentication, checkRole } = require('../../auth/authUtils');
 const router = express.Router();
 
+router.get('/random/:id', asyncHandler(productController.getRandomProducts));
 router.get('/:id', asyncHandler(productController.getAProduct));
 router.get('/published/all', asyncHandler(productController.getAllPublishedProduct));
 router.post('/filter', asyncHandler(productController.filterProductByCategory));

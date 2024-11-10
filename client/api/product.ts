@@ -30,6 +30,16 @@ export const getDraftProductsList = async () => {
   }
 };
 
+export const getRandomProducts = async (id: string) => {
+  try {
+    const response: AxiosResponse<ProductResponse> = await axiosInstance.get(`/product/random/${id}`);
+    return response.data.metadata as Product[]; 
+  } catch (error) {
+    console.error("Error during get random products list api:", error);
+    throw error;
+  }
+};
+
 export const publishProduct = async ({ id }: { id: string }) => {
   const infoUser = getCookie('user');
   const token = getCookie('token');
