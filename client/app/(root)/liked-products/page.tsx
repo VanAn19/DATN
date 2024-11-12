@@ -3,7 +3,7 @@
 import { getUserFavorite, removeProductFromFavorite } from '@/api/favorite';
 import { Product } from '@/types';
 import { Button, Card, notification } from 'antd';
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react';
 import { ShoppingCartOutlined, HeartFilled } from '@ant-design/icons';
 import Image from 'next/image';
 import Link from 'next/link';
