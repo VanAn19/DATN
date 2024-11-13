@@ -12,6 +12,7 @@ router.use(authentication)
 
 router.use(checkRole('admin'))
 
+router.get('/search/:keySearch', asyncHandler(inventoryController.searchStock));
 router.post('', asyncHandler(inventoryController.addStockToInventory));
 router.get('', asyncHandler(inventoryController.getStockAndSoldQuantity));
 

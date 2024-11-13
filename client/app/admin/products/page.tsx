@@ -11,8 +11,6 @@ import { getStock } from '@/api/inventory';
 import { SearchOutlined } from '@ant-design/icons';
 import debounce from 'lodash.debounce';
 
-const { Search } = Input;
-
 const VND = new Intl.NumberFormat("vi-VN", {
   style: "currency",
   currency: "VND",

@@ -19,6 +19,13 @@ class InventoryController {
         }).send(res);
     }
 
+    searchStock = async (req,res,next) => {
+        new SuccessResponse({
+            message: 'search stock successfully',
+            metadata: await InventoryService.searchStock(req.params)
+        }).send(res);
+    }
+
     getSoldQuantity = async (req,res,next) => {
         new SuccessResponse({
             message: 'Get sold quantity product successfully',

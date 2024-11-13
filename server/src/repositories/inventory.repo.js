@@ -53,8 +53,44 @@ const releaseInventory = async ({ productId, quantity }) => {
 const getStockAndSoldQuantity = async () => {
     return Inventory.find()
         .sort({ updatedAt: -1 })
+        .populate('productId')
         .lean()
         .exec()
+}
+
+const searchStockByAdmin = async ({ keySearch }) => {
+    const regexSearch = new RegExp(keySearch, 'i');
+    // const results = await Inventory.aggregate([
+    //     {
+    //         $lookup: {
+    //             from: 'Products', // collection
+    //             localField: 'productId',
+    //             foreignField: '_id',
+    //             as: 'product'
+    //         }
+    //     },
+    //     { $unwind: '$product' }, // tách array product để truy cập trường bên trong
+    //     {
+    //         $match: {
+    //             $or: [
+    //                 { 'product.name': regexSearch }, 
+    //             ]
+    //         }
+    //     }
+    // ]);
+    // return results;
+
+    const results = await Inventory.find()
+        .populate({
+            path: 'productId',
+            match: { name: regexSearch }, 
+            select: 'name thumbnail'
+        })
+        .sort({ updatedAt: -1 })
+        .lean()
+        .exec();
+
+    return results.filter(item => item.productId);
 }
 
 module.exports = {
@@ -63,4 +99,5 @@ module.exports = {
     reservationInventory,
     releaseInventory,
     getStockAndSoldQuantity,
+    searchStockByAdmin
 }

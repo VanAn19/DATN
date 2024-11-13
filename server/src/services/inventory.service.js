@@ -2,7 +2,7 @@
 
 const { BadRequestError } = require('../core/error.response');
 const Inventory = require('../models/inventory.model');
-const { getStockAndSoldQuantity } = require('../repositories/inventory.repo');
+const { getStockAndSoldQuantity, searchStockByAdmin } = require('../repositories/inventory.repo');
 const { getProductById } = require('../repositories/product.repo');
 const { getInfoData } = require('../utils');
 
@@ -27,6 +27,10 @@ class InventoryService {
 
     static async getStockAndSoldQuantity() {
         return await getStockAndSoldQuantity();
+    }
+
+    static async searchStock({ keySearch }) {
+        return await searchStockByAdmin({ keySearch });
     }
 
     static async getSoldQuantity() {

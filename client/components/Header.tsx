@@ -81,7 +81,7 @@ const Header = () => {
     },
     { 
       label: (
-        <Link href={"/liked-products"} className="list-item border">
+        <Link href={"/liked-products"} className="list-item border-t border-b">
           <p className="item-text">Sản phẩm đã thích</p>
         </Link>
       ),  
@@ -147,7 +147,7 @@ const Header = () => {
                 }}
               >
                 {infoUser && infoUser?.role === 'admin' && (
-                  <Link href={"/admin"} className="list-item">
+                  <Link href={"/admin"} className="list-item border-b">
                     <p className="item-text">Trang quản lý</p>
                 </Link>
                 )}
