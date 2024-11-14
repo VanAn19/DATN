@@ -15,22 +15,25 @@ const AdminInventory = () => {
   const [loading, setLoading] = useState(false);
   const [isAddInventoryVisible, setIsAddInventoryVisible] = useState(false);
 
-  useEffect(() => {
-    const fetchStock = async () => {
-      setLoading(true);
-      try {
-        const res = await getStock();
-        if (res.status === 200) {
-          setStocks(res.metadata);
-        }
-      } catch (error) {
-        console.error("Error during fetch stock: ", error);
-      } finally {
-        setLoading(false);
+  const fetchStock = async () => {
+    setLoading(true);
+    try {
+      const res = await getStock();
+      if (res.status === 200) {
+        setStocks(res.metadata);
       }
-    };
+    } catch (error) {
+      console.error("Error during fetch stock: ", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
     fetchStock();
   }, []);
+
+  console.log(stocks);
 
   const handleSearchInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchValue(e.target.value);
@@ -134,10 +137,10 @@ const AdminInventory = () => {
       <Modal
         title="Nhập hàng tồn kho"
         open={isAddInventoryVisible}
-        onCancel={handleOpenAddInventory}
-        footer={null} // Nếu không muốn có footer, để footer = null
+        onCancel={handleCloseAddInventory}
+        footer={null}
       >
-        <AddProductInventory onClose={handleCloseAddInventory} />
+        <AddProductInventory onClose={handleCloseAddInventory} onAddSuccess={fetchStock} />
       </Modal>
     </div>
   )

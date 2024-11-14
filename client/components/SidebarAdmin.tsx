@@ -48,8 +48,7 @@ const SidebarAdmin = () => {
       link: '/admin/inventories', 
       component: AreaChartOutlined,
       subItems: [
-        { label: 'Danh sách hàng tồn kho', link: '/admin/inventories' },
-        { label: 'Nhập thêm sản phẩm', link: '/admin/inventories/add' },
+        { label: 'Danh sách hàng tồn kho', link: '/admin/inventories' }
       ]
     },
   ];

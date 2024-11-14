@@ -1,12 +1,14 @@
 import { addStock, getStock } from '@/api/inventory';
-import { Button, Form, Input, InputNumber, Modal, notification, Select } from 'antd';
+import { Product } from '@/types';
+import { Button, Form, InputNumber, Modal, notification, Select } from 'antd';
 import React, { useEffect, useState } from 'react'
 
 interface AddProductInventoryProps {
   onClose: () => void;
+  onAddSuccess: () => void;
 }
 
-const AddProductInventory: React.FC<AddProductInventoryProps> = ({ onClose }) => {
+const AddProductInventory: React.FC<AddProductInventoryProps> = ({ onClose, onAddSuccess }) => {
   const [form] = Form.useForm();
   const [stocks, setStocks] = useState([]);
   const [products, setProducts] = useState([]);
@@ -35,8 +37,6 @@ const AddProductInventory: React.FC<AddProductInventoryProps> = ({ onClose }) =>
     fetchStock();
   }, []);
 
-  console.log("product", products);
-
   const handleFinish = async (values: any) => {
     setLoading(true);
     try {
@@ -52,6 +52,7 @@ const AddProductInventory: React.FC<AddProductInventoryProps> = ({ onClose }) =>
         });
         form.resetFields();
         onClose();
+        onAddSuccess();
       }
     } catch (error) {
       console.error('Error during add product to inventory:', error);
@@ -65,58 +66,51 @@ const AddProductInventory: React.FC<AddProductInventoryProps> = ({ onClose }) =>
   };
 
   return (
-    <Modal
-      title="Thêm sản phẩm vào kho"
-      open
-      onCancel={onClose}
-      footer={null}
+    <Form
+      form={form}
+      layout="vertical"
+      onFinish={handleFinish}
     >
-      <Form
-        form={form}
-        layout="vertical"
-        onFinish={handleFinish}
+      <Form.Item
+        label="Tên sản phẩm"
+        name="productId"
+        rules={[{ required: true, message: 'Vui lòng nhập tên sản phẩm!' }]}
       >
-        <Form.Item
-          label="Tên sản phẩm"
-          name="productId"
-          rules={[{ required: true, message: 'Vui lòng nhập tên sản phẩm!' }]}
+        <Select
+          value={selectedProduct || ''}
+          onChange={(value) => setSelectedProduct(value)}
+          placeholder="Chọn sản phẩm"
+          loading={loading}
         >
-          <Select
-            value={selectedProduct || ''}
-            onChange={(value) => setSelectedProduct(value)}
-            placeholder="Chọn sản phẩm"
-            loading={loading}
-          >
-            {products.map((product) => (
-              <Select.Option key={product._id} value={product._id}>
-                {product.name}
-              </Select.Option>
-            ))}
-          </Select>
-        </Form.Item>
+          {products.map((product: Product) => (
+            <Select.Option key={product._id} value={product._id}>
+              {product.name}
+            </Select.Option>
+          ))}
+        </Select>
+      </Form.Item>
         
-        <Form.Item
-          label="Số lượng tồn kho"
-          name="stock"
-          rules={[{ required: true, message: 'Vui lòng nhập số lượng!' }]}
-        >
-          <InputNumber
-            min={1}
-            placeholder="Nhập số lượng tồn kho"
-            style={{ width: '100%' }}
-          />
-        </Form.Item>
+      <Form.Item
+        label="Số lượng tồn kho"
+        name="stock"
+        rules={[{ required: true, message: 'Vui lòng nhập số lượng!' }]}
+      >
+        <InputNumber
+          min={1}
+          placeholder="Nhập số lượng tồn kho"
+          style={{ width: '100%' }}
+        />
+      </Form.Item>
 
-        <div className="flex justify-end">
-          <Button onClick={onClose} style={{ marginRight: 8 }}>
-            Hủy
-          </Button>
-          <Button type="primary" htmlType="submit" loading={loading}>
-            Thêm sản phẩm
-          </Button>
-        </div>
-      </Form>
-    </Modal>
+      <div className="flex justify-end">
+        <Button onClick={onClose} style={{ marginRight: 8 }}>
+          Hủy
+        </Button>
+        <Button type="primary" htmlType="submit" loading={loading}>
+          Thêm sản phẩm
+        </Button>
+      </div>
+    </Form>
   )
 }
 
