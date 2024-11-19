@@ -6,6 +6,7 @@ import { PlusOutlined } from '@ant-design/icons';
 import { Category } from '@/types';
 import Link from 'next/link';
 import { getListCategory, removeCategory } from '@/api/category';
+import Title from 'antd/es/typography/Title';
 
 const { Search } = Input;
 
@@ -79,6 +80,7 @@ const AdminCategory = () => {
 
   return (
     <div className="p-4">
+      <Title level={4} className='px-3'>Tất cả danh mục</Title>
       <div className="flex justify-between items-center mb-4">
         <Search
           placeholder="Tìm tên danh mục, SKU danh mục, Mã danh mục..."

@@ -1,16 +1,18 @@
 'use client'
 
 import React, { useEffect, useState } from 'react'
-import { notification, Skeleton, Spin } from "antd";
+import { Button, Input, notification, Skeleton, Spin, Upload, UploadProps } from "antd";
 import { SkeletonCustomProduct } from "./slide/CustomSlide";
 import Image from 'next/image';
-import { 
-  LoadingOutlined, 
-  DropboxOutlined, 
-  MinusOutlined, 
-  PlusOutlined, 
-  HeartFilled, 
-  HeartOutlined
+import {
+  LoadingOutlined,
+  DropboxOutlined,
+  MinusOutlined,
+  PlusOutlined,
+  HeartFilled,
+  HeartOutlined,
+  SendOutlined,
+  PictureOutlined
 } from "@ant-design/icons";
 import images from '@/public/images';
 import {
@@ -33,7 +35,7 @@ const VND = new Intl.NumberFormat("vi-VN", {
   currency: "VND",
 });
 
-export default function ProductInfo(props: { data: any, user: string, isLoading: boolean }) {
+export default function ProductInfo(props: { data: any, user: any, isLoading: boolean }) {
   const { data, user, isLoading } = props;
   const [quantity, setQuantity] = useState(1);
   const [isFavorited, setIsFavorited] = useState(false);
@@ -41,7 +43,24 @@ export default function ProductInfo(props: { data: any, user: string, isLoading:
   const [loadingFavorite, setLoadingFavorite] = useState(false);
   const router = useRouter();
 
-  const settings = {  
+  ///////
+  const [fileList, setFileList] = useState([]);
+
+  const uploadProps: UploadProps = {
+    fileList,
+    beforeUpload: (file) => {
+      // Xử lý file trước khi upload
+      console.log("Uploading file:", file);
+      return false; // Ngăn không upload trực tiếp
+    },
+    onChange: ({ fileList: newFileList }) => {
+      setFileList(newFileList);
+    },
+    showUploadList: false, // Ẩn danh sách file đã tải lên
+  };
+  ///////////
+
+  const settings = {
     infinite: data?.images?.length > 1,
     speed: 500,
     slidesToShow: 1,
@@ -56,7 +75,7 @@ export default function ProductInfo(props: { data: any, user: string, isLoading:
 
   const decreaseQuantity = () => {
     if (quantity > 1) {
-      setQuantity(prev => prev - 1); 
+      setQuantity(prev => prev - 1);
     }
   }
 
@@ -137,7 +156,7 @@ export default function ProductInfo(props: { data: any, user: string, isLoading:
       setLoading(false);
     }
   }
-    
+
   return (
     <>
       <div className="flex flex-col xl:flex-row w-full h-full mt-[100px] gap-8 px-4 mb-4">
@@ -247,7 +266,7 @@ export default function ProductInfo(props: { data: any, user: string, isLoading:
             </div>
             <div className="flex items-center gap-2 ml-3">
               <span className="mr-5">Vận Chuyển</span>
-              <Image 
+              <Image
                 src={images.freeShip}
                 alt='FreeShip'
                 width={30}
@@ -293,9 +312,36 @@ export default function ProductInfo(props: { data: any, user: string, isLoading:
         )}
       </div>
 
-      <div className='w-[90%] mx-auto overflow-hidden mb-10 border-t border-gray-300'>
+      <div className='w-[90%] mx-auto overflow-hidden border-t border-gray-300'>
         <div className='flex justify-center'>
           <RandomProductSlider />
+        </div>
+      </div>
+
+      <div className="w-[90%] mx-auto mb-10 border-t border-gray-300">
+        <p className="text-xl font-bold p-4">Đánh giá sản phẩm</p>
+        <div className="w-[80%] px-4 rounded-md flex items-start">
+          <Image
+            src={user?.avatar || images.logo}
+            alt="User Avatar"
+            width={40}
+            height={40}
+            className="rounded-full"
+          />
+          <div className="relative flex-grow ml-4">
+            <Input.TextArea
+              placeholder={`Comment as ${user.name}`}
+              autoSize={{ minRows: 2, maxRows: 4 }}
+              maxLength={500}
+              className="p-2 rounded-md border-gray-300 w-full pb-10"
+            />
+            <div className="absolute inset-x-0 bottom-2 flex justify-between px-4">
+              <Upload {...uploadProps}>
+                <PictureOutlined className="text-gray-500 text-lg cursor-pointer hover:text-gray-700" />
+              </Upload>
+              <SendOutlined className="text-gray-500 text-lg cursor-pointer hover:text-gray-700" />
+            </div>
+          </div>
         </div>
       </div>
     </>

@@ -8,6 +8,7 @@ import Image from 'next/image';
 import { getListSearchStock, getStock } from '@/api/inventory';
 import debounce from 'lodash.debounce';
 import AddProductInventory from '@/components/AddProductInventory';
+import Title from 'antd/es/typography/Title';
 
 const AdminInventory = () => {
   const [stocks, setStocks] = useState([]);
@@ -114,6 +115,7 @@ const AdminInventory = () => {
   
   return (
     <div className="p-4">
+      <Title level={4} className='px-3'>Danh sách hàng tồn kho</Title>
       <div className="flex justify-between items-center mb-4">
         <Input 
           value={searchValue}
@@ -135,7 +137,7 @@ const AdminInventory = () => {
         className='custom-table-header'
       />
       <Modal
-        title="Nhập hàng tồn kho"
+        title={<span className="text-xl font-bold text-black">Nhập hàng tồn kho</span>}
         open={isAddInventoryVisible}
         onCancel={handleCloseAddInventory}
         footer={null}

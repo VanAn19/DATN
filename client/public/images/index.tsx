@@ -8,7 +8,7 @@ const images = {
     visa: require('./visa.jpg'),
     sliderImg: require('./slider-img-remove.png'),
     whiteBg: require('./white-wallpaper.jpg'),
-    background: "/images/background3.jpg",
+    background: "/images/background.jpg",
 };
 
 export default images;

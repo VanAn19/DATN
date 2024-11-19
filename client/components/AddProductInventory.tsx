@@ -75,12 +75,14 @@ const AddProductInventory: React.FC<AddProductInventoryProps> = ({ onClose, onAd
         label="Tên sản phẩm"
         name="productId"
         rules={[{ required: true, message: 'Vui lòng nhập tên sản phẩm!' }]}
+        className='text-[16px]'
       >
         <Select
           value={selectedProduct || ''}
           onChange={(value) => setSelectedProduct(value)}
           placeholder="Chọn sản phẩm"
           loading={loading}
+          className='custom-select'
         >
           {products.map((product: Product) => (
             <Select.Option key={product._id} value={product._id}>
@@ -99,6 +101,7 @@ const AddProductInventory: React.FC<AddProductInventoryProps> = ({ onClose, onAd
           min={1}
           placeholder="Nhập số lượng tồn kho"
           style={{ width: '100%' }}
+          className='custom-input'
         />
       </Form.Item>
 
@@ -107,7 +110,7 @@ const AddProductInventory: React.FC<AddProductInventoryProps> = ({ onClose, onAd
           Hủy
         </Button>
         <Button type="primary" htmlType="submit" loading={loading}>
-          Thêm sản phẩm
+          Nhập hàng
         </Button>
       </div>
     </Form>

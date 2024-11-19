@@ -8,6 +8,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { getOrderByAdmin, searchOrderByAdmin, updateStatusOrder } from '@/api/order';
 import debounce from 'lodash.debounce';
+import Title from 'antd/es/typography/Title';
 
 const VND = new Intl.NumberFormat("vi-VN", {
   style: "currency",
@@ -227,6 +228,7 @@ const AdminOrder = () => {
 
   return (
     <div className="p-4">
+      <Title level={4} className='px-3'>Danh sách đơn hàng</Title>
       <div className="flex justify-between items-center mb-4">
         <Input 
           value={searchValue}

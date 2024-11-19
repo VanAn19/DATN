@@ -10,6 +10,7 @@ import Link from 'next/link';
 import { getStock } from '@/api/inventory';
 import { SearchOutlined } from '@ant-design/icons';
 import debounce from 'lodash.debounce';
+import Title from 'antd/es/typography/Title';
 
 const VND = new Intl.NumberFormat("vi-VN", {
   style: "currency",
@@ -181,6 +182,7 @@ const AdminProducts = () => {
 
   return (
     <div className="p-4">
+      <Title level={4} className='px-3'>Tất cả sản phẩm</Title>
       <div className="flex justify-between items-center mb-4">
         <Input 
           value={searchValue}

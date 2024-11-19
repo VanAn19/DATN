@@ -7,7 +7,7 @@ import { checkAvailableLogin, getCookie } from '@/utils';
 
 const ProductPage = ({ productId }: { productId: string }) => {
   const [data, setData] = useState({});
-  const [user, setUser] = useState('');
+  const [user, setUser] = useState({});
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
@@ -16,7 +16,7 @@ const ProductPage = ({ productId }: { productId: string }) => {
       try {
         const res = await getInfoProduct(productId);
         setData(res);
-        setUser(checkAvailableLogin() ? getCookie('user')._id : '');
+        setUser(checkAvailableLogin() ? getCookie('user') : '');
         setIsLoading(false);
       } catch (error) {
         console.error("Product page error: ", error);
