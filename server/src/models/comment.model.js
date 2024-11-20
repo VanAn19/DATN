@@ -20,13 +20,16 @@ const commentSchema = new Schema({
         type: String,
         required: true
     },
-    images: {
-        type: Array,
-        default: []
-    }
+    images: [{
+        publicId: { type: String, required: true },
+        imageUrl: { type: String, required: true },
+        thumbUrl: { type: String, required: true }
+    }]
 }, {
     collection: COLLECTION_NAME,
     timestamps: true
 })
+
+commentSchema.path('images').default([])
 
 module.exports = model(DOCUMENT_NAME, commentSchema);

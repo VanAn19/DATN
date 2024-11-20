@@ -5,7 +5,8 @@ const { Types } = require('mongoose');
 
 const findCommentByProductId = async (productId) => {
     return await Comment.find({ product: new Types.ObjectId(productId) })
-        .sort({ updatedAt: -1 })
+        .sort({ updatedAt: 1 })
+        .populate('user')
         .lean()
         .exec()
 }
