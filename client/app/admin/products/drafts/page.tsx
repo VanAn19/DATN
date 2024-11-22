@@ -128,7 +128,6 @@ const DraftProducts = () => {
         <div className='flex flex-col space-y-2 text-blue-500'>
           <Button type='link' onClick={() => handlePublish(product._id)}>Phát hành</Button>
           <Link href={`/products/${product.slug}`}>Xem trước</Link>
-          <Link href='/'>Cập nhật</Link>
           <Link href='/'>Xóa</Link>
         </div>
       ),

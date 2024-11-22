@@ -178,6 +178,7 @@ export interface Order {
             cardName: string;
         } | {}
     },
+    createdAt: string;
 };
 
 export type OrderStatus = 'pending' | 'confirmed' | 'shipped' | 'canceled' | 'delivered';

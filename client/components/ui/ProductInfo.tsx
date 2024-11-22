@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useEffect, useState } from 'react'
-import { Button, Input, notification, Skeleton, Spin, Upload, UploadProps } from "antd";
+import { Avatar, Button, Dropdown, Form, Input, Menu, Modal, notification, Pagination, Skeleton, Spin, Upload, UploadProps } from "antd";
 import { SkeletonCustomProduct } from "./slide/CustomSlide";
 import Image from 'next/image';
 import {
@@ -12,7 +12,8 @@ import {
   HeartFilled,
   HeartOutlined,
   SendOutlined,
-  PictureOutlined
+  PictureOutlined,
+  EllipsisOutlined
 } from "@ant-design/icons";
 import images from '@/public/images';
 import {
@@ -24,9 +25,13 @@ import "slick-carousel/slick/slick-theme.css";
 import dynamic from "next/dynamic";
 import { addToCart } from '@/api/cart';
 import { addProductToFavorite, getUserFavorite, removeProductFromFavorite } from '@/api/favorite';
-import { checkAvailableLogin } from '@/utils';
+import { checkAvailableLogin, convertUtcTimeToVNTime, getCookie } from '@/utils';
 import { useRouter } from 'next/navigation';
 import RandomProductSlider from '../RandomProductSlider';
+import { FileItem } from '@/types';
+import { Comment } from '@/types/comment';
+import { deleteImage, uploadImages } from '@/api/upload';
+import { deleteCommentById, getCommentByProductId, uploadCommentByUser } from '@/api/comment';
 
 const Slider = dynamic(() => import("react-slick"), { ssr: false }) as any;
 
@@ -37,28 +42,114 @@ const VND = new Intl.NumberFormat("vi-VN", {
 
 export default function ProductInfo(props: { data: any, user: any, isLoading: boolean }) {
   const { data, user, isLoading } = props;
+  const [form] = Form.useForm();
   const [quantity, setQuantity] = useState(1);
+  const [comments, setComments] = useState<Comment[]>([]);
+  const [currentImage, setCurrentImage] = useState<string>("");
+  const [isImageModalVisible, setIsImageModalVisible] = useState(false);
   const [isFavorited, setIsFavorited] = useState(false);
+  const [fileList, setFileList] = useState<FileItem[]>([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5;
   const [loading, setLoading] = useState(false);
+  const [uploading, setUploading] = useState(false);
   const [loadingFavorite, setLoadingFavorite] = useState(false);
   const router = useRouter();
 
-  ///////
-  const [fileList, setFileList] = useState([]);
+  const handleImageChange = async ({ fileList }: any) => {
+    setFileList(fileList);
+    const files = fileList.map((file: any) => file.originFileObj);
+    if (files.length) {
+      setUploading(true);
+      const formData = new FormData();
+      files.forEach((file: any) => {
+        formData.append('files', file);
+      });
+      try {
+        const response = await uploadImages(formData);
+        const updatedFileList = response.metadata.map((img: any, index: number) => ({
+          uid: index.toString(),
+          name: `image-${index}`,
+          status: 'done',
+          publicId: img.publicId,
+          url: img.imageUrl,
+          thumbUrl: img.thumbUrl,
+        }));
+        setFileList(updatedFileList);
+      } catch (error) {
+        console.error("Error during upload images:", error);
+      } finally {
+        setUploading(false);
+      }
+    }
+  }
 
-  const uploadProps: UploadProps = {
-    fileList,
-    beforeUpload: (file) => {
-      // Xử lý file trước khi upload
-      console.log("Uploading file:", file);
-      return false; // Ngăn không upload trực tiếp
-    },
-    onChange: ({ fileList: newFileList }) => {
-      setFileList(newFileList);
-    },
-    showUploadList: false, // Ẩn danh sách file đã tải lên
+  const handleRemove = async (file: any) => {
+    try {
+      await deleteImage({ publicId: file.publicId });
+      const updatedFileList = fileList.filter((item) => item.uid !== file.uid);
+      setFileList(updatedFileList);
+    } catch (error) {
+      console.error("Error during delete image:", error);
+    }
   };
-  ///////////
+
+  const openImageModal = (image: string) => {
+    setCurrentImage(image);
+    setIsImageModalVisible(true);
+  };
+
+  const closeImageModal = () => {
+    setIsImageModalVisible(false);
+    setCurrentImage("");
+  }
+
+  const onFinish = async (values: any) => {
+    setLoading(true);
+    try {
+      const { content } = values;
+      const images = fileList.map((file) => ({
+        publicId: file.publicId,
+        imageUrl: file.url || '',
+        thumbUrl: file.thumbUrl || ''
+      }));
+      const res = await uploadCommentByUser({
+        product: data._id,
+        content,
+        images
+      });
+      if (res.status === 201) {
+        form.resetFields();
+        setFileList([]);
+        setComments((prevComments) => [
+          ...prevComments,
+          {
+            _id: '000000000000000000000000',
+            product: data._id,
+            content,
+            images,
+            user: {
+              name: user.name,
+              avatar: user.avatar
+            },
+            createdAt: new Date()
+          }
+        ]);
+      }
+    } catch (error) {
+      console.error('Error during comment:', error);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const paginatedComments = comments.slice(startIndex, endIndex);
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
 
   const settings = {
     infinite: data?.images?.length > 1,
@@ -68,6 +159,24 @@ export default function ProductInfo(props: { data: any, user: any, isLoading: bo
     nextArrow: data?.images?.length > 1 ? <SampleNextArrow /> : null,
     prevArrow: data?.images?.length > 1 ? <SamplePrevArrow /> : null
   }
+
+  const handleMenuClick = async ({ key, id }: { key: string, id: string }) => {
+    if (key === "edit") {
+      // ...
+    } else if (key === "delete") {
+      setLoading(true);
+      try {
+        const res = await deleteCommentById(id);
+        if (res.status === 200) {
+          setComments((prevComments) => prevComments.filter((comment) => comment._id !== id));
+        }
+      } catch (error) {
+        console.error("Error during delete comment:", error);
+      } finally {
+        setLoading(false);
+      }
+    }
+  };
 
   const increaseQuantity = () => {
     setQuantity(prev => prev + 1);
@@ -105,6 +214,25 @@ export default function ProductInfo(props: { data: any, user: any, isLoading: bo
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    setLoading(true);
+    const fetchComment = async () => {
+      try {
+        const res = await getCommentByProductId(data._id);
+        if (res.status === 200) {
+          setComments(res.metadata);
+        }
+      } catch (error) {
+        console.error("Error during check favorite product: ", error);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchComment();
+  }, [data._id]);
+
+  console.log(comments);
 
   useEffect(() => {
     const isAuth = checkAvailableLogin();
@@ -312,38 +440,136 @@ export default function ProductInfo(props: { data: any, user: any, isLoading: bo
         )}
       </div>
 
-      <div className='w-[90%] mx-auto overflow-hidden border-t border-gray-300'>
+      <div className="w-[90%] mx-auto border-t border-gray-300">
+        <p className="text-xl font-bold p-4">Đánh giá sản phẩm</p>
+
+        {paginatedComments.length > 0 ? paginatedComments.map((comment: any) => (
+          <div key={comment._id} className="p-4 bg-white shadow-md rounded-lg border mt-2">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-4">
+                <Avatar src={comment.user?.avatar || images.logo} size={40} />
+                <div>
+                  <p className="font-semibold">{comment.user?.name}</p>
+                  <p className="text-gray-500 text-sm">{convertUtcTimeToVNTime(comment.createdAt)}</p>
+                </div>
+              </div>
+              {getCookie("user")._id === comment.user && (
+                <div>
+                  <Dropdown
+                    overlay={
+                      <Menu
+                        onClick={(info) => handleMenuClick({ key: info.key, id: comment._id })}
+                        items={[
+                          { label: "Sửa", key: "edit" },
+                          { label: "Xóa", key: "delete" },
+                        ]}
+                      />
+                    }
+                    trigger={["click"]}
+                    placement="bottomRight"
+                  >
+                    <EllipsisOutlined className="text-lg cursor-pointer" />
+                  </Dropdown>
+                </div>
+              )}
+            </div>
+            <div className="mt-2 text-gray-700">
+              <p>{comment.content}</p>
+            </div>
+            {comment.images.length > 0 && (
+              <div className="flex mt-2 gap-2">
+                {comment.images.map((image: any, index: any) => (
+                  <div
+                    key={index}
+                    className="cursor-pointer"
+                    onClick={() => openImageModal(image.imageUrl)}
+                  >
+                    <Image
+                      src={image.imageUrl}
+                      alt={`Product Image ${index + 1}`}
+                      width={120}
+                      height={120}
+                    />
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )) : (
+          <div>Chưa có bình luận. Hãy là người đầu tiên đánh giá sản phẩm</div>
+        )}
+
+        <div key={1} className="mt-4">
+          <Pagination
+            className='justify-center items-center'
+            current={currentPage}
+            pageSize={itemsPerPage}
+            total={comments.length}
+            onChange={handlePageChange}
+          />
+        </div>
+
+        {checkAvailableLogin() && (
+          <div className="w-full px-4 rounded-md flex items-start mt-2">
+            <Image
+              src={user?.avatar || images.logo}
+              alt="User Avatar"
+              width={40}
+              height={40}
+              className="rounded-full"
+            />
+            <div className="relative flex-grow ml-4">
+              <Form form={form} onFinish={onFinish}>
+                <Form.Item
+                  name="content"
+                >
+                  <Input.TextArea
+                    placeholder={`Comment as ${user.name}`}
+                    autoSize={{ minRows: 2, maxRows: 4 }}
+                    maxLength={500}
+                    className="p-2 rounded-md border-gray-300 w-full overflow-y-auto"
+                    style={{ paddingBottom: "3rem" }}
+                  />
+                </Form.Item>
+                <div className="absolute inset-x-0 bottom-5 flex justify-between items-center px-4">
+                  <Upload
+                    fileList={fileList}
+                    onRemove={handleRemove}
+                    onChange={handleImageChange}
+                    beforeUpload={() => false}
+                    multiple
+                  >
+                    <PictureOutlined className="text-gray-500 text-xl cursor-pointer hover:text-blue-600" />
+                  </Upload>
+                  <Button type='link' htmlType='submit' loading={uploading || loading} className='mb-2'>
+                    <SendOutlined className="text-gray-500 text-lg cursor-pointer hover:text-blue-600" />
+                  </Button>
+                </div>
+              </Form>
+            </div>
+          </div>
+        )}
+      </div>
+
+      <div className='w-[90%] mx-auto mb-10 overflow-hidden border-t border-gray-300'>
         <div className='flex justify-center'>
           <RandomProductSlider />
         </div>
       </div>
 
-      <div className="w-[90%] mx-auto mb-10 border-t border-gray-300">
-        <p className="text-xl font-bold p-4">Đánh giá sản phẩm</p>
-        <div className="w-[80%] px-4 rounded-md flex items-start">
-          <Image
-            src={user?.avatar || images.logo}
-            alt="User Avatar"
-            width={40}
-            height={40}
-            className="rounded-full"
-          />
-          <div className="relative flex-grow ml-4">
-            <Input.TextArea
-              placeholder={`Comment as ${user.name}`}
-              autoSize={{ minRows: 2, maxRows: 4 }}
-              maxLength={500}
-              className="p-2 rounded-md border-gray-300 w-full pb-10"
-            />
-            <div className="absolute inset-x-0 bottom-2 flex justify-between px-4">
-              <Upload {...uploadProps}>
-                <PictureOutlined className="text-gray-500 text-lg cursor-pointer hover:text-gray-700" />
-              </Upload>
-              <SendOutlined className="text-gray-500 text-lg cursor-pointer hover:text-gray-700" />
-            </div>
-          </div>
-        </div>
-      </div>
+      <Modal
+        open={isImageModalVisible}
+        onCancel={closeImageModal}
+        footer={null}
+        centered
+      >
+        <Image
+          src={currentImage}
+          alt="Full size image"
+          width={600}
+          height={600}
+        />
+      </Modal>
     </>
   )
 }

@@ -2,6 +2,7 @@ import React from 'react'
 import { Modal } from 'antd';
 import { Order } from '@/types';
 import Image from 'next/image';
+import { convertUtcTimeToVNTime } from '@/utils';
 
 const VND = new Intl.NumberFormat("vi-VN", {
   style: "currency",
@@ -33,6 +34,7 @@ const Bill: React.FC<BillProps> = ({ visible, onClose, order }) => {
         </p>
         <p className='mb-2'><span>Phương thức thanh toán: </span>{order?.payment?.method === 'cash' ? 'Tiền mặt' : 'Thẻ tín dụng'}</p>
         <p className='mb-4'>Trạng thái đơn hàng: {order?.status}</p>
+        <p className='mb-4'>Ngày đặt: {convertUtcTimeToVNTime(order?.createdAt ?? '')}</p>
         <div className="mb-4">
           {order?.products.map((product: any) => (
             <div key={product.productId} className="flex mb-2">

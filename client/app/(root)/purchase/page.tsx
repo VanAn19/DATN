@@ -86,7 +86,8 @@ const Purchase = () => {
               priceRaw: order.products[0].priceRaw, 
             }))),
             trackingNumber: order.trackingNumber,
-            status: order.status as OrderStatus
+            status: order.status as OrderStatus,
+            createdAt: order.createdAt
           }));
           setOrders(fetchedOrders); 
         }

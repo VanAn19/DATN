@@ -92,14 +92,14 @@ const Footer = () => {
                 </Link>
               ))}
             </div>
-            <p className="font-semibold text-lg pt-7 pb-4">
+            {/* <p className="font-semibold text-lg pt-7 pb-4">
               Thông tin thanh toán
             </p>
             <div className="flex flex-col">
               <p>Số tài khoản: 104873713029</p>
               <p>Chủ tài khoản: NGUYEN VAN AN</p>
               <p>Ngân hàng: Ngân hàng Thương mại Cổ phần Công thương Việt Nam</p>
-            </div>
+            </div> */}
           </div>
         </div>
         <div className="bottom flex justify-center items-center">
