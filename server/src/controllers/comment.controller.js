@@ -12,6 +12,13 @@ class CommentController {
         }).send(res);
     }
 
+    findAllCommentByAdmin = async (req,res,next) => {
+        new SuccessResponse({
+            message: 'find all comment by admin successfully',
+            metadata: await CommentService.getAllCommentByAdmin()
+        }).send(res);
+    }
+
     uploadCommentByUser = async (req,res,next) => {
         new CREATED({
             message: 'upload comment by user successfully',

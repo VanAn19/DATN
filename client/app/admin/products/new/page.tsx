@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useEffect, useState } from 'react'
-import { Form, Input, Button, Upload, Select, notification, Image } from 'antd';
+import { Form, Input, Button, Upload, Select, notification, Image, Card } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import { deleteImage, uploadImages } from '@/api/upload';
 import { Category, FileItem } from '@/types';
@@ -38,7 +38,7 @@ const NewProduct = () => {
     };
     fetchCategory();
   }, [])
-  
+
   const handleImageChange = async ({ fileList }: any) => {
     setFileList(fileList);
     const files = fileList.map((file: any) => file.originFileObj);
@@ -46,10 +46,10 @@ const NewProduct = () => {
       setUploading(true);
       const formData = new FormData();
       files.forEach((file: any) => {
-        formData.append('files', file); 
+        formData.append('files', file);
       });
       try {
-        const response = await uploadImages(formData); 
+        const response = await uploadImages(formData);
         // sau khi upload thành công => cập nhật lại fileList với URL từ server
         // setFileList(response.metadata.map((img: any, index: number) => ({
         //   uid: index.toString(),
@@ -64,8 +64,8 @@ const NewProduct = () => {
           name: `image-${index}`,
           status: 'done',
           publicId: img.publicId,
-          url: img.imageUrl, 
-          thumbUrl: img.thumbUrl, 
+          url: img.imageUrl,
+          thumbUrl: img.thumbUrl,
         }));
         setFileList(updatedFileList);
         setThumbnail(updatedFileList[0]?.thumbUrl || '');
@@ -79,7 +79,7 @@ const NewProduct = () => {
 
   const handleRemove = async (file: any) => {
     try {
-      await deleteImage({ publicId: file.publicId }); 
+      await deleteImage({ publicId: file.publicId });
       // setFileList(fileList.filter((item) => item.uid !== file.uid));
       // // delete preview thumbnail 
       // if (file.publicId === fileList[0]?.publicId) {
@@ -95,7 +95,7 @@ const NewProduct = () => {
       console.error("Error during delete image:", error);
     }
   };
-  
+
   const onFinish = async (values: any) => {
     setLoading(true);
     setErrorMessage('');
@@ -106,7 +106,7 @@ const NewProduct = () => {
         imageUrl: file.url || '',
         thumbUrl: file.thumbUrl || ''
       }));
-      const thumbnail = images[0]?.thumbUrl; 
+      const thumbnail = images[0]?.thumbUrl;
       if (!thumbnail) {
         notification.error({
           message: 'Lỗi',
@@ -131,14 +131,14 @@ const NewProduct = () => {
           message: 'Success',
           description: 'Sản phẩm đã được tạo thành công.',
         });
-        form.resetFields(); 
+        form.resetFields();
         setThumbnail('');
         setFileList([]);
       }
     } catch (error: any) {
       if (error.response?.status === 403) {
         setErrorMessage("Sản phẩm đã tồn tại.");
-      }  else {
+      } else {
         console.error('Error during create product:', error);
         notification.error({
           message: 'Failed',
@@ -151,9 +151,8 @@ const NewProduct = () => {
   };
 
   return (
-    <div className="w-full h-full bg-gray-100">
-      <div className="w-full h-full max-w-7xl bg-white rounded-lg shadow-lg p-10"> 
-        <h2 className="text-2xl font-bold mb-6">Thêm mới sản phẩm</h2>
+    <div className="p-4">
+      <Card title="Thêm mới sản phẩm">
         <Form form={form} onFinish={onFinish} layout="vertical">
           <Form.Item
             name="images"
@@ -165,11 +164,11 @@ const NewProduct = () => {
               fileList={fileList}
               onRemove={handleRemove}
               onChange={handleImageChange}
-              beforeUpload={() => false} 
+              beforeUpload={() => false}
               multiple
             >
               {fileList.length < 8 && (
-                <div>               
+                <div>
                   <PlusOutlined />
                   <div style={{ marginTop: 8 }}>Thêm hình ảnh</div>
                 </div>
@@ -177,13 +176,13 @@ const NewProduct = () => {
             </Upload>
           </Form.Item>
 
-          {thumbnail && ( 
+          {thumbnail && (
             <Form.Item label="Ảnh bìa">
               <Image
-                width={100} 
+                width={100}
                 src={thumbnail}
                 alt="Thumbnail"
-                preview={false} 
+                preview={false}
               />
             </Form.Item>
           )}
@@ -258,34 +257,34 @@ const NewProduct = () => {
           </Form.Item>
 
           <Form.Item>
-            <Button 
+            <Button
               type="default"
-              htmlType="reset" 
-              disabled={uploading || loading}  
+              htmlType="reset"
+              disabled={uploading || loading}
               className='mr-5'
             >
               Hủy
             </Button>
-            <Button 
-              type="default" 
+            <Button
+              type="default"
               onClick={() => setIsDraft(true)}
-              htmlType="submit" 
-              disabled={uploading || loading}  
+              htmlType="submit"
+              disabled={uploading || loading}
               className='mr-5 bg-gray-300'
             >
               Lưu bản nháp
             </Button>
-            <Button 
-              type="primary"  
+            <Button
+              type="primary"
               onClick={() => setIsDraft(false)}
-              htmlType="submit" 
+              htmlType="submit"
               loading={uploading || loading}
             >
               Lưu & Hiển thị
             </Button>
           </Form.Item>
         </Form>
-      </div>
+      </Card>
     </div>
   )
 }

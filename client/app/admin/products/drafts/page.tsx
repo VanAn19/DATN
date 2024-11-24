@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useEffect, useState } from 'react'
-import { Table, Button, Input, Select, notification } from 'antd';
+import { Table, Button, Input, Select, notification, Card } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import { Product } from '@/types';
 import Image from 'next/image';
@@ -27,7 +27,7 @@ const DraftProducts = () => {
       setLoading(true);
       try {
         const res = await getDraftProductsList();
-        setProducts(res);  
+        setProducts(res);
       } catch (error) {
         console.error("Error during fetch draft product: ", error);
       } finally {
@@ -42,7 +42,7 @@ const DraftProducts = () => {
       setLoading(true);
       try {
         const res = await getStock();
-        setStocks(res.metadata);  
+        setStocks(res.metadata);
       } catch (error) {
         console.error("Error during fetch stock: ", error);
       } finally {
@@ -80,11 +80,11 @@ const DraftProducts = () => {
       key: 'name',
       render: (text: string, product: Product) => (
         <div className='flex'>
-          <Image 
-            src={product.thumbnail} 
-            alt={product.name} 
-            width={100} 
-            height={100} 
+          <Image
+            src={product.thumbnail}
+            alt={product.name}
+            width={100}
+            height={100}
           />
           <div className='ml-5'>{product.name}</div>
         </div>
@@ -136,27 +136,22 @@ const DraftProducts = () => {
 
   return (
     <div className="p-4">
-      <div className="flex justify-between items-center mb-4">
-        {/* <Search
-          placeholder="Tìm tên sản phẩm, SKU sản phẩm, Mã sản phẩm..."
-          onSearch={(value) => console.log(value)}
-          enterButton
-          style={{ width: '300px' }}
+      <Card
+        title={
+          <div className="flex justify-between items-center">
+            <span>Danh sách bản nháp sản phẩm</span>
+          </div>
+        }
+      >
+        <Table
+          columns={columns}
+          dataSource={products}
+          loading={loading}
+          rowKey={(product: Product) => product._id}
+          pagination={{ pageSize: 10 }}
+          className='custom-table-header border rounded-lg'
         />
-        <Link href="/admin/products/new" passHref>
-          <Button type="primary" icon={<PlusOutlined />}>
-            Thêm 1 sản phẩm mới
-          </Button>
-        </Link> */}
-        <h1>Danh sách bản nháp sản phẩm</h1>
-      </div>
-      <Table
-        columns={columns}
-        dataSource={products}
-        loading={loading}
-        rowKey={(product: Product) => product._id}
-        pagination={{ pageSize: 10 }}
-      />
+      </Card>
     </div>
   )
 }

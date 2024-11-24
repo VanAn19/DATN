@@ -2,7 +2,7 @@
 
 const { BadRequestError, NotFoundError } = require("../core/error.response");
 const Comment = require('../models/comment.model');
-const { findCommentByProductId, deleteCommentById, updateCommentByUser } = require("../repositories/comment.repo");
+const { findCommentByProductId, deleteCommentById, updateCommentByUser, findAllCommentByAdmin } = require("../repositories/comment.repo");
 
 class CommentService {
 
@@ -27,6 +27,10 @@ class CommentService {
 
     static async deleteCommentById({ id }) {
         return await deleteCommentById({ id });
+    }
+
+    static async getAllCommentByAdmin() {
+        return await findAllCommentByAdmin();
     }
 
 }

@@ -51,7 +51,7 @@ const releaseInventory = async ({ productId, quantity }) => {
 }
 
 const getStockAndSoldQuantity = async () => {
-    return Inventory.find()
+    return await Inventory.find()
         .sort({ updatedAt: -1 })
         .populate('productId')
         .lean()

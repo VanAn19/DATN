@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useEffect, useState } from 'react'
-import { Form, Input, Button, Upload, Select, notification } from 'antd';
+import { Form, Input, Button, Upload, Select, notification, Card } from 'antd';
 import { Category, FileItem } from '@/types';
 import { createCategory, getInfoCategory, getListCategory, updateCategory } from '@/api/category';
 import { useParams, useRouter } from 'next/navigation';
@@ -34,7 +34,7 @@ const UpdateCategory = () => {
     fetchCategories();
   }, [id, form]);
 
-  
+
   const onFinish = async (values: any) => {
     setLoading(true);
     try {
@@ -66,9 +66,8 @@ const UpdateCategory = () => {
   };
 
   return (
-    <div className="w-full h-full bg-gray-100">
-      <div className="w-full h-full max-w-7xl bg-white rounded-lg shadow-lg p-10"> 
-        <h2 className="text-2xl font-bold mb-6">Cập nhật danh mục</h2>
+    <div className='p-4'>
+      <Card title="Cập nhật danh mục">
         <Form form={form} onFinish={onFinish} layout="vertical">
           <Form.Item
             name="name"
@@ -83,24 +82,24 @@ const UpdateCategory = () => {
           {errorMessage && <p className="text-red-500 text-sm mb-1">{errorMessage}</p>}
 
           <Form.Item>
-            <Button 
+            <Button
               type="default"
-              htmlType="reset" 
-              disabled={loading}  
+              htmlType="reset"
+              disabled={loading}
               className='mr-5'
             >
               Hủy
             </Button>
-            <Button 
-              type="primary"  
-              htmlType="submit" 
+            <Button
+              type="primary"
+              htmlType="submit"
               loading={loading}
             >
               Lưu & Hiển thị
             </Button>
           </Form.Item>
         </Form>
-      </div>
+      </Card>
     </div>
   )
 }

@@ -32,6 +32,16 @@ export const getCommentByProductId = async (id: string) => {
   }
 };
 
+export const getAllCommentByAdmin = async () => {
+  try {
+    const response = await axiosInstance.get(`/comment/all`);
+    return response.data; 
+  } catch (error) {
+    console.error("Error during get all comment by admin api:", error);
+    throw error;
+  }
+};
+
 export const deleteCommentById = async (id: string) => {
   const infoUser = getCookie('user');
   const token = getCookie('token');

@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState } from 'react'
-import { Form, Input, Button, Upload, Select, notification } from 'antd';
+import { Form, Input, Button, Upload, Select, notification, Card } from 'antd';
 import { Category, FileItem } from '@/types';
 import { createCategory, getListCategory } from '@/api/category';
 
@@ -11,7 +11,7 @@ const { Option } = Select;
 const NewCategory = () => {
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
-  
+
   const onFinish = async (values: any) => {
     setLoading(true);
     try {
@@ -34,9 +34,8 @@ const NewCategory = () => {
   };
 
   return (
-    <div className="w-full h-full bg-gray-100">
-      <div className="w-full h-full max-w-7xl bg-white rounded-lg shadow-lg p-10"> 
-        <h2 className="text-2xl font-bold mb-6">Thêm mới danh mục</h2>
+    <div className='p-4'>
+      <Card title="Thêm mới danh mục">
         <Form form={form} onFinish={onFinish} layout="vertical">
           <Form.Item
             name="name"
@@ -50,24 +49,24 @@ const NewCategory = () => {
           </Form.Item>
 
           <Form.Item>
-            <Button 
+            <Button
               type="default"
-              htmlType="reset" 
-              disabled={loading}  
+              htmlType="reset"
+              disabled={loading}
               className='mr-5'
             >
               Hủy
             </Button>
-            <Button 
-              type="primary"  
-              htmlType="submit" 
+            <Button
+              type="primary"
+              htmlType="submit"
               loading={loading}
             >
               Lưu & Hiển thị
             </Button>
           </Form.Item>
         </Form>
-      </div>
+      </Card>
     </div>
   )
 }

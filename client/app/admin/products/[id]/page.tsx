@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useEffect, useState } from 'react';
-import { Form, Input, Button, Upload, Select, notification } from 'antd';
+import { Form, Input, Button, Upload, Select, notification, Card } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import { getInfoProduct, updateProduct } from '@/api/product';
 import { deleteImage, uploadImages } from '@/api/upload';
@@ -117,7 +117,7 @@ const UpdateProduct = () => {
       const updatedFileList = fileList.filter((item) => item.uid !== file.uid);
       setFileList(updatedFileList); // cập nhật state với ds ảnh mới sau xóa
       form.setFieldsValue({ images: updatedFileList }); // set lại form
-      
+
     } catch (error) {
       console.error("Error removing image:", error);
     }
@@ -133,7 +133,7 @@ const UpdateProduct = () => {
         imageUrl: file.url || '',
         thumbUrl: file.thumbUrl || ''
       }));
-      const thumbnail = images[0]?.thumbUrl; 
+      const thumbnail = images[0]?.thumbUrl;
       if (!thumbnail) {
         notification.error({
           message: 'Lỗi',
@@ -162,7 +162,7 @@ const UpdateProduct = () => {
     } catch (error: any) {
       if (error.response?.status === 403) {
         setErrorMessage("Tên sản phẩm đã tồn tại.");
-      }  else {
+      } else {
         console.error('Error during update product:', error);
         notification.error({
           message: 'Failed',
@@ -175,9 +175,8 @@ const UpdateProduct = () => {
   };
 
   return (
-    <div className="w-full h-full bg-gray-100">
-      <div className="w-full h-full max-w-7xl bg-white rounded-lg shadow-lg p-10"> 
-        <h2 className="text-2xl font-bold mb-6">Cập nhật sản phẩm</h2>
+    <div className='p-4'>
+      <Card title="Cập nhật sản phẩm">
         <Form form={form} onFinish={onFinish} layout="vertical">
           <Form.Item
             name="images"
@@ -191,11 +190,11 @@ const UpdateProduct = () => {
               fileList={fileList}
               onRemove={handleRemove}
               onChange={handleImageChange}
-              beforeUpload={() => false} 
+              beforeUpload={() => false}
               multiple
             >
               {fileList.length < 8 && (
-                <div>               
+                <div>
                   <PlusOutlined />
                   <div style={{ marginTop: 8 }}>Thêm hình ảnh</div>
                 </div>
@@ -273,24 +272,24 @@ const UpdateProduct = () => {
           </Form.Item>
 
           <Form.Item>
-            <Button 
+            <Button
               type="default"
-              htmlType="reset" 
-              disabled={uploading || loading}  
+              htmlType="reset"
+              disabled={uploading || loading}
               className='mr-5'
             >
               Hủy
             </Button>
-            <Button 
+            <Button
               type="primary"
-              htmlType="submit" 
+              htmlType="submit"
               loading={uploading || loading}
             >
               Lưu
             </Button>
           </Form.Item>
         </Form>
-      </div>
+      </Card>
     </div>
   )
 }

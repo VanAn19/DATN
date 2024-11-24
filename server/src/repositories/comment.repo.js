@@ -11,6 +11,15 @@ const findCommentByProductId = async (productId) => {
         .exec()
 }
 
+const findAllCommentByAdmin = async () => {
+    return await Comment.find()
+        .sort({ updatedAt: 1 })
+        .populate('user')
+        .populate('product')
+        .lean()
+        .exec()
+}
+
 const updateCommentByUser = async ({ id, payload, isNew = true }) => {
     return await Comment.findByIdAndUpdate(id, payload, { new: isNew });
 }
@@ -21,6 +30,7 @@ const deleteCommentById = async ({ id }) => {
 
 module.exports = {
     findCommentByProductId,
+    findAllCommentByAdmin,
     updateCommentByUser,
     deleteCommentById
 }

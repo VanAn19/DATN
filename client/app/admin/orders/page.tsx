@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useCallback, useEffect, useState } from 'react'
-import { Table, Button, Input, Select, notification } from 'antd';
+import { Table, Button, Input, Select, notification, Card } from 'antd';
 import { PlusOutlined, SearchOutlined } from '@ant-design/icons';
 import { Order, OrderStatus, Product, ProductCart } from '@/types';
 import Image from 'next/image';
@@ -39,6 +39,7 @@ const formatOrders = (ordersData: any[]): Order[] => {
     payment: order.payment,
     trackingNumber: order.trackingNumber,
     status: order.status as OrderStatus,
+    createdAt: order.createdAt
   }));
 };
 
@@ -87,8 +88,8 @@ const AdminOrder = () => {
             )
           );
         } else {
-          setOrders(prevOrders => 
-            prevOrders.map(order => 
+          setOrders(prevOrders =>
+            prevOrders.map(order =>
               order._id === orderId ? { ...order, status: newStatus } : order
             )
           );
@@ -119,7 +120,7 @@ const AdminOrder = () => {
         try {
           const res = await searchOrderByAdmin(value);
           if (res.status === 200) {
-            setOrders(formatOrders(res.metadata)); 
+            setOrders(formatOrders(res.metadata));
           }
         } catch (error) {
           console.error("Error during search order: ", error);
@@ -150,22 +151,22 @@ const AdminOrder = () => {
       key: 'products',
       render: (_: any, order: Order) => (
         <div>
-        {order.products.map((product: ProductCart) => (
-          <div className='flex mb-2' key={product.productId}>
-            {/* <Image 
+          {order.products.map((product: ProductCart) => (
+            <div className='flex mb-2' key={product.productId}>
+              {/* <Image 
               src={product.thumbnail} 
               alt={product.name} 
               width={100} 
               height={100} 
             /> */}
-            <div className=''>
-              <p>{product.name}</p>
-              <p className='text-gray-500'>Số lượng: {product.quantity}</p>
-              <p className='text-gray-500'>Đơn giá: {VND.format(product.price)}</p>
+              <div className=''>
+                <p>{product.name}</p>
+                <p className='text-gray-500'>Số lượng: {product.quantity}</p>
+                <p className='text-gray-500'>Đơn giá: {VND.format(product.price)}</p>
+              </div>
             </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
       ),
     },
     {
@@ -228,24 +229,29 @@ const AdminOrder = () => {
 
   return (
     <div className="p-4">
-      <Title level={4} className='px-3'>Danh sách đơn hàng</Title>
-      <div className="flex justify-between items-center mb-4">
-        <Input 
-          value={searchValue}
-          onChange={handleSearchInputChange}
-          placeholder='Tìm theo mã đơn hàng, mã vận chuyển...' 
-          prefix={<SearchOutlined style={{ cursor: 'pointer' }} />}
-          className='w-2/3'
+      <Card
+        title={
+          <div className="flex justify-between items-center">
+            <span>Danh sách đơn hàng</span>
+            <Input
+              value={searchValue}
+              onChange={handleSearchInputChange}
+              placeholder='Tìm theo mã đơn hàng, mã vận chuyển...'
+              prefix={<SearchOutlined style={{ cursor: 'pointer' }} />}
+              className='w-2/3'
+            />
+          </div>
+        }
+      >
+        <Table
+          columns={columns}
+          dataSource={orders}
+          loading={loading}
+          rowKey={(order: Order) => order._id}
+          pagination={{ pageSize: 10 }}
+          className='custom-table-header border rounded-lg'
         />
-      </div>
-      <Table
-        columns={columns}
-        dataSource={orders}
-        loading={loading}
-        rowKey={(order: Order) => order._id}
-        pagination={{ pageSize: 10 }}
-        className='custom-table-header'
-      />
+      </Card>
     </div>
   )
 }
