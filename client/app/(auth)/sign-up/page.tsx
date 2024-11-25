@@ -9,7 +9,7 @@ import { useRouter } from "next/navigation";
 import Image from 'next/image';
 import images from '@/public/images';
 import '../../../styles/auth/signup.scss'
-import { Checkbox, Spin } from "antd";
+import { Button, Checkbox, Col, Form, Input, message, Row, Spin } from "antd";
 import { LoadingOutlined } from "@ant-design/icons";
 import { signup } from '@/api/auth';
 import { setCookie } from '@/utils';
@@ -31,137 +31,157 @@ const schema = yup.object().shape({
 });
 
 const SignUp = () => {
-  const expirationHours = 3;
-  const { register, handleSubmit, formState: { errors } } = useForm({
-    resolver: yupResolver(schema),
-  });
+  const expirationHours = 12;
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
-  const [errorMessage, setErrorMessage] = useState<string>('');
 
-  const handleSignUp = async (data: any) => {
+  const onFinish = async (values: any) => {
     setIsLoading(true);
-    setErrorMessage('');
     try {
-      const res = await signup(data);
+      const res = await signup(values);
       if (res.status === 201) {
-        setCookie('user', res?.metadata?.user, expirationHours);
+        setCookie('user', res.metadata.user, expirationHours);
         router.push('/otp-verified');
       }
     } catch (error: any) {
-      if (error.response?.status === 403) {
-        setErrorMessage("Tên người dùng đã tồn tại.");
-      } else {
-        console.error('Error sign in:', error);
-        setErrorMessage("Đã xảy ra lỗi, vui lòng thử lại sau.");
-      }
+      message.error(error.response?.data?.message || 'Đã xảy ra lỗi, vui lòng thử lại.');
     } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <div className="form-signup p-[2%] mobile:p-[50px]">
-      <form onSubmit={handleSubmit(handleSignUp)} className="form-submit flex-col mobile:flex-row">
-        <div className="box-left w-full mobile:w-[50%]">
+    <div className="flex justify-center items-center min-h-screen bg-gray-100"
+      style={{
+        background: `url(${images.background}) 0% 0% / contain`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundAttachment: 'fixed',
+        backgroundRepeat: 'no-repeat',
+      }}
+    >
+      <div className="bg-white flex shadow-lg rounded-lg overflow-hidden w-full max-w-4xl">
+        <div className="w-1/2 hidden lg:block">
           <Image
-            className="object-contain rounded_image img-signup"
-            priority={true}
             src={images.imgSignUp}
-            alt="SignUp Image"
+            alt="Sign Up Image"
+            className="h-full w-full object-cover"
           />
         </div>
-        <div className="box-right">
-          <h2 className="title-sign">Dao Trọng Bình - Người giúp việc nhiệt tình! 👋</h2>
-          <div className="group-input-password">
-            <div className="group-input">
-              <p>Tên đăng nhập <span className='text-red-500'>*</span></p>
-              <input
-                type="text"
-                {...register('username')}
-              />
-              {errors.username && <span className="error-message">{errors.username.message}</span>}
-              {errorMessage && <p className="error-message">{errorMessage}</p>}
-            </div>
-            <div className="group-input">
-              <p>Họ tên <span className='text-red-500'>*</span></p>
-              <input
-                type="text"
-                {...register('name')}
-              />
-              {errors.name && <span className="error-message">{errors.name.message}</span>}
-            </div>
-          </div>
-          <div className="group-input">
-            <p>Số điện thoại <span className='text-red-500'>*</span></p>
-            <input
-              type="text"
-              {...register('phone')}
-            />
-            {errors.phone && <span className="error-message">{errors.phone.message}</span>}
-          </div>
-          <div className="group-input">
-            <p>Email <span className='text-red-500'>*</span></p>
-            <input
-              type="text"
-              {...register('email')}
-            />
-            {errors.email && <span className="error-message">{errors.email.message}</span>}
-          </div>
-          <div className="group-input-password">
-            <div className="group-input">
-              <p>Mật khẩu <span className='text-red-500'>*</span></p>
-              <input
-                type="password"
-                {...register('password')}
-              />
-              {errors.password && <span className="error-message">{errors.password.message}</span>}
-            </div>
-            <div className="group-input">
-              <p>Nhập lại mật khẩu <span className='text-red-500'>*</span></p>
-              <input
-                type="password"
-                {...register('confirmPassword')}
-              />
-              {errors.confirmPassword && <span className="error-message">{errors.confirmPassword.message}</span>}
-            </div>
-          </div>
-          <div className="group-input">
-            <p>Địa chỉ</p>
-            <input
-              type="text"
-              {...register('address')}
-            />
-            {errors.address && <span className="error-message">{errors.address.message}</span>}
-          </div>
-          {/* <Checkbox className="mt-2 font-semibold">
-            Tôi đồng ý với các <Link href={`https://ezpics.vn/post/32`} className="text-blue-600">Điều khoản dịch vụ của Dao Trọng Bình</Link>
-          </Checkbox> */}
-          <button type="submit" className="btn-submit-sign">
-            {isLoading ? (
-              <Spin
-                indicator={
-                  <LoadingOutlined
-                    style={{
-                      fontSize: 24,
-                      color: "white",
-                    }}
-                    spin
-                  />
-                }
-              />
-            ) : (
-              "Đăng ký"
-            )}
-          </button>
-          <div className="nav-sign">
+
+        <div className="w-full lg:w-1/2 p-8">
+          <h2 className="text-2xl font-bold text-center mb-6">Dao Trọng Bình - Người giúp việc nhiệt tình! 👋</h2>
+          <Form
+            layout="vertical"
+            onFinish={onFinish}
+            initialValues={{ username: '', name: '', phone: '', email: '', address: '' }}
+          >
+            <Row gutter={16}>
+              <Col xs={24} md={12}>
+                <Form.Item
+                  label="Tên đăng nhập"
+                  name="username"
+                  rules={[{ required: true, message: 'Tên đăng nhập là bắt buộc' }]}
+                >
+                  <Input placeholder="Nhập tên đăng nhập" />
+                </Form.Item>
+              </Col>
+              <Col xs={24} md={12}>
+                <Form.Item
+                  label="Số điện thoại"
+                  name="phone"
+                  rules={[
+                    { required: true, message: 'Số điện thoại là bắt buộc' },
+                    {
+                      pattern: /^((\+84|0)[3|5|7|8|9])+([0-9]{8})$/,
+                      message: 'Số điện thoại không hợp lệ',
+                    },
+                  ]}
+                >
+                  <Input placeholder="Nhập số điện thoại" />
+                </Form.Item>
+              </Col>
+            </Row>
+
+            <Form.Item
+              label="Họ tên"
+              name="name"
+              rules={[{ required: true, message: 'Họ tên là bắt buộc' }]}
+            >
+              <Input placeholder="Nhập họ tên" />
+            </Form.Item>
+
+            <Form.Item
+              label="Email"
+              name="email"
+              rules={[
+                { required: true, message: 'Email là bắt buộc' },
+                { type: 'email', message: 'Email không hợp lệ' },
+              ]}
+            >
+              <Input placeholder="Nhập email" />
+            </Form.Item>
+
+            <Form.Item
+              label="Địa chỉ"
+              name="address"
+              rules={[{ required: true, message: 'Địa chỉ là bắt buộc' }]}
+            >
+              <Input placeholder="Nhập địa chỉ" />
+            </Form.Item>
+
+            <Row gutter={16}>
+              <Col xs={24} md={12}>
+                <Form.Item
+                  label="Mật khẩu"
+                  name="password"
+                  rules={[{ required: true, message: 'Mật khẩu là bắt buộc' }]}
+                >
+                  <Input.Password placeholder="Nhập mật khẩu" />
+                </Form.Item>
+              </Col>
+              <Col xs={24} md={12}>
+                <Form.Item
+                  label="Nhập lại mật khẩu"
+                  name="confirmPassword"
+                  dependencies={['password']}
+                  rules={[
+                    { required: true, message: 'Nhập lại mật khẩu là bắt buộc' },
+                    ({ getFieldValue }) => ({
+                      validator(_, value) {
+                        if (!value || getFieldValue('password') === value) {
+                          return Promise.resolve();
+                        }
+                        return Promise.reject('Mật khẩu nhập lại không khớp');
+                      },
+                    }),
+                  ]}
+                >
+                  <Input.Password placeholder="Nhập lại mật khẩu" />
+                </Form.Item>
+              </Col>
+            </Row>
+
+            <Button
+              type="primary"
+              htmlType="submit"
+              block
+              className="mt-4 custom-btn"
+              icon={isLoading ? <LoadingOutlined /> : null}
+              disabled={isLoading}
+            >
+              {isLoading ? 'Đang xử lý...' : 'Đăng ký'}
+            </Button>
+          </Form>
+
+          <div className="text-center mt-4">
             Đã có tài khoản?{' '}
-            <Link href="/sign-in" className="font-medium text-indigo-600 hover:text-indigo-500">
+            <Link href="/sign-in" className="text-blue-500 hover:underline">
               Đăng nhập
             </Link>
           </div>
         </div>
-      </form>
+      </div>
     </div>
   )
 }

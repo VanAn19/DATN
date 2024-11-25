@@ -16,10 +16,10 @@ const Footer = () => {
   ]
 
   const pageItems = [
-    { label: "Chính sách quyền riêng tư", link: "" },
-    { label: "Chính sách bảo mật", link: "" },
-    { label: "Chính sách bảo hành", link: "" },
-    { label: "Chính sách hoàn trả hàng", link: "", },
+    { label: "Chính sách quyền riêng tư", link: "/policy/chinh-sach-quyen-rieng-tu" },
+    { label: "Chính sách bảo mật", link: "/policy/chinh-sach-bao-mat" },
+    { label: "Chính sách bảo hành", link: "/policy/chinh-sach-bao-hanh" },
+    { label: "Chính sách hoàn trả hàng", link: "/policy/chinh-sach-hoan-tra-hang", },
     { label: "Điều khoản dịch vụ", link: "", },
   ];
 

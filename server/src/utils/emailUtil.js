@@ -7,7 +7,9 @@ const transporter = nodemailer.createTransport({
     auth: {
         user: process.env.GMAIL_ACCOUNT,
         pass: process.env.GMAIL_PASSWORD
-    }
+    },
+    debug: true, 
+    logger: true,
 });
 
 const sendOTPEmail = async (email, otp) => {

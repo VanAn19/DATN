@@ -67,7 +67,7 @@ const Header = () => {
 
   const iconsMenu = [
     { component: MenuOutlined, key: 'menu' },
-    { component: SearchOutlined, key: 'search' }
+    // { component: SearchOutlined, key: 'search' }
   ]
 
   const itemsDropdowUser = [
@@ -91,6 +91,14 @@ const Header = () => {
       label: (
         <Link href={"/purchase"} className="list-item border-b">
           <p className="item-text">Đơn hàng của tôi</p>
+        </Link>
+      ), 
+      key: 'orders'
+    },
+    { 
+      label: (
+        <Link href={"/purchase"} className="list-item border-b">
+          <p className="item-text">Đổi mật khẩu</p>
         </Link>
       ), 
       key: 'orders'
