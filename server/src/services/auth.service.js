@@ -8,7 +8,7 @@ const { BadRequestError, AuthFailureError, ForbiddenError, NotFoundError } = req
 const KeyTokenService = require('./keyToken.service');
 const { createTokenPair } = require('../auth/authUtils');
 const { getInfoData } = require('../utils');
-const { findByUsername, deleteTempUserById, findTempUserByUsername, findUserByEmail } = require('../repositories/auth.repo');
+const { findByUsername, deleteTempUserById, findTempUserByUsername, findUserByEmail, findUserById } = require('../repositories/auth.repo');
 const { generateAndSendOTP, verifyOTP } = require('./otp.service');
 const { sendLinkResetPassword } = require('../utils/emailUtil');
 
@@ -141,6 +141,17 @@ class AuthService {
         user.passwordResetExpires = undefined
         await user.save()
         return user
+    }
+
+    static changePassword = async ({ userId, currentPassword, newPassword }) => {
+        const foundUser = await findUserById(userId);
+        if (!foundUser) throw new BadRequestError("You do not have access");
+        const match = await bcrypt.compare(currentPassword, foundUser.password);
+        if (!match) throw new AuthFailureError('Authentication error');
+        const passwordHash = await bcrypt.hash(newPassword, 10);
+        foundUser.password = passwordHash;
+        await foundUser.save();
+        return foundUser;
     }
 
 }

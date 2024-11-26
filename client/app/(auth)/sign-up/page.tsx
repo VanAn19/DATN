@@ -14,22 +14,6 @@ import { LoadingOutlined } from "@ant-design/icons";
 import { signup } from '@/api/auth';
 import { setCookie } from '@/utils';
 
-const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
-const emailRegExp = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
-
-const schema = yup.object().shape({
-  username: yup.string().required('Tên người dùng là bắt buộc'),
-  password: yup.string().required('Mật khẩu là bắt buộc'),
-  name: yup.string().required('Tên đăng nhập là bắt buộc'),
-  email: yup.string().matches(emailRegExp, 'Email không hợp lệ').required('Email là bắt buộc'),
-  phone: yup.string().matches(phoneRegExp, 'Số điện thoại không hợp lệ').required('Số điện thoại là bắt buộc'),
-  address: yup.string().required('Địa chỉ là bắt buộc'),
-  confirmPassword: yup
-    .string()
-    .oneOf([yup.ref('password')], 'Mật khẩu nhập lại không khớp')
-    .required('Nhập lại mật khẩu là bắt buộc'),
-});
-
 const SignUp = () => {
   const expirationHours = 12;
   const router = useRouter();
@@ -122,13 +106,13 @@ const SignUp = () => {
               <Input placeholder="Nhập email" />
             </Form.Item>
 
-            <Form.Item
+            {/* <Form.Item
               label="Địa chỉ"
               name="address"
               rules={[{ required: true, message: 'Địa chỉ là bắt buộc' }]}
             >
               <Input placeholder="Nhập địa chỉ" />
-            </Form.Item>
+            </Form.Item> */}
 
             <Row gutter={16}>
               <Col xs={24} md={12}>
@@ -166,7 +150,7 @@ const SignUp = () => {
               type="primary"
               htmlType="submit"
               block
-              className="mt-4 custom-btn"
+              className="mt-4 h-14 custom-btn"
               icon={isLoading ? <LoadingOutlined /> : null}
               disabled={isLoading}
             >

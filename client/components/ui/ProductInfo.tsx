@@ -53,7 +53,6 @@ export default function ProductInfo(props: { data: any, user: any, isLoading: bo
   const itemsPerPage = 5;
   const [loading, setLoading] = useState(false);
   const [uploading, setUploading] = useState(false);
-  const [loadingFavorite, setLoadingFavorite] = useState(false);
   const router = useRouter();
 
   const handleImageChange = async ({ fileList }: any) => {
@@ -385,9 +384,6 @@ export default function ProductInfo(props: { data: any, user: any, isLoading: bo
                 {VND.format(data?.price)}
               </div>
             </div>
-            <div className="flex items-center gap-3">
-              <div className='' style={{ letterSpacing: '0.2px', lineHeight: '1.4' }}>{data?.description}</div>
-            </div>
             <div className="flex items-center gap-2 ml-3">
               <span className="blinking-dot"></span>
               <div className=''>Còn Hàng</div>
@@ -440,6 +436,13 @@ export default function ProductInfo(props: { data: any, user: any, isLoading: bo
         )}
       </div>
 
+      <div className='w-[90%] mx-auto overflow-hidden border-t border-gray-300'>
+        <p className="text-xl font-bold p-4">Mô tả sản phẩm</p>
+        <div className="flex items-center gap-3">
+          <div className='' style={{ letterSpacing: '0.2px', lineHeight: '1.4' }}>{data?.description}</div>
+        </div>
+      </div>
+
       <div className="w-[90%] mx-auto border-t border-gray-300">
         <p className="text-xl font-bold p-4">Đánh giá sản phẩm</p>
 
@@ -453,7 +456,7 @@ export default function ProductInfo(props: { data: any, user: any, isLoading: bo
                   <p className="text-gray-500 text-sm">{convertUtcTimeToVNTime(comment.createdAt)}</p>
                 </div>
               </div>
-              {getCookie("user")._id === comment.user && (
+              {getCookie("user")?._id === comment.user && (
                 <div>
                   <Dropdown
                     overlay={
@@ -499,15 +502,17 @@ export default function ProductInfo(props: { data: any, user: any, isLoading: bo
           <div>Chưa có bình luận. Hãy là người đầu tiên đánh giá sản phẩm</div>
         )}
 
-        <div key={1} className="mt-4">
-          <Pagination
-            className='justify-center items-center'
-            current={currentPage}
-            pageSize={itemsPerPage}
-            total={comments.length}
-            onChange={handlePageChange}
-          />
-        </div>
+        {Math.ceil(comments.length / itemsPerPage) > 1 && (
+          <div key={1} className="mt-4">
+            <Pagination
+              className='justify-center items-center'
+              current={currentPage}
+              pageSize={itemsPerPage}
+              total={comments.length}
+              onChange={handlePageChange}
+            />
+          </div>
+        )}
 
         {checkAvailableLogin() && (
           <div className="w-full px-4 rounded-md flex items-start mt-2">

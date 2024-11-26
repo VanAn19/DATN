@@ -83,3 +83,20 @@ export const resetPassword = async (data: { token: string, password: string }) =
     throw error;
   }
 }
+
+export const changePassword = async (data: { currentPassword: string, newPassword: string }) => {
+  const infoUser = getCookie('user');
+  const token = getCookie('token');
+  try {
+    const response = await axiosInstance.post('/changePassword', data, {
+      headers: {
+        'Authorization': token,
+        'x-client-id': infoUser._id
+      }
+    });
+    return response.data; 
+  } catch (error) {
+    console.error("Error during reset password api:", error);
+    throw error;
+  }
+}

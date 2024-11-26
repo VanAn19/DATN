@@ -97,7 +97,7 @@ const Header = () => {
     },
     { 
       label: (
-        <Link href={"/purchase"} className="list-item border-b">
+        <Link href={"/change-password"} className="list-item border-b">
           <p className="item-text">Đổi mật khẩu</p>
         </Link>
       ), 

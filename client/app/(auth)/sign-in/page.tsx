@@ -58,25 +58,25 @@ const SignIn = () => {
       }}
     >
       <div className="bg-white p-8 rounded shadow-md w-full max-w-sm">
-        <h2 className="text-2xl font-bold mb-6 text-center">Đăng nhập</h2>
+        <h2 className="text-2xl font-bold text-center">Đăng nhập</h2>
         <Form layout="vertical" onFinish={handleLogin}>
           <Form.Item
             label="Tên đăng nhập"
             name="username"
-            rules={[{ required: true, message: 'Tên người dùng là bắt buộc' }]}
+            rules={[{ required: true, message: 'Vui lòng nhập tên đăng nhập!' }]}
           >
-            <Input placeholder="Nhập tên đăng nhập" />
+            <Input className='custom-input' placeholder="Nhập tên đăng nhập" />
           </Form.Item>
 
           <Form.Item
             label="Mật khẩu"
             name="password"
-            rules={[{ required: true, message: 'Mật khẩu là bắt buộc' }]}
+            rules={[{ required: true, message: 'Vui lòng nhập mật khẩu!' }]}
           >
-            <Input.Password placeholder="Nhập mật khẩu" />
+            <Input.Password className='custom-input' placeholder="Nhập mật khẩu" />
           </Form.Item>
 
-          <div className="flex justify-end items-center mb-4">
+          <div className="flex justify-end items-center">
             <Link href="/forgot-password" className="text-indigo-600 hover:text-indigo-500 text-sm">
               Quên mật khẩu?
             </Link>
@@ -87,7 +87,7 @@ const SignIn = () => {
               type="primary"
               htmlType="submit"
               block
-              className="mt-4 custom-btn"
+              className="mt-4 h-14 custom-btn"
               disabled={isLoading}
             >
               {isLoading ? (

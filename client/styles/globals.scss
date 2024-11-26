@@ -14,10 +14,15 @@
 @media (prefers-color-scheme: dark) {
   :root {
     font-family: 'Chakra Petch', sans-serif, 'Quicksand', sans-serif;
+    --antd-font-family: 'Chakra Petch', sans-serif, 'Quicksand', sans-serif;
     --foreground-rgb: 255, 255, 255;
     --background-start-rgb: 0, 0, 0;
     --background-end-rgb: 0, 0, 0;
   }
+}
+
+* {
+  font-family: var(--antd-font-family, 'Chakra Petch', sans-serif) !important;
 }
 
 body {
