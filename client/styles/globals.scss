@@ -49,6 +49,26 @@ body {
   100% { opacity: 1; }
 }
 
+@layer components {
+  .thin-scrollbar {
+    scrollbar-width: thin; /* Đặt thanh cuộn mảnh cho Firefox */
+    scrollbar-color: rgba(0, 0, 0, 0.2) transparent; /* Đặt màu thanh cuộn cho Firefox */
+  }
+
+  .thin-scrollbar::-webkit-scrollbar {
+    width: 6px; /* Đặt chiều rộng của thanh cuộn */
+  }
+
+  .thin-scrollbar::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.2); /* Màu của thanh cuộn */
+    border-radius: 10px; /* Tạo góc bo tròn cho thanh cuộn */
+  }
+
+  .thin-scrollbar::-webkit-scrollbar-track {
+    background-color: transparent; /* Màu nền của track thanh cuộn */
+  }
+}
+
 .blinking-dot {
   height: 10px;
   width: 10px;

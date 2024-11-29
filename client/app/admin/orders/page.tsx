@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useCallback, useEffect, useState } from 'react'
-import { Table, Button, Input, Select, notification, Card } from 'antd';
+import { Table, Button, Input, Select, notification, Card, Tag } from 'antd';
 import { PlusOutlined, SearchOutlined } from '@ant-design/icons';
 import { Order, OrderStatus, Product, ProductCart } from '@/types';
 import Image from 'next/image';
@@ -193,9 +193,12 @@ const AdminOrder = () => {
       title: 'Phương thức thanh toán',
       dataIndex: 'payment',
       key: 'payment',
-      render: (payment: { method: string }) => (
-        payment.method === 'cash' ? 'Tiền mặt' : 'Thẻ tín dụng'
-      ),
+      render: (payment: { method: string }) => {
+        let color: string = 'processing';
+        if (payment.method === 'cash') color = 'success';
+        // payment.method === 'cash' ? 'Tiền mặt' : 'Thẻ tín dụng'
+        return <Tag className='text-xs' color={color}>{payment.method === 'cash' ? 'Tiền mặt' : 'Thẻ tín dụng'}</Tag>;
+      },
     },
     {
       title: 'Mã vận chuyển',
@@ -238,7 +241,7 @@ const AdminOrder = () => {
               onChange={handleSearchInputChange}
               placeholder='Tìm theo mã đơn hàng, mã vận chuyển...'
               prefix={<SearchOutlined style={{ cursor: 'pointer' }} />}
-              className='w-2/3'
+              className='w-96'
             />
           </div>
         }
@@ -250,6 +253,8 @@ const AdminOrder = () => {
           rowKey={(order: Order) => order._id}
           pagination={{ pageSize: 10 }}
           className='custom-table-header border rounded-lg'
+          bordered
+          scroll={{ x: 'max-content' }}
         />
       </Card>
     </div>

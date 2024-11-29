@@ -10,6 +10,7 @@ import Link from 'next/link';
 import { addToCart } from '@/api/cart';
 import { checkAvailableLogin } from '@/utils';
 import { useRouter } from 'next/navigation';
+import TruncatedText from '@/components/ui/TruncatedText';
 
 const VND = new Intl.NumberFormat("vi-VN", {
   style: "currency",
@@ -121,7 +122,7 @@ const LikedProducts = () => {
                   <p className="text-gray-500 ml-1 mr-1">{VND.format(product.sellingPrice)}</p> 
                   <p className="text-gray-500 line-through">{VND.format(product.price)}</p> 
                 </div>
-                <p className='text-gray-500'>{product.description}</p>
+                <TruncatedText text={product.description} maxLength={200} />
               </Link>
             </div>
           </Card>

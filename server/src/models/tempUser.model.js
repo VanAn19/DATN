@@ -33,8 +33,7 @@ var userSchema = new Schema({
     },
     address: {
         type: String,
-        trim: true,
-        required: true
+        trim: true
     },
     avatar: {
         type: String,

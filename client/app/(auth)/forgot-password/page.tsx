@@ -4,6 +4,7 @@ import { Button, Form, Input, message } from 'antd';
 import React, { useState } from 'react'
 import { MailOutlined } from '@ant-design/icons';
 import { forgotPassword } from '@/api/auth';
+import images from '@/public/images';
 
 const ForgotPassword = () => {
   const [loading, setLoading] = useState(false);
@@ -28,7 +29,15 @@ const ForgotPassword = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
+    <div className="min-h-screen flex items-center justify-center bg-gray-100"
+      style={{
+        background: `url(${images.background}) 0% 0% / contain`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundAttachment: 'fixed',
+        backgroundRepeat: 'no-repeat',
+      }}
+    >
       <div className="max-w-md w-full p-6 shadow-lg bg-white rounded-lg">
         <h2 className="text-center text-2xl font-bold mb-4">Quên mật khẩu</h2>
         <Form name="forgot-password" layout="vertical" onFinish={onFinish}>
@@ -50,7 +59,7 @@ const ForgotPassword = () => {
 
           <Form.Item>
             <button
-              type="submit" 
+              type="submit"
               disabled={loading}
               className={`w-full h-14 py-2 text-yellow-200 bg-black transition duration-200 ease-in-out rounded-lg 
                 ${loading ? 'opacity-50 cursor-not-allowed' : 'hover:bg-black hover:text-yellow-300'}`}

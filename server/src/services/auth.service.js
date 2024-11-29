@@ -46,6 +46,7 @@ class AuthService {
         const foundUser = await findByUsername({ username });
         if (!foundUser) throw new BadRequestError('User is not registered');
         if (!foundUser.isOtpVerified) throw new BadRequestError('Bạn cần xác minh OTP trước khi đăng nhập');
+        if (foundUser.status === 'disabled') throw new BadRequestError('Tài khoản bị vô hiệu hóa');
         const match = await bcrypt.compare(password, foundUser.password);
         if (!match) throw new AuthFailureError('Authentication error');
         const privateKey = crypto.randomBytes(64).toString('hex');
@@ -57,6 +58,8 @@ class AuthService {
             publicKey,
             privateKey
         });
+        foundUser.activeTime = new Date();
+        await foundUser.save();
         return {
             user: getInfoData({ fields: ['_id', 'username', 'name', 'email', 'phone', 'avatar', 'address', 'role'], object: foundUser}),
             tokens
@@ -65,7 +68,9 @@ class AuthService {
 
     static signUp = async ({ username, password, name, email, phone, address }) => {
         const holderUser = await findByUsername({ username });
-        if (holderUser) throw new BadRequestError('Username already registered!');
+        if (holderUser) throw new BadRequestError('Tên đăng nhập đã được đăng ký!');
+        const holderEmail = await findUserByEmail({ email });
+        if (holderEmail) throw new BadRequestError('Email đã được đăng ký!');
         const passwordHash = await bcrypt.hash(password, 10);
         const otp = Math.floor(100000 + Math.random() * 900000);
         const expiredAt = new Date(Date.now() + 5 * 60000);

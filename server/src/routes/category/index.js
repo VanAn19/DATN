@@ -10,7 +10,7 @@ router.get('/', asyncHandler(categoryController.getListCategory));
 
 router.use(authentication)
 
-router.use(checkRole('admin'))
+router.use(checkRole('admin', 'employee'))
 
 router.post('/create', asyncHandler(categoryController.createCategory));
 router.get('/:id', asyncHandler(categoryController.getACategory));

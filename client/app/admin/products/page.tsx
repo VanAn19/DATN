@@ -86,7 +86,7 @@ const AdminProducts = () => {
   }
 
   const getStockData = (productId: string, field: 'soldQuantity' | 'stock') => {
-    const stock = stocks.find((s: any) => s.productId === productId);
+    const stock = stocks.find((s: any) => s.productId._id === productId);
     return stock ? stock[field] : 0;
   };
 
@@ -146,7 +146,12 @@ const AdminProducts = () => {
       title: 'Giá',
       dataIndex: 'price',
       key: 'price',
-      render: (price: number) => `${VND.format(price)}`,
+      render: (text: string, product: Product) => (
+        <div className='flex flex-col'>
+          <span>{VND.format(product.sellingPrice)}</span>
+          <span className='line-through text-gray-400'>{VND.format(product.price)}</span>
+        </div>
+      ),
       sorter: (a: Product, b: Product) => a.price - b.price,
     },
     {
@@ -208,6 +213,7 @@ const AdminProducts = () => {
           rowKey={(product: Product) => product._id}
           pagination={{ pageSize: 10 }}
           className='custom-table-header border rounded-lg'
+          bordered
         />
       </Card >
     </div>

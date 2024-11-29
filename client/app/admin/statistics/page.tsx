@@ -105,7 +105,7 @@ const Statistic = () => {
       <Card
         title={
           <div className="flex justify-between items-center">
-            <span>Thống kê theo doanh thu theo sản phẩm</span>
+            <span>Thống kê theo doanh thu sản phẩm</span>
             <Select
               defaultValue="bar"
               onChange={handleChartTypeChange}

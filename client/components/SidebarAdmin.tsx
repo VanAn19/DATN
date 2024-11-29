@@ -1,58 +1,60 @@
 import Link from 'next/link';
 import { useState } from 'react';
-import { AppstoreOutlined, MenuUnfoldOutlined, FileTextOutlined, AreaChartOutlined, UpOutlined, DownOutlined } from '@ant-design/icons';
+import { AppstoreOutlined, MenuUnfoldOutlined, FileTextOutlined, AreaChartOutlined, UpOutlined, DownOutlined, UserOutlined, CommentOutlined, CarOutlined, DatabaseOutlined } from '@ant-design/icons';
+import { getCookie } from '@/utils';
 
 const SidebarAdmin = () => {
   const [activeItems, setActiveItems] = useState<string[]>([]);
+  const user = getCookie('user');
 
   const menuItems = [
-    { 
-      label: 'Quản Lý Sản Phẩm', 
-      link: '/admin/products', 
+    {
+      label: 'Quản Lý Sản Phẩm',
+      link: '/admin/products',
       component: AppstoreOutlined,
       subItems: [
         { label: 'Tất cả sản phẩm', link: '/admin/products' },
         { label: 'Thêm sản phẩm mới', link: '/admin/products/new' },
         { label: 'Bản nháp của tôi', link: '/admin/products/drafts' },
-      ] 
+      ]
     },
-    { 
-      label: 'Quản Lý Danh Mục', 
-      link: '/admin/categories', 
+    {
+      label: 'Quản Lý Danh Mục',
+      link: '/admin/categories',
       component: MenuUnfoldOutlined,
       subItems: [
         { label: 'Tất cả danh mục', link: '/admin/categories' },
         { label: 'Thêm danh mục mới', link: '/admin/categories/new' },
-      ] 
+      ]
     },
-    { 
-      label: 'Quản Lý Đơn Hàng', 
-      link: '/admin/orders', 
+    {
+      label: 'Quản Lý Đơn Hàng',
+      link: '/admin/orders',
       component: FileTextOutlined,
       subItems: [
         { label: 'Tất cả đơn hàng', link: '/admin/orders' },
         { label: 'Đơn hàng đang xử lý', link: '/admin/orders/processing' },
       ]
     },
-    { 
-      label: 'Quản Lý Hàng Tồn Kho', 
-      link: '/admin/inventories', 
-      component: AreaChartOutlined,
+    {
+      label: 'Quản Lý Hàng Tồn Kho',
+      link: '/admin/inventories',
+      component: DatabaseOutlined,
       subItems: [
         { label: 'Danh sách hàng tồn kho', link: '/admin/inventories' }
       ]
     },
-    { 
-      label: 'Quản Lý Bình Luận', 
-      link: '/admin/comments', 
-      component: AreaChartOutlined,
+    {
+      label: 'Quản Lý Bình Luận',
+      link: '/admin/comments',
+      component: CommentOutlined,
       subItems: [
         { label: 'Danh sách bình luận', link: '/admin/comments' }
       ]
     },
-    { 
-      label: 'Thống Kê', 
-      link: '/admin/stats', 
+    {
+      label: 'Thống Kê',
+      link: '/admin/stats',
       component: AreaChartOutlined,
       subItems: [
         { label: 'Thống kê', link: '/admin/statistics' },
@@ -60,24 +62,33 @@ const SidebarAdmin = () => {
     },
   ];
 
+  if (user.role === 'admin') {
+    menuItems.push({
+      label: 'Quản lý người dùng',
+      link: '/admin/user',
+      component: UserOutlined,
+      subItems: [{ label: 'Danh sách người dùng', link: '/admin/user' }],
+    });
+  }
+
   const toggleDropdown = (itemLabel: string) => {
     if (activeItems.includes(itemLabel)) {
       setActiveItems(activeItems.filter(item => item !== itemLabel));
     } else {
-      setActiveItems([...activeItems, itemLabel]); 
+      setActiveItems([...activeItems, itemLabel]);
     }
   };
 
   return (
-    <aside className="w-64 bg-white h-screen fixed top-5 left-0 pt-16 p-2 shadow-lg">
+    <aside className="w-64 bg-white h-full fixed top-5 left-0 pt-16 p-2 shadow-lg overflow-auto thin-scrollbar">
       <ul className="mb-8">
         {menuItems.map((item, index) => {
           const IconComponent = item.component;
           const isActive = activeItems.includes(item.label);
           return (
             <li key={index} className='mb-4'>
-              <div 
-                onClick={() => toggleDropdown(item.label)} 
+              <div
+                onClick={() => toggleDropdown(item.label)}
                 className={`cursor-pointer flex items-center justify-between gap-3 p-2 rounded hover:bg-gray-200 text-gray-700`}
               >
                 <div className="flex items-center gap-3">

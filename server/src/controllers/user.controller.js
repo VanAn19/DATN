@@ -19,6 +19,27 @@ class UserController {
         }).send(res);
     }
 
+    getAllUserByAdmin = async (req,res,next) => {
+        new SuccessResponse({
+            message: 'get all user success',
+            metadata: await UserService.getAllUserByAdmin()
+        }).send(res);
+    }
+
+    updateStatusUserByAdmin = async (req,res,next) => {
+        new SuccessResponse({
+            message: 'update status user successfully ',
+            metadata: await UserService.updateStatusUserByAdmin(req.body)
+        }).send(res);
+    }
+
+    searchUser = async (req,res,next) => {
+        new SuccessResponse({
+            message: 'search user successfully',
+            metadata: await UserService.searchUserByAdmin(req.params)
+        }).send(res);
+    }
+
 }
 
 module.exports = new UserController();

@@ -119,6 +119,7 @@ const AdminComment = () => {
           rowKey={(comment: any) => comment._id}
           pagination={{ pageSize: 10 }}
           className='custom-table-header border rounded-lg'
+          bordered
         />
       </Card>
     </div>

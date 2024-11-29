@@ -35,8 +35,7 @@ var userSchema = new Schema({
     },
     address: {
         type: String,
-        trim: true,
-        required: true
+        trim: true
     },
     avatar: {
         type: String,
@@ -44,8 +43,17 @@ var userSchema = new Schema({
     },
     role: {
         type: String,
-        enum: ['user', 'admin'],
+        enum: ['user', 'employee', 'admin'],
         default: 'user'
+    },
+    status: {
+        type: String,
+        enum: ['active', 'disabled'],
+        default: 'active'
+    },
+    activeTime: {
+        type: Date,
+        default: new Date()
     },
     isOtpVerified: {
         type: Boolean,
@@ -63,6 +71,13 @@ var userSchema = new Schema({
 }, {
     timestamps: true,
     collection: COLLECTION_NAME
+});
+
+// create index for search
+userSchema.index({
+    name: 'text',
+    username: 'text',
+    email: 'text'
 });
 
 userSchema.methods = {

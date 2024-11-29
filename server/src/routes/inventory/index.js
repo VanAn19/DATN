@@ -10,7 +10,7 @@ router.get('/sold', asyncHandler(inventoryController.getSoldQuantity));
 
 router.use(authentication)
 
-router.use(checkRole('admin'))
+router.use(checkRole('admin', 'employee'))
 
 router.get('/search/:keySearch', asyncHandler(inventoryController.searchStock));
 router.post('', asyncHandler(inventoryController.addStockToInventory));

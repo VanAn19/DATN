@@ -14,7 +14,7 @@ router.post('/cancel/:id', asyncHandler(orderController.cancelOrderByUser));
 router.get('/:id', asyncHandler(orderController.getOneOrderByUser));
 router.get('/', asyncHandler(orderController.getOrderByUser));
 
-router.use(checkRole('admin'))
+router.use(checkRole('admin', 'employee'))
 
 router.get('/admin/getOrderByAdmin', asyncHandler(orderController.getOrderByAdmin));
 router.get('/getOneOrderByAdmin/:id', asyncHandler(orderController.getOneOrderByAdmin));

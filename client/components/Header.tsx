@@ -154,7 +154,7 @@ const Header = () => {
                   // scrollbars: "false",
                 }}
               >
-                {infoUser && infoUser?.role === 'admin' && (
+                {infoUser && (infoUser?.role === 'admin' || infoUser?.role === 'employee') && (
                   <Link href={"/admin"} className="list-item border-b">
                     <p className="item-text">Trang quản lý</p>
                 </Link>

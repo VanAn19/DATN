@@ -101,6 +101,7 @@ const AdminCategory = () => {
         rowKey={(categories) => categories._id}
         pagination={{ pageSize: 10 }}
         className='custom-table-header'
+        bordered
       />
     </div>
   )

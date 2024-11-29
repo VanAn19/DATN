@@ -119,7 +119,11 @@ const SignUp = () => {
                 <Form.Item
                   label="Mật khẩu"
                   name="password"
-                  rules={[{ required: true, message: 'Mật khẩu là bắt buộc' }]}
+                  rules={[
+                    { required: true, message: 'Mật khẩu là bắt buộc' },
+                    { min: 6, message: 'Mật khẩu phải có ít nhất 6 ký tự' },
+                    { max: 18, message: 'Mật khẩu không được quá 18 ký tự' },
+                  ]}
                 >
                   <Input.Password placeholder="Nhập mật khẩu" />
                 </Form.Item>
@@ -139,6 +143,8 @@ const SignUp = () => {
                         return Promise.reject('Mật khẩu nhập lại không khớp');
                       },
                     }),
+                    { min: 6, message: 'Mật khẩu nhập lại phải có ít nhất 6 ký tự' },
+                    { max: 18, message: 'Mật khẩu nhập lại không được quá 18 ký tự' },
                   ]}
                 >
                   <Input.Password placeholder="Nhập lại mật khẩu" />

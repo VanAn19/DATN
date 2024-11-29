@@ -10,9 +10,9 @@ export function checkAvailableLogin() {
   }
 }
 
-export function checkRoleAdmin() {
+export function checkRoleAdminAndEmployee() {
   const infoUser = getCookie("user");
-  if (infoUser?.role === 'admin') {
+  if (infoUser?.role === 'admin' || infoUser?.role === 'employee') {
     return true;
   } else {
     return false;

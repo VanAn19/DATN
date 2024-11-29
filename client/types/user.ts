@@ -7,3 +7,5 @@ export interface InfoUser {
     avatar: string;
     address: string;
 }
+
+export type UserStatus = 'active' | 'disabled';

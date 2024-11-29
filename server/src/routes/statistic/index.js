@@ -8,8 +8,9 @@ const router = express.Router();
 
 router.use(authentication)
 
-router.use(checkRole('admin'))
+router.use(checkRole('admin', 'employee'))
 
 router.get('/product', asyncHandler(statisticController.statisticByProduct));
+router.get('/date/:startDate/:endDate', asyncHandler(statisticController.statisticByDateRange));
 
 module.exports = router;
