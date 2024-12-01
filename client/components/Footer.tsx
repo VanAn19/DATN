@@ -20,7 +20,7 @@ const Footer = () => {
     { label: "Chính sách bảo mật", link: "/policy/chinh-sach-bao-mat" },
     { label: "Chính sách bảo hành", link: "/policy/chinh-sach-bao-hanh" },
     { label: "Chính sách hoàn trả hàng", link: "/policy/chinh-sach-hoan-tra-hang", },
-    { label: "Điều khoản dịch vụ", link: "", },
+    { label: "Điều khoản dịch vụ", link: "/policy/dieu-khoan-dich-vu", },
   ];
 
   return (

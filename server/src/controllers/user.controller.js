@@ -40,6 +40,13 @@ class UserController {
         }).send(res);
     }
 
+    addNewUser = async (req,res,next) => {
+        new SuccessResponse({
+            message: 'add new user by admin successfully',
+            metadata: await UserService.addNewUserByAdmin(req.body)
+        }).send(res);
+    }
+
 }
 
 module.exports = new UserController();

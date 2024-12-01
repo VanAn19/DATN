@@ -1,12 +1,13 @@
 'use client'
 
 import { getAllUserByAdmin, getListSearchUserByAdmin, updateStatusUser } from '@/api/user';
-import { Card, Input, notification, Select, Table, Tag } from 'antd'
+import { Button, Card, Input, Modal, notification, Select, Table, Tag } from 'antd'
 import { format } from 'date-fns'
 import React, { useCallback, useEffect, useState } from 'react'
 import { UserStatus } from '@/types/user';
 import debounce from 'lodash.debounce';
-import { SearchOutlined } from '@ant-design/icons';
+import { PlusOutlined, SearchOutlined } from '@ant-design/icons';
+import AddNewUser from '@/components/AddNewUser';
 
 const userStatusOptions = [
   { label: 'Hoạt động', value: 'active' },
@@ -16,20 +17,22 @@ const userStatusOptions = [
 const AdminUser = () => {
   const [users, setUsers] = useState<any[]>([]);
   const [searchValue, setSearchValue] = useState<string>('');
+  const [isAddUserVisible, setIsAddUserVisible] = useState(false);
   const [loading, setLoading] = useState(false);
 
+  const fetchUsers = async () => {
+    setLoading(true);
+    try {
+      const res = await getAllUserByAdmin();
+      setUsers(res.metadata);
+    } catch (error) {
+      console.error("Error during fetch all user: ", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    const fetchUsers = async () => {
-      setLoading(true);
-      try {
-        const res = await getAllUserByAdmin();
-        setUsers(res.metadata);
-      } catch (error) {
-        console.error("Error during fetch all user: ", error);
-      } finally {
-        setLoading(false);
-      }
-    };
     fetchUsers();
   }, []);
 
@@ -87,6 +90,14 @@ const AdminUser = () => {
     }
   }
 
+  const handleOpenAddUser = () => {
+    setIsAddUserVisible(true);
+  };
+
+  const handleCloseAddUser = () => {
+    setIsAddUserVisible(false);
+  };
+
   const columns = [
     {
       title: 'Tên đăng nhập',
@@ -113,11 +124,23 @@ const AdminUser = () => {
       dataIndex: 'role',
       key: 'role',
       render: (role: any) => {
-        let color: string = 'processing';
-        if (role === 'admin') color = 'success';
-        else if (role === 'employee') color = 'warning';
+        const roleLabels: Record<string, string> = {
+          admin: 'Quản trị viên',
+          employee: 'Nhân viên',
+          user: 'Người dùng',
+        };
 
-        return <Tag className='text-xs' color={color}>{role}</Tag>;
+        const colorMap: Record<string, string> = {
+          admin: 'success',
+          employee: 'warning',
+          user: 'default',
+        };
+
+        return (
+          <Tag className="text-xs" color={colorMap[role]}>
+            {roleLabels[role]}
+          </Tag>
+        );
       }
     },
     {
@@ -156,6 +179,9 @@ const AdminUser = () => {
               prefix={<SearchOutlined style={{ cursor: 'pointer' }} />}
               className='w-2/3'
             />
+            <Button type="primary" icon={<PlusOutlined />} onClick={handleOpenAddUser}>
+              Thêm người dùng mới
+            </Button>
           </div>
         }
       >
@@ -169,6 +195,14 @@ const AdminUser = () => {
           bordered
         />
       </Card >
+      <Modal
+        title={<span className="text-xl font-bold text-black">Thêm người dùng mới</span>}
+        open={isAddUserVisible}
+        onCancel={handleCloseAddUser}
+        footer={null}
+      >
+        <AddNewUser onClose={handleCloseAddUser} onAddSuccess={fetchUsers} />
+      </Modal>
     </div>
   )
 }

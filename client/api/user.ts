@@ -90,3 +90,20 @@ export const updateStatusUser = async (data: { username: string, newStatus: stri
     throw error;
   }
 };
+
+export const addNewUserByAdmin = async (data: { username: string; password: string; name: string; email: string; phone: string; role: string }) => {
+  const infoUser = getCookie('user');
+  const token = getCookie('token');
+  try {
+    const response = await axiosInstance.post('/profile/add', data, {
+      headers: {
+        'Authorization': token,
+        'x-client-id': infoUser._id
+      }
+    });
+    return response.data; 
+  } catch (error) {
+    console.error("Error during add new user by admin api:", error);
+    throw error;
+  }
+};

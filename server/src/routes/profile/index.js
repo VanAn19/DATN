@@ -16,5 +16,6 @@ router.use(checkRole('admin'))
 router.get('/all', asyncHandler(userController.getAllUserByAdmin));
 router.patch('/update', asyncHandler(userController.updateStatusUserByAdmin));
 router.get('/search/:keySearch', asyncHandler(userController.searchUser));
+router.post('/add', asyncHandler(userController.addNewUser));
 
 module.exports = router;
