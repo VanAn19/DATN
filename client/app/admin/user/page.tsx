@@ -127,7 +127,7 @@ const AdminUser = () => {
         const roleLabels: Record<string, string> = {
           admin: 'Quản trị viên',
           employee: 'Nhân viên',
-          user: 'Người dùng',
+          user: 'Khách hàng',
         };
 
         const colorMap: Record<string, string> = {
