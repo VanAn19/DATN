@@ -2,7 +2,14 @@
 
 import React from 'react'
 import DashboardCard from '@/components/DashboardCard';
-import { AppstoreOutlined, MenuUnfoldOutlined, FileTextOutlined, AreaChartOutlined } from '@ant-design/icons';
+import { AppstoreOutlined, 
+  MenuUnfoldOutlined, 
+  FileTextOutlined, 
+  AreaChartOutlined, 
+  DatabaseOutlined,
+  CommentOutlined,
+  UserOutlined
+} from '@ant-design/icons';
 
 const Admin = () => {
   const cardData = [
@@ -14,7 +21,7 @@ const Admin = () => {
     },
     {
       title: "Danh mục",
-      count: 12,
+      count: 3,
       icon: <MenuUnfoldOutlined className="text-slate-500" style={{ fontSize: '72px' }} />,
       link: '/admin/categories'
     },
@@ -25,15 +32,33 @@ const Admin = () => {
       link: '/admin/orders'
     },
     {
+      title: "Hàng tồn kho",
+      count: 28,
+      icon: <DatabaseOutlined className="text-slate-500" style={{ fontSize: '72px' }} />,
+      link: '/admin/orders'
+    },
+    {
+      title: "Bình luận",
+      count: 66,
+      icon: <CommentOutlined className="text-slate-500" style={{ fontSize: '72px' }} />,
+      link: '/admin/orders'
+    },
+    {
       title: "Thống kê",
       count: 750,
       icon: <AreaChartOutlined className="text-slate-500" style={{ fontSize: '72px' }} />,
       link: '/admin/stats'
-    }
+    },
+    {
+      title: "Tài khoản",
+      count: 8,
+      icon: <UserOutlined className="text-slate-500" style={{ fontSize: '72px' }} />,
+      link: '/admin/orders'
+    },
   ];
 
   return (
-    <div className="flex flex-col md:flex-row justify-between gap-5 mb-5 p-5">
+    <div className="grid grid-cols-1 md:grid-cols-4 gap-5 mb-5 p-5">
       {cardData.map((card, index) => (
         <div key={index} className="mt-10"> 
         <DashboardCard

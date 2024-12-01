@@ -50,7 +50,10 @@ const Bill: React.FC<BillProps> = ({ visible, onClose, order }) => {
           {order?.address?.street}, {order?.address?.ward}, {order?.address?.district}, {order?.address?.province}
         </p>
         <p className='mb-2'><span>Phương thức thanh toán: </span>{order?.payment?.method === 'cash' ? 'Tiền mặt' : 'Thẻ tín dụng'}</p>
-        <p className='mb-4'>Trạng thái đơn hàng: {getStatusLabel(order?.status)}</p>
+        {order?.trackingNumber && (
+          <p className='mb-2'>Mã vận chuyển: {order.trackingNumber}</p>
+        )}
+        <p className='mb-2'>Trạng thái đơn hàng: {getStatusLabel(order?.status)}</p>
         <p className='mb-4'>Ngày đặt: {convertUtcTimeToVNTime(order?.createdAt ?? '')}</p>
         <div className="mb-4">
           {order?.products.map((product: any) => (

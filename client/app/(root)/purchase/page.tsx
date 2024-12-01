@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react'
 import { ShoppingCartOutlined, MessageOutlined, EyeOutlined } from '@ant-design/icons';
 import Image from 'next/image';
-import { Button, Card, Col, Row, Tabs } from 'antd';
+import { Button, Card, Col, Pagination, Row, Tabs } from 'antd';
 import { cancelOrderByUser, getOrderByUser } from '@/api/order';
 import { Order, OrderStatus } from '@/types';
 import Bill from '@/components/Bill';
@@ -54,8 +54,10 @@ const Purchase = () => {
   const [orders, setOrders] = useState<any[]>([]);
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
+  const itemsPerPage = 4;
+  const [currentPage, setCurrentPage] = useState(1);
   const [loading, setLoading] = useState<boolean>(false);
-  const [isAuthChecked, setIsAuthChecked] = useState<boolean>(false); 
+  const [isAuthChecked, setIsAuthChecked] = useState<boolean>(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -83,13 +85,13 @@ const Purchase = () => {
             payment: order.payment,
             products: order.products.flatMap((product: any) => product.products.map((item: any) => ({
               ...item,
-              priceRaw: order.products[0].priceRaw, 
+              priceRaw: order.products[0].priceRaw,
             }))),
             trackingNumber: order.trackingNumber,
             status: order.status as OrderStatus,
             createdAt: order.createdAt
           }));
-          setOrders(fetchedOrders); 
+          setOrders(fetchedOrders);
         }
       } catch (err) {
         console.error("Failed to fetch cart:", err);
@@ -105,8 +107,8 @@ const Purchase = () => {
     try {
       const res = await cancelOrderByUser(id);
       if (res.status === 200) {
-        setOrders(prevOrders => 
-          prevOrders.map(order => 
+        setOrders(prevOrders =>
+          prevOrders.map(order =>
             order._id === id ? { ...order, status: 'canceled' } : order
           )
         );
@@ -119,8 +121,16 @@ const Purchase = () => {
   }
 
   const handleViewDetails = (order: Order) => {
-    setSelectedOrder(order); 
-    setIsModalVisible(true); 
+    setSelectedOrder(order);
+    setIsModalVisible(true);
+  };
+
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const paginatedOrders = orders.slice(startIndex, endIndex);
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
   };
 
   return (
@@ -129,7 +139,7 @@ const Purchase = () => {
         <TabPane tab="Tất cả" key="1">
           <Row gutter={16}>
             <Col span={24}>
-              {orders.map(order => {
+              {paginatedOrders.map(order => {
                 const statusInfo = statusOrder[order.status as OrderStatus];
                 return (
                   <Card
@@ -158,7 +168,7 @@ const Purchase = () => {
                     ]}
                     className="hover:shadow-lg transition-shadow duration-300 mb-4"
                   >
-                    {order.products.map((product: any) => (  
+                    {order.products.map((product: any) => (
                       <div key={product.productId} className="flex mb-2">
                         <div className="mr-4">
                           <Image
@@ -168,23 +178,23 @@ const Purchase = () => {
                             height={100}
                           />
                         </div>
-                        <div className="flex-1 ml-4">  
-                          <p className="text-lg font-bold">{product.name}</p> 
+                        <div className="flex-1 ml-4">
+                          <p className="text-lg font-bold">{product.name}</p>
                           <p className='text-gray-500'>Số lượng: {product.quantity}</p>
-                          <div className="flex items-center w-full"> 
-                            <p className="text-gray-500">Đơn giá: {VND.format(product.price)}</p> 
+                          <div className="flex items-center w-full">
+                            <p className="text-gray-500">Đơn giá: {VND.format(product.price)}</p>
                             <p className="text-lg font-bold ml-auto">{VND.format(product.price * product.quantity)}</p>
                           </div>
                         </div>
                       </div>
                     ))}
-                    <div className="flex justify-end items-center space-x-2"> 
+                    <div className="flex justify-end items-center space-x-2">
                       <p className="text-gray-700 font-bold">Phí ship:</p>
                       <p className="text-lg font-bold">{VND.format(order.checkout.freeShip)}</p>
                     </div>
-                    <div className="flex justify-end items-center space-x-2"> 
+                    <div className="flex justify-end items-center space-x-2">
                       <p className="text-gray-700 font-bold">Thành tiền:</p>
-                      <p className="text-lg font-bold text-orange-400">{VND.format(order.checkout.totalCheckout)}</p> 
+                      <p className="text-lg font-bold text-orange-400">{VND.format(order.checkout.totalCheckout)}</p>
                     </div>
                   </Card>
                 )
@@ -193,6 +203,17 @@ const Purchase = () => {
           </Row>
         </TabPane>
       </Tabs>
+      {Math.ceil(orders.length / itemsPerPage) > 1 && (
+        <div key={1} className="mt-4">
+          <Pagination
+            className='justify-center items-center'
+            current={currentPage}
+            pageSize={itemsPerPage}
+            total={orders.length}
+            onChange={handlePageChange}
+          />
+        </div>
+      )}
       <Bill visible={isModalVisible} onClose={() => setIsModalVisible(false)} order={selectedOrder} />
     </div>
   )
