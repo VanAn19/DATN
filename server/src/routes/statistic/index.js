@@ -12,5 +12,6 @@ router.use(checkRole('admin', 'employee'))
 
 router.get('/product', asyncHandler(statisticController.statisticByProduct));
 router.get('/date/:startDate/:endDate', asyncHandler(statisticController.statisticByDateRange));
+router.get('/revenueByDate', asyncHandler(statisticController.statisticRevenueByDate));
 
 module.exports = router;

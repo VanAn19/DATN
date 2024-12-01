@@ -17,6 +17,11 @@ var categorySchema = new Schema({
     collection: COLLECTION_NAME
 });
 
+// create index for search
+categorySchema.index({
+    name: 'text'
+});
+
 categorySchema.pre('save', function(next) {
     this.slug = slugify(this.name, { lower: true });
     next();

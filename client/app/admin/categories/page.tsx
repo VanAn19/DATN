@@ -1,17 +1,16 @@
 'use client'
 
-import React, { useEffect, useState } from 'react'
-import { Table, Button, Input, Select, notification } from 'antd';
-import { PlusOutlined } from '@ant-design/icons';
+import React, { useCallback, useEffect, useState } from 'react'
+import { Table, Button, Input, Select, notification, Card } from 'antd';
+import { PlusOutlined, SearchOutlined } from '@ant-design/icons';
 import { Category } from '@/types';
 import Link from 'next/link';
-import { getListCategory, removeCategory } from '@/api/category';
-import Title from 'antd/es/typography/Title';
-
-const { Search } = Input;
+import { getListCategory, getListSearchCategory, removeCategory } from '@/api/category';
+import debounce from 'lodash.debounce';
 
 const AdminCategory = () => {
   const [categories, setCategories] = useState<Category[]>([]);
+  const [searchValue, setSearchValue] = useState<string>('');
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -20,7 +19,7 @@ const AdminCategory = () => {
       try {
         const res = await getListCategory();
         if (res.status === 200) {
-          setCategories(res.metadata);  
+          setCategories(res.metadata);
         }
       } catch (error) {
         console.error("Error during fetch category: ", error);
@@ -31,12 +30,14 @@ const AdminCategory = () => {
     fetchCategories();
   }, []);
 
+  console.log(categories);
+
   const handleRemoveProduct = async (productId: string) => {
     setLoading(true);
     try {
       await removeCategory(productId);
       notification.success({
-        message: 'Xóa sản phẩm thành công!',
+        message: 'Xóa danh mục thành công!',
       });
       const res = await getListCategory();
       setCategories(res.metadata);
@@ -46,6 +47,34 @@ const AdminCategory = () => {
       setLoading(false);
     }
   }
+
+  const handleSearchInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchValue(e.target.value);
+  };
+
+  const debouncedSearch = useCallback(
+    debounce(async (value: string) => {
+      if (value.trim()) {
+        setLoading(true);
+        try {
+          const res = await getListSearchCategory(value);
+          setCategories(res.metadata);
+        } catch (error) {
+          console.error("Error during search category: ", error);
+        } finally {
+          setLoading(false);
+        }
+      } else {
+        const res = await getListCategory();
+        setCategories(res.metadata);
+      }
+    }, 300),
+    []
+  );
+
+  useEffect(() => {
+    debouncedSearch(searchValue);
+  }, [searchValue, debouncedSearch]);
 
   const columns = [
     {
@@ -62,7 +91,7 @@ const AdminCategory = () => {
       key: 'productCount',
       render: (productCount: number) => (
         <div>
-          {productCount}    
+          {productCount}
         </div>
       )
     },
@@ -80,29 +109,35 @@ const AdminCategory = () => {
 
   return (
     <div className="p-4">
-      <Title level={4} className='px-3'>Tất cả danh mục</Title>
-      <div className="flex justify-between items-center mb-4">
-        <Search
-          placeholder="Tìm tên danh mục, SKU danh mục, Mã danh mục..."
-          onSearch={(value) => console.log(value)}
-          enterButton
-          style={{ width: '300px' }}
+      <Card
+        title={
+          <div className="flex justify-between items-center">
+            <span>Tất cả danh mục</span>
+            <Input
+              value={searchValue}
+              onChange={handleSearchInputChange}
+              placeholder='Tìm theo tên danh mục...'
+              prefix={<SearchOutlined style={{ cursor: 'pointer' }} />}
+              className='w-2/3'
+            />
+            <Link href="/admin/categories/new" passHref>
+              <Button type="primary" icon={<PlusOutlined />}>
+                Thêm 1 danh mục mới
+              </Button>
+            </Link>
+          </div>
+        }
+      >
+        <Table
+          columns={columns}
+          dataSource={categories}
+          loading={loading}
+          rowKey={(categories) => categories._id}
+          pagination={{ pageSize: 10 }}
+          className='custom-table-header'
+          bordered
         />
-        <Link href="/admin/products/new" passHref>
-          <Button type="primary" icon={<PlusOutlined />}>
-            Thêm 1 danh mục mới
-          </Button>
-        </Link>
-      </div>
-      <Table
-        columns={columns}
-        dataSource={categories}
-        loading={loading}
-        rowKey={(categories) => categories._id}
-        pagination={{ pageSize: 10 }}
-        className='custom-table-header'
-        bordered
-      />
+      </Card>
     </div>
   )
 }

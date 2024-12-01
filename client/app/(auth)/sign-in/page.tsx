@@ -28,7 +28,7 @@ const SignIn = () => {
         setCookie("user", res?.metadata?.user, expirationHours);
         if (res.metadata.user.role === "user") {
           router.push("/");
-        } else if (res.metadata.user.role === "admin") {
+        } else if (res.metadata.user.role === "admin" || res.metadata.user.role === "employee") {
           router.push("/admin");
         }
       }

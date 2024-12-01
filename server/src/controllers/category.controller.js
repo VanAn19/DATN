@@ -40,6 +40,13 @@ class CategoryController {
         }).send(res);
     }
 
+    searchCategory = async (req,res,next) => {
+        new SuccessResponse({
+            message: 'search category successfully',
+            metadata: await CategoryService.searchCategory(req.params)
+        }).send(res);
+    }
+
 }
 
 module.exports = new CategoryController();

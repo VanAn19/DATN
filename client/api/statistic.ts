@@ -17,3 +17,20 @@ export const statisticByProduct = async () => {
     throw error;
   }
 }
+
+export const statisticRevenueByDate = async () => {
+  const infoUser = getCookie('user');
+  const token = getCookie('token');
+  try {
+    const response = await axiosInstance.get(`/statistic/revenueByDate`, {
+      headers: {
+        'Authorization': token,
+        'x-client-id': infoUser._id
+      }
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error during get statistic revenue by date api:", error);
+    throw error;
+  }
+}

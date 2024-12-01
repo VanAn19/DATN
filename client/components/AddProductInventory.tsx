@@ -93,13 +93,13 @@ const AddProductInventory: React.FC<AddProductInventoryProps> = ({ onClose, onAd
       </Form.Item>
         
       <Form.Item
-        label="Số lượng tồn kho"
+        label="Số lượng"
         name="stock"
         rules={[{ required: true, message: 'Vui lòng nhập số lượng!' }]}
       >
         <InputNumber
           min={1}
-          placeholder="Nhập số lượng tồn kho"
+          placeholder="Nhập số lượng"
           style={{ width: '100%' }}
           className='custom-input'
         />

@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useEffect, useState } from 'react'
-import { ShoppingCartOutlined, MessageOutlined } from '@ant-design/icons';
+import { ShoppingCartOutlined, MessageOutlined, EyeOutlined } from '@ant-design/icons';
 import Image from 'next/image';
 import { Button, Card, Col, Row, Tabs } from 'antd';
 import { cancelOrderByUser, getOrderByUser } from '@/api/order';
@@ -144,7 +144,7 @@ const Purchase = () => {
                       )
                     }
                     actions={[
-                      <Button key={1} icon={<ShoppingCartOutlined />} type="primary" onClick={() => handleViewDetails(order)}>
+                      <Button key={1} icon={<EyeOutlined />} type="primary" onClick={() => handleViewDetails(order)}>
                         Xem chi tiết
                       </Button>,
                       <Button key={2} icon={<MessageOutlined />} type="default">

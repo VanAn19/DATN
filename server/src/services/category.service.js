@@ -1,7 +1,7 @@
 'use strict'
 
 const Category = require('../models/category.model');
-const { findCategoryByName, getListCategory, updateCategoryById, getCategoryById, deleteCategoryById } = require('../repositories/category.repo');
+const { findCategoryByName, getListCategory, updateCategoryById, getCategoryById, deleteCategoryById, searchCategory } = require('../repositories/category.repo');
 const { BadRequestError, NotFoundError } = require('../core/error.response');
 
 class CategoryService {
@@ -30,6 +30,10 @@ class CategoryService {
 
     static async getACategory({ id }) {
         return await getCategoryById({ id });
+    }
+
+    static async searchCategory({ keySearch }) {
+        return await searchCategory({ keySearch });
     }
 
 }

@@ -1,6 +1,6 @@
 import React from 'react'
 import { Modal } from 'antd';
-import { Order } from '@/types';
+import { Order, OrderStatus } from '@/types';
 import Image from 'next/image';
 import { convertUtcTimeToVNTime } from '@/utils';
 
@@ -12,10 +12,27 @@ const VND = new Intl.NumberFormat("vi-VN", {
 interface BillProps {
   visible: boolean;
   onClose: () => void;
-  order: Order | null; 
+  order: Order | null;
 }
 
 const Bill: React.FC<BillProps> = ({ visible, onClose, order }) => {
+  const getStatusLabel = (status: OrderStatus | undefined): string => {
+    switch (status) {
+      case 'pending':
+        return 'Đang xử lý';
+      case 'confirmed':
+        return 'Đã xác nhận';
+      case 'shipped':
+        return 'Đang giao hàng';
+      case 'canceled':
+        return 'Đã hủy';
+      case 'delivered':
+        return 'Giao hàng thành công';
+      default:
+        return 'Không xác định';
+    }
+  };
+
   return (
     <Modal
       title="Chi tiết đơn hàng"
@@ -25,7 +42,7 @@ const Bill: React.FC<BillProps> = ({ visible, onClose, order }) => {
       width={800}
     >
       <div className='ml-2'>
-        <p className='mb-2'><span>Mã đơn hàng: </span>{order?.trackingNumber}</p>
+        <p className='mb-2'><span>Mã đơn hàng: </span>{order?._id}</p>
         <p className='mb-2'><span>Tên người nhận: </span>{order?.name}</p>
         <p className='mb-2'><span>Số điện thoại: </span>{order?.phone}</p>
         <p className='mb-2'>
@@ -33,7 +50,7 @@ const Bill: React.FC<BillProps> = ({ visible, onClose, order }) => {
           {order?.address?.street}, {order?.address?.ward}, {order?.address?.district}, {order?.address?.province}
         </p>
         <p className='mb-2'><span>Phương thức thanh toán: </span>{order?.payment?.method === 'cash' ? 'Tiền mặt' : 'Thẻ tín dụng'}</p>
-        <p className='mb-4'>Trạng thái đơn hàng: {order?.status}</p>
+        <p className='mb-4'>Trạng thái đơn hàng: {getStatusLabel(order?.status)}</p>
         <p className='mb-4'>Ngày đặt: {convertUtcTimeToVNTime(order?.createdAt ?? '')}</p>
         <div className="mb-4">
           {order?.products.map((product: any) => (

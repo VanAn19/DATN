@@ -11,24 +11,24 @@ const getListCategory = async () => {
     return await Category.aggregate([
         {
             $lookup: {
-                from: Product.collection.name, 
-                localField: '_id', 
-                foreignField: 'category', 
-                as: 'products' 
+                from: Product.collection.name,
+                localField: '_id',
+                foreignField: 'category',
+                as: 'products'
             }
         },
         {
             $project: {
                 name: 1,
                 slug: 1,
-                productCount: { $size: '$products' }, 
+                productCount: { $size: '$products' },
                 createdAt: 1,
                 updatedAt: 1
             }
         }
     ])
-    .sort({ updatedAt: -1 })
-    .exec();
+        .sort({ updatedAt: -1 })
+        .exec();
 }
 
 const updateCategoryById = async ({ id, payload, isNew = true }) => {
@@ -43,10 +43,45 @@ const deleteCategoryById = async ({ id }) => {
     return await Category.deleteOne({ _id: id });
 }
 
+const searchCategory = async ({ keySearch }) => {
+    const regexSearch = new RegExp(keySearch, 'i');
+
+    const results = await Category.aggregate([
+        {
+            $match: {
+                $or: [
+                    { name: regexSearch },
+                ]
+            }
+        },
+        {
+            $lookup: {
+                from: Product.collection.name,
+                localField: '_id',
+                foreignField: 'category',
+                as: 'products'
+            }
+        },
+        {
+            $project: {
+                name: 1,
+                slug: 1,
+                productCount: { $size: '$products' },
+                createdAt: 1,
+                updatedAt: 1
+            }
+        }
+    ])
+        .exec();
+
+    return results;
+}
+
 module.exports = {
     findCategoryByName,
     getListCategory,
     updateCategoryById,
     getCategoryById,
-    deleteCategoryById
+    deleteCategoryById,
+    searchCategory
 }

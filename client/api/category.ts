@@ -1,11 +1,11 @@
 import { Category } from "@/types";
 import axiosInstance from "./axiosInstance";
-import { getCookie } from "@/utils"; 
+import { getCookie } from "@/utils";
 
 export const getListCategory = async () => {
   try {
     const response = await axiosInstance.get('/category');
-    return response.data; 
+    return response.data;
   } catch (error) {
     console.error("Error during get list category api:", error);
     throw error;
@@ -22,7 +22,7 @@ export const getInfoCategory = async (id: string) => {
         'x-client-id': infoUser._id
       }
     });
-    return response.data.metadata; 
+    return response.data.metadata;
   } catch (error) {
     console.error("Error during get info category api:", error);
     throw error;
@@ -39,15 +39,15 @@ export const createCategory = async (data: { name: string }) => {
         'x-client-id': infoUser._id
       }
     });
-    return response.data; 
+    return response.data;
   } catch (error) {
     console.error("Error during create category api:", error);
     throw error;
   }
 }
 
-export const updateCategory = async (id: string, data: { 
-  name: string, 
+export const updateCategory = async (id: string, data: {
+  name: string,
 }) => {
   const infoUser = getCookie('user');
   const token = getCookie('token');
@@ -69,7 +69,7 @@ export const removeCategory = async (id: string) => {
   const infoUser = getCookie('user');
   const token = getCookie('token');
   try {
-    const response = await axiosInstance.delete(`/category/delete/${id}`,  {
+    const response = await axiosInstance.delete(`/category/delete/${id}`, {
       headers: {
         'Authorization': token,
         'x-client-id': infoUser._id
@@ -78,6 +78,23 @@ export const removeCategory = async (id: string) => {
     return response.data;
   } catch (error) {
     console.error("Error during remove product api:", error);
+    throw error;
+  }
+}
+
+export const getListSearchCategory = async (keySearch: string) => {
+  const infoUser = getCookie('user');
+  const token = getCookie('token');
+  try {
+    const response = await axiosInstance.get(`/category/search/${keySearch}`, {
+      headers: {
+        'Authorization': token,
+        'x-client-id': infoUser._id
+      }
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error during get list search category api:", error);
     throw error;
   }
 }

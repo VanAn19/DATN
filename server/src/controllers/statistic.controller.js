@@ -19,6 +19,13 @@ class StatisticController {
         }).send(res);
     }
 
+    statisticRevenueByDate = async (req,res,next) => {
+        new SuccessResponse({
+            message: 'Get statistic revenue by date range successfully',
+            metadata: await StatisticService.statisticRevenueByDate()
+        }).send(res);
+    }
+
 }
 
 module.exports = new StatisticController();

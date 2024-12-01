@@ -16,5 +16,6 @@ router.post('/create', asyncHandler(categoryController.createCategory));
 router.get('/:id', asyncHandler(categoryController.getACategory));
 router.patch('/update/:id', asyncHandler(categoryController.updateCategory));
 router.delete('/delete/:id', asyncHandler(categoryController.deleteCategory));
+router.get('/search/:keySearch', asyncHandler(categoryController.searchCategory));
 
 module.exports = router;
